@@ -7,3 +7,11 @@ Functionality of the project consists of:
 		- Multitouch Input Device
 	* Mapping game controls to customizable controller mappings
 
+Useful Git commands:
+git add <filename>    => adds a file to the repository
+
+git commit -a -m "message goes here"    =>quick commit, use before pushing changes
+git push origin master                  =>push your changes to the repository
+
+git pull    => downloads the changes in the repository to your computer
+
