@@ -1,2 +1,9 @@
 HandWire is a mobile controller for your computer using Android devices.
 Development is forthcoming.
+Functionality of the project consists of:
+	* Using the Android device as a Virtual
+		- Mouse
+		- Keyboard
+		- Multitouch Input Device
+	* Mapping game controls to customizable controller mappings
+
