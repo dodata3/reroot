@@ -1,2 +1,10 @@
 HandWire is a mobile controller for your computer using Android devices.
 Development is forthcoming.
+
+Useful Git commands:
+git add <filename>    => adds a file to the repository
+
+git commit -a -m "message goes here"    =>quick commit, use before pushing changes
+git push origin master                  =>push your changes to the repository
+
+git pull    => downloads the changes in the repository to your computer
