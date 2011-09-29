@@ -1,3 +1,8 @@
+$Id$
+Description: Contains information about the project including build instructions
+	and instructions for use.
+(C) 2011 Cyberpad Technologies
+
 HandWire is a mobile controller for your computer using Android devices.
 Development is forthcoming.
 Functionality of the project consists of:
@@ -10,7 +15,72 @@ Functionality of the project consists of:
 Useful Git commands:
 git add <filename>    => adds a file to the repository
 
-git commit -a -m "message goes here"    =>quick commit, use before pushing or pulling changes
+git commit -a -m "message goes here"    =>quick commit, use before pushing changes
 git push origin master                  =>push your changes to the repository
 
-git pull    => downloads the changes in the repository to your computer (commit before a pull)
+git pull    => downloads the changes in the repository to your computer
+
+************************************************************************************
+How to build and run:
+************************************************************************************
+Client (Android)
+Requirements: 
+	* Android SDK
+	* Eclipse
+
+	First Time:
+	1) Install Android SDK. (http://developer.android.com/sdk/installing.html)
+	2) Open Eclipse and go to File->New->Android Project (It may be in Other...)
+	3) Select "Create Project from Existing Source" and navigate to the 
+		client/android directory.  The selected directory should contain an 
+		AndroidManifest.xml
+	4) Select Finish
+	5) Go to File->Import...
+	6) Select General->Existing Projects into Workspace
+	7) Navigate to client/android/tests
+	8) Import the tests project into your Workspace
+
+	Once the projects are in your workspace
+	1) Right click the project and select Run as->Android Application
+	2) If you've connected your phone, the application should run on your phone
+	3) Otherwise, you'll need to set up an AVD
+		When asked to set up an AVD, click Yes.
+	4) Create a new AVD targetting Android 2.2 (SDK version 8).
+		Use default parameters for the rest of the settings.
+	5) Select Start AVD to start your new AVD Emulator
+	6) Select the running AVD from the drop-down in eclipse once its booted.
+	7) To run the tests, right click the test project and select Run As JUnitTest
+		Follow the same process if necessary for AVD support.
+		
+Server (PC, MacOSX, Linux)
+Requirements:
+	* Qt Toolkit (4.5 or Higher)
+		- Ensure the libraries and binaries are on your system path!
+	* CMake (2.6 or Higher)
+		- Also ensure this is on your system path!
+	* Some CMake compatible compiler:
+		- Visual Studio (2008 Recommended, 2010 has issues with CMake)
+		- MinGW
+		- Gnu Compiler (GCC/G++)
+	
+	First Time:
+	1) CD To the server directory in a command prompt/terminal
+	2) Run cmake, and look at the list of compilers it can generate for.
+	3) Select one of those compilers and run CMake with the -G parameter
+		Example: cmake -G "Visual Studio 2008"
+		If CMake complains that it can't find Qt, the libraries and binaries
+		are not on your system path.  You should fix this.
+	4) Once CMake has generated a project/makefile for you, open it in your
+		IDE or simply run make
+	
+	Once project has been created
+	5) Treat the project as though it builds entirely in your IDE/from your makefile.
+	
+	IMPORTANT NOTE.  Modifying CMake's generated makefiles or IDE files
+		(ie. your Visual Studio Project) is a VERY BAD IDEA.  These changes will be
+		over-written the next time you regenerate your file.  To modify build parameters
+		such as adding new files and stuff, modify CMakeLists.txt in the project root
+		following the CMake syntax.
+
+	
+
