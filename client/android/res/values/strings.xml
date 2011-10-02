@@ -6,4 +6,5 @@
     <string name="myClickHandler">myClickHandler</string>
     <string name="enterBtn">Enter</string>
     <color name="backgroundColor">#3399CC</color>
+    <string name="showBtn">Show</string>
 </resources>
