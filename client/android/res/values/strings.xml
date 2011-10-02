@@ -2,4 +2,8 @@
 <resources>
     <string name="hello">Hello World, RerootActivity!</string>
     <string name="app_name">Reroot</string>
+    <string name="my_ip_address">IP Address</string>
+    <string name="myClickHandler">myClickHandler</string>
+    <string name="enterBtn">Enter</string>
+    <color name="backgroundColor">#3399CC</color>
 </resources>
