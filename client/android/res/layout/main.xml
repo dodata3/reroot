@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/LinearLayout1" xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor" android:weightSum="1">
+    <Button android:text="@string/showBtn" android:id="@+id/button2" android:layout_height="wrap_content" android:layout_width="172dp" android:layout_below="@+id/button1" android:layout_alignLeft="@+id/button1"></Button>
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:text="." android:layout_height="wrap_content" android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_alignBottom="@+id/editText1" android:layout_toRightOf="@+id/editText3"></TextView>
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:text="." android:layout_height="wrap_content" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_alignBottom="@+id/editText1" android:layout_toRightOf="@+id/editText1"></TextView>
+    <EditText android:id="@+id/editText2" android:inputType="number" android:layout_height="wrap_content" android:layout_width="60dp" android:text="0" android:layout_alignBottom="@+id/TextView01" android:layout_toRightOf="@+id/TextView01"></EditText>
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:text="." android:layout_height="wrap_content" android:id="@+id/TextView03" android:layout_width="wrap_content" android:layout_alignBottom="@+id/editText2" android:layout_toRightOf="@+id/editText2"></TextView>
+    <EditText android:id="@+id/editText1" android:inputType="number" android:layout_height="wrap_content" android:layout_width="60dp" android:text="0" android:layout_below="@+id/textView1" android:layout_alignParentLeft="true" android:layout_marginTop="25dp"></EditText>
+    <EditText android:id="@+id/editText3" android:inputType="number" android:layout_height="wrap_content" android:layout_width="60dp" android:text="0" android:layout_alignBottom="@+id/TextView02" android:layout_toRightOf="@+id/TextView03"></EditText>
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:text="Enter IP Address" android:layout_height="wrap_content" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"></TextView>
+    <EditText android:id="@+id/editText4" android:inputType="number" android:layout_height="wrap_content" android:layout_width="60dp" android:text="0" android:layout_alignBottom="@+id/TextView02" android:layout_toRightOf="@+id/TextView02"></EditText>
+    <Button android:text="@string/enterBtn" android:id="@+id/button1" android:onClick="myClickHandler" android:layout_height="wrap_content" android:layout_width="184dp" android:layout_below="@+id/TextView01" android:layout_alignParentLeft="true" android:layout_marginTop="44dp"></Button>
     
-    <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" 
-    android:id="@+id/textView1" android:text="Enter IP Address"></TextView>
-    
-    <EditText android:id="@+id/editText1" android:layout_width="match_parent" 
-    android:layout_height="wrap_content" android:inputType="number">
-    </EditText>
-    
-    <Button android:id="@+id/button1" android:layout_height="wrap_content" 
-    android:text="@string/enterBtn" 
-    android:onClick="myClickHandler" android:layout_width="184dp"></Button>
-    <Button android:text="@string/showBtn" android:id="@+id/button2" android:layout_height="wrap_content" android:layout_width="172dp"></Button>
-    
-</LinearLayout>
+</RelativeLayout>
