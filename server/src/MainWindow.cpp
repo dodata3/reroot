@@ -2,14 +2,20 @@
 // Description: Main window for RerootServer
 // (C) Cyberpad Technologies 2011
 #include <QtGui>
-
+#include "OSCListener.h"
 #include "MainWindow.h"
+#include "OSCMessage.h"
+#include "OSCPort.h"
 
 MainWindow::MainWindow()
 {
 	createIconGroupBox();
 	createMessageGroupBox();
-
+	QHostAddress localAddress("127.0.0.1"); //Home address
+	QHostAddress remoteAddress("128.113.232.91"); //Using Griffin's android for now.
+	qint16 port = 1337;
+	OSCPort osp(localAddress, remoteAddress, port);
+	OSCListener osL;
 	iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
 
 	createActions();
