@@ -7,10 +7,9 @@
 #define OSCMESSAGE_H
 
 #include "OSCPacket.h"
-#include "OSCms_global.h"
 
 
-class OSCMSSHARED_EXPORT OSCMessage : public OSCPacket
+class OSCMessage : public OSCPacket
 {
 public:
     OSCMessage();

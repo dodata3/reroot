@@ -8,12 +8,11 @@
 
 #include <QDateTime>
 #include "OSCPacket.h"
-#include "OSCms_global.h"
 
 
 const QDateTime TIMESTAMP_IMMEDIATE(QDate(1970,1,1));
 
-class OSCMSSHARED_EXPORT OSCBundle : public OSCPacket
+class OSCBundle : public OSCPacket
 {
 public:
     static const unsigned long SECONDS_FROM_1900_to_1970 = 2208988800;

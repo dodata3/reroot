@@ -10,9 +10,8 @@
 #include <QUdpSocket>
 #include "OSCPacketDispatcher.h"
 #include "OSCByteArrayToMsgConverter.h"
-#include "OSCms_global.h"
 
-class OSCMSSHARED_EXPORT OSCPort : public QThread
+class OSCPort : public QThread
 {
 public:
     OSCPort(QHostAddress& LocalAddress, QHostAddress& remoteAddress);
