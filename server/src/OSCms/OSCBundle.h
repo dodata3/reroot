@@ -15,7 +15,7 @@ const QDateTime TIMESTAMP_IMMEDIATE(QDate(1970,1,1));
 class OSCBundle : public OSCPacket
 {
 public:
-    static const unsigned long SECONDS_FROM_1900_to_1970 = 2208988800;
+    static const unsigned long SECONDS_FROM_1900_to_1970 = 2208988800u;
 
     OSCBundle();
     OSCBundle(QDateTime& timestamp);
