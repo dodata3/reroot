@@ -7,4 +7,8 @@
     <string name="enterBtn">Enter</string>
     <color name="backgroundColor">#3399CC</color>
     <string name="showBtn">Show</string>
+    <string name="ip_one">0</string>
+    <string name="ip_two">0</string>
+    <string name="ip_three">0</string>
+    <string name="ip_four">0</string>
 </resources>
