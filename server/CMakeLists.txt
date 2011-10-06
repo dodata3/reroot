@@ -50,6 +50,7 @@ SET( OSC_CPP
 SET( SOURCES
 	src/main.cpp
 	src/MainWindow.cpp
+	src/Listener.cpp
 	${OSC_CPP}
 	${MOC_CPP}
 	${UI_CPP}
