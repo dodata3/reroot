@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import android.view.View.OnClickListener;
 
 public class RerootActivity extends Activity {
 	//private EditText text[];
+	private static final String TAG = "Reroot";
 	EditText [] ip_text = new EditText[4];
 	EditText test_message;
 	SharedPreferences preferences;
@@ -33,6 +35,7 @@ public class RerootActivity extends Activity {
         Button view_btn = (Button)findViewById(R.id.button2);
         test_message = (EditText)findViewById(R.id.editText5);
         Button transmit_btn = (Button)findViewById(R.id.button3);
+        Button connect_btn = (Button)findViewById(R.id.connect_btn);
         
         //initialize preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -56,9 +59,18 @@ public class RerootActivity extends Activity {
         			Toast.makeText(RerootActivity.this, message, Toast.LENGTH_LONG).show();
         		}
         	}
-        		
-        	
         });
+        connect_btn.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v){
+        		onConnectButton();
+        	}
+        });
+		/*Button but = (Button)this.findViewById(R.id.btnConnect);
+		but.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				onConnectButton();
+			}
+		});*/
     }
     
     
@@ -92,5 +104,43 @@ public class RerootActivity extends Activity {
     	
     		
     }
+    
+    private void onConnectButton(){
+    	String ip_address = preferences.getString("ip_address", "n/a");
+    	if (ip_address.matches("^[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}$")){
+    		try{
+    			Intent i = new Intent(this, PadActivity.class);
+    			this.startActivity(i);
+    			this.finish();
+    		}
+    		catch(Exception ex){
+    			Toast.makeText(this, "Failure", Toast.LENGTH_LONG).show(); Log.d(TAG, ex.toString());
+    		}
+    		
+    	}
+    	
+    }
+    
+	/*private void onConnectButton() {
+		String ip = this.tbIp.getText().toString();
+		if (ip.matches("^[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}$")) {
+			try {
+				Settings.setIp(ip);
+				//
+				Intent i = new Intent(this, PadActivity.class);
+				this.startActivity(i);
+				this.finish();
+			} catch (Exception ex) {
+				//this.tvError.setText("Invalid IP address");
+				//this.tvError.setVisibility(View.VISIBLE);
+				Toast.makeText(this, this.getResources().getText(R.string.toast_invalidIP), Toast.LENGTH_LONG).show();
+				Log.d(TAG, ex.toString());
+			}
+		} else {
+			//this.tvError.setText("Invalid IP address");
+			//this.tvError.setVisibility(View.VISIBLE);
+			Toast.makeText(this, this.getResources().getText(R.string.toast_invalidIP), Toast.LENGTH_LONG).show();
+		}
+	}*/
    
 }
