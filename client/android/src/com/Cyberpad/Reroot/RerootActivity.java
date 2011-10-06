@@ -17,7 +17,8 @@ import android.view.View.OnClickListener;
 
 public class RerootActivity extends Activity {
 	//private EditText text[];
-	EditText [] text = new EditText[4];
+	EditText [] ip_text = new EditText[4];
+	EditText test_message;
 	SharedPreferences preferences;
 	
     /** Called when the activity is first created. */
@@ -25,15 +26,18 @@ public class RerootActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        text[0] = (EditText)findViewById(R.id.editText1);
-        text[1] = (EditText)findViewById(R.id.editText2);
-        text[2] = (EditText)findViewById(R.id.editText3);
-        text[3] = (EditText)findViewById(R.id.editText4);
-        Button button = (Button)findViewById(R.id.button2);
+        ip_text[0] = (EditText)findViewById(R.id.editText1);
+        ip_text[1] = (EditText)findViewById(R.id.editText2);
+        ip_text[2] = (EditText)findViewById(R.id.editText3);
+        ip_text[3] = (EditText)findViewById(R.id.editText4);
+        Button view_btn = (Button)findViewById(R.id.button2);
+        test_message = (EditText)findViewById(R.id.editText5);
+        Button transmit_btn = (Button)findViewById(R.id.button3);
+        
         //initialize preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         
-        button.setOnClickListener(new OnClickListener() {
+        view_btn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v){
         		String ip_address = preferences.getString("ip_address", "n/a");
         		Toast.makeText(RerootActivity.this,
@@ -42,17 +46,28 @@ public class RerootActivity extends Activity {
         	}
         	
         });
+        transmit_btn.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v){
+        		if(test_message.getText().length() == 0){
+        			Toast.makeText(RerootActivity.this, "Please enter a message", Toast.LENGTH_LONG).show();
+        		}
+        		else{
+        			String message = test_message.getText().toString();
+        			Toast.makeText(RerootActivity.this, message, Toast.LENGTH_LONG).show();
+        		}
+        	}
+        		
+        	
+        });
     }
-    
-    
     
     
     //this method is called at button click
     public void myClickHandler(View view){
     	switch(view.getId()){
     	case R.id.button1:
-    		if(text[0].getText().length() == 0 || text[1].getText().length() == 0
-    				|| text[2].getText().length() == 0 || text[3].getText().length() == 0){
+    		if(ip_text[0].getText().length() == 0 || ip_text[1].getText().length() == 0
+    				|| ip_text[2].getText().length() == 0 || ip_text[3].getText().length() == 0){
     			Toast.makeText(this, "Please enter a valid number", 
     					Toast.LENGTH_LONG).show();
     			return;
@@ -61,24 +76,21 @@ public class RerootActivity extends Activity {
     		String ip_full = "";
     		
     		for(int i=0; i<4; i++){
-    			//int inputValue = text[i].getText().toString();
-    			String str = text[i].getText().toString();//Integer.toString(inputValue);
+    			String str = ip_text[i].getText().toString();//Integer.toString(inputValue);
     			ip_full = ip_full + str;
-    			//ip_full.concat(str);
     			if(i<3){
-    				//ip_full.concat(".");    
     				ip_full = ip_full + ".";
     			}
     		}
     		
     		Editor edit = preferences.edit();
-    		edit.putString("ip_address", ip_full/*buffer.toString()*/);
+    		edit.putString("ip_address", ip_full);
     		edit.commit();
     		
-    		
     		//Toast.makeText(this, ip_full, Toast.LENGTH_LONG).show();
-    			
     	}
+    	
+    		
     }
    
 }

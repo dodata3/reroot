@@ -1,2 +1,5 @@
 *~
 moc_*
+
+client/android/gen
+client/android/bin
