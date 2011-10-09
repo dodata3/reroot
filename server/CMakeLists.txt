@@ -8,6 +8,9 @@ PROJECT( RerootServer )
 SET( CMAKE_BUILD_TYPE Release )
 SET( CMAKE_CXX_FLAGS "-Wall" )
 
+# Packaging
+INCLUDE(CPack)
+
 # QT4 Handling
 FIND_PACKAGE( Qt4 REQUIRED )
 
@@ -38,6 +41,7 @@ INCLUDE_DIRECTORIES(
 	.
 	./src
 	./src/OSCms
+	./src/qrencode
 )
 
 # OSCms sources
@@ -51,6 +55,19 @@ SET( OSC_CPP
 	src/OSCms/OSCPort.cpp
 )
 
+# qrencode sources
+SET( QR_CPP
+	src/qrencode/bitstream.c
+	src/qrencode/mask.c
+	src/qrencode/mmask.c
+	src/qrencode/mqrspec.c
+	src/qrencode/qrencode.c
+	src/qrencode/qrinput.c
+	src/qrencode/qrspec.c
+	src/qrencode/rscode.c
+	src/qrencode/split.c
+)
+
 
 # General
 SET( SOURCES
@@ -58,6 +75,7 @@ SET( SOURCES
 	src/MainWindow.cpp
 	src/Listener.cpp
 	${OSC_CPP}
+	${QR_CPP}
 	${MOC_CPP}
 	${UI_CPP}
 	${RES_H}
