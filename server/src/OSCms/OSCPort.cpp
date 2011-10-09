@@ -4,6 +4,7 @@
 ****************************************************************************/
 
 #include "OSCPort.h"
+#include <iostream>
 
 /**
  * Create an OSCPort that sends to newAddress, on the standard SuperCollider port
@@ -11,9 +12,9 @@
  *
  * Default the port to the standard one for SuperCollider
  */
-OSCPort::OSCPort(QHostAddress& LocalAddress, QHostAddress& remoteAddress)
+OSCPort::OSCPort(QHostAddress& remoteAddress)
 {
-    construct(LocalAddress, remoteAddress, defaultSCOSCPort());
+    construct(remoteAddress, defaultSCOSCPort());
 }
 
 /**
@@ -21,20 +22,21 @@ OSCPort::OSCPort(QHostAddress& LocalAddress, QHostAddress& remoteAddress)
  * @param newAddress InetAddress
  * @param newPort int
  */
-OSCPort::OSCPort(QHostAddress& LocalAddress, QHostAddress& remoteAddress, qint16 newPort)
+OSCPort::OSCPort(QHostAddress& remoteAddress, qint16 newPort)
 {
-    construct(LocalAddress, remoteAddress, newPort);
+    construct(remoteAddress, newPort);
 }
 
-void OSCPort::construct(QHostAddress& LoAddr, QHostAddress& newAddress, qint16 newPort)
+void OSCPort::construct(QHostAddress& newAddress, qint16 newPort)
 {
     iSocket  = new QUdpSocket();
     iDispatcher = new OSCPacketDispatcher();
     iConverter  = new OSCByteArrayToMsgConverter();
+    ibListening = FALSE;
 
     iAddress = newAddress;
     iPort  = newPort;
-    iSocket->bind(LoAddr, iPort);
+    iSocket->bind(iPort, QUdpSocket::ShareAddress);
 }
 
 OSCPort::~OSCPort()
@@ -48,11 +50,13 @@ OSCPort::~OSCPort()
 void OSCPort::run()
 {
     QByteArray datagram(1536,0);
-    connect(iSocket,SIGNAL(readyRead()),this,SLOT(DummySlot()) );
     while(ibListening)
     {
+        std::cout << "Listening..." << std::endl;
         if(!iSocket->waitForReadyRead())    continue;
         if(!iSocket->hasPendingDatagrams()) continue;
+
+        std::cout << "Recieved something?" << std::endl;
 
         qint32 mbytesLength;
         mbytesLength = iSocket->readDatagram(datagram.data(),1536);
@@ -63,6 +67,7 @@ void OSCPort::run()
             delete &oscPacket;
         }
     }
+    std::cout << "Stopped Listening..." << std::endl;
 }
 
 /**

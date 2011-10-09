@@ -6,6 +6,8 @@
 
 #include <QSystemTrayIcon>
 #include <QDialog>
+#include "OSCPort.h"
+#include "Listener.h"
 
 class QAction;
 class QCheckBox;
@@ -66,6 +68,9 @@ private:
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
+
+	OSCPort* mpPort;
+	Listener mListener;
 };
 
 #endif // MAINWINDOW_H_

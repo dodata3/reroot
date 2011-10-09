@@ -37,11 +37,12 @@ public class PadActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.test_layout);
 	    test_msg = (EditText)findViewById(R.id.edit_test);
 	    //get preferences
 	    preferences = PreferenceManager.getDefaultSharedPreferences(this);
 	    Button submit_btn = (Button)findViewById(R.id.submit_btn);
-	    submit_btn.setOnClickListener(new OnClickListener() {
+	    submit_btn.setOnClickListener( new OnClickListener() {
         	public void onClick(View v){
         		String ip_address = preferences.getString("ip_address", "n/a");
         		String message = test_msg.getText().toString();
@@ -52,8 +53,10 @@ public class PadActivity extends Activity {
 				
 				OSCMessage msg = new OSCMessage("/control", args);
 				try {
+					Log.d(TAG, "Sending...");
 					sender.send(msg);
 				} catch (Exception ex) {
+					Log.d(TAG, "Failed to send...");
 					Log.d(TAG, ex.toString());
 				}
         		
@@ -63,12 +66,14 @@ public class PadActivity extends Activity {
 	    
 	    
 	    try{
+	    	Log.d(TAG, "Trying to create the OSCPort: Address - " + preferences.getString("ip_address", "n/a"));
 	    	this.sender = new OSCPortOut(InetAddress.getByName(preferences.getString("ip_address", "n/a")),
 	    			OSCPort
 	    			.defaultSCOSCPort());
 	    	
 	    }
 	    catch(Exception ex){
+	    	Log.d(TAG, "Could not create the OSCPort");
 	    	Log.d(TAG, ex.toString());
 	    }
 	    

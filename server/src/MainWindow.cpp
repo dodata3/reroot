@@ -2,10 +2,10 @@
 // Description: Main window for RerootServer
 // (C) Cyberpad Technologies 2011
 #include <QtGui>
-#include "Listener.h"
+#include <iostream>
 #include "MainWindow.h"
-#include "OSCMessage.h"
-#include "OSCPort.h"
+
+using namespace std;
 
 MainWindow::MainWindow()
 {
@@ -13,14 +13,16 @@ MainWindow::MainWindow()
 	createMessageGroupBox();
 
 	// See here on how to do the OSC connection: http://www.illposed.com/software/javaosc.html
-	QHostAddress localAddress( "127.0.0.1" ); //Home address
-	QHostAddress remoteAddress( "128.113.232.91" ); //Using Griffin's android for now.
-	qint16 port = 57110;
-	OSCPort osp( localAddress, remoteAddress, port );
-	Listener osL;
-	QString msg("/hello" );
-	osp.addListener( msg, osL );
-	osp.startListening();
+	QHostAddress remoteAddress( "129.161.32.163" ); //Using Griffin's android for now.
+	qint16 port = OSCPort::defaultSCOSCPort();
+    mpPort = new OSCPort( remoteAddress, port );
+	QString msg("/control");
+	mpPort->addListener( msg, mListener );
+	mpPort->startListening();
+
+	// Listen in unix using
+	// sudo tcpdump -s 0 -pnli wlan0 proto UDP and port 57110
+
 
 	iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
 

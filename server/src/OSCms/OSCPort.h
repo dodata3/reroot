@@ -14,8 +14,8 @@
 class OSCPort : public QThread
 {
 public:
-    OSCPort(QHostAddress& LocalAddress, QHostAddress& remoteAddress);
-    OSCPort(QHostAddress& LocalAddress, QHostAddress& remoteAddress, qint16 newPort);
+    OSCPort(QHostAddress& remoteAddress);
+    OSCPort(QHostAddress& remoteAddress, qint16 newPort);
     ~OSCPort();
 
     /**
@@ -37,11 +37,10 @@ public:
     bool isListening() { return ibListening; }
     void addListener(QString& anAddress, OSCListener& listener);
     void send(OSCPacket& aPacket);
-    void construct(QHostAddress& LocalAddress, QHostAddress& newAddress, qint16 newPort);
+    void construct(QHostAddress& newAddress, qint16 newPort);
 
 protected:
     void run();
-    void DummySlot() { };
 
     QHostAddress iAddress;
     bool ibListening;

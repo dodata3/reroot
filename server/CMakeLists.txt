@@ -15,6 +15,12 @@ SET( QT_USE_QTNETWORK TRUE )
 
 INCLUDE( ${QT_USE_FILE} )
 
+IF( NOT CMAKE_BUILD_TYPE )
+  SET( CMAKE_BUILD_TYPE Debug CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+      FORCE )
+ENDIF( NOT CMAKE_BUILD_TYPE )
+
 SET( QT_SOURCES
 	src/MainWindow.h
 )
