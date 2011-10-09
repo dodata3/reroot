@@ -52,11 +52,8 @@ void OSCPort::run()
     QByteArray datagram(1536,0);
     while(ibListening)
     {
-        std::cout << "Listening..." << std::endl;
         if(!iSocket->waitForReadyRead())    continue;
         if(!iSocket->hasPendingDatagrams()) continue;
-
-        std::cout << "Recieved something?" << std::endl;
 
         qint32 mbytesLength;
         mbytesLength = iSocket->readDatagram(datagram.data(),1536);
@@ -67,7 +64,6 @@ void OSCPort::run()
             delete &oscPacket;
         }
     }
-    std::cout << "Stopped Listening..." << std::endl;
 }
 
 /**
