@@ -225,7 +225,6 @@ QVariant OSCByteArrayToMsgConverter::readInteger()
 QDateTime OSCByteArrayToMsgConverter::readTimeTag()
 {
     qint64 secondBytes;
-    qint64 fractionBytes;
     qint32 tdata;
 
     bool isImmediate = TRUE;
@@ -241,7 +240,6 @@ QDateTime OSCByteArrayToMsgConverter::readTimeTag()
     tdata = (tdata<<8)| iBytes->at(iStreamPosition++);
     tdata = (tdata<<8)| iBytes->at(iStreamPosition++);
     if(tdata > 0) isImmediate = FALSE;
-    fractionBytes = (unsigned)tdata;
 
     if(isImmediate) return TIMESTAMP_IMMEDIATE;
 
@@ -249,7 +247,6 @@ QDateTime OSCByteArrayToMsgConverter::readTimeTag()
     long secsSince1970 =  secsSince1900 - OSCBundle::SECONDS_FROM_1900_to_1970;
     if(secsSince1970 < 0) secsSince1970 = 0;
 
-    //long fraction = (fractionBytes*1000)>>32;
     QDateTime mTimeTag;
     mTimeTag.setTime_t(secsSince1970);
     return mTimeTag;

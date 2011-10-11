@@ -64,7 +64,11 @@ static RS *rslist = NULL;
 static pthread_mutex_t rslist_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
+#ifdef _MSC_VER
 static __inline int modnn(RS *rs, int x){
+#else
+static inline int modnn(RS *rs, int x){
+
 	while (x >= rs->nn) {
 		x -= rs->nn;
 		x = (x >> rs->mm) + (x & rs->nn);
