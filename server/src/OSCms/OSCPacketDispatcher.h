@@ -18,12 +18,12 @@ public:
     ~OSCPacketDispatcher();
 
     void addListener(QString& address, OSCListener& listener);
-    void dispatchPacket(OSCPacket& packet, QDateTime* timestamp = NULL);
+    void dispatchPacket(OSCPacket& packet, QHostAddress& address, QDateTime* timestamp = NULL);
 
 private:
-    void dispatchBundle(OSCBundle& bundle);
-    void dispatchMessage(OSCMessage& message);
-    void dispatchMessage(OSCMessage& message, QDateTime& time);
+    void dispatchBundle(OSCBundle& bundle, QHostAddress& address);
+    void dispatchMessage(OSCMessage& message, QHostAddress& address );
+    void dispatchMessage(OSCMessage& message, QHostAddress& address, QDateTime& time);
 
     QHash<QString,OSCListener>* iAddressToClassTable;
 

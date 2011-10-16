@@ -68,7 +68,7 @@ static pthread_mutex_t rslist_mutex = PTHREAD_MUTEX_INITIALIZER;
 static __inline int modnn(RS *rs, int x){
 #else
 static inline int modnn(RS *rs, int x){
-
+#endif
 	while (x >= rs->nn) {
 		x -= rs->nn;
 		x = (x >> rs->mm) + (x & rs->nn);
@@ -81,7 +81,7 @@ static inline int modnn(RS *rs, int x){
 
 #define MM (rs->mm)
 #define NN (rs->nn)
-#define ALPHA_TO (rs->alpha_to) 
+#define ALPHA_TO (rs->alpha_to)
 #define INDEX_OF (rs->index_of)
 #define GENPOLY (rs->genpoly)
 #define NROOTS (rs->nroots)
@@ -281,7 +281,7 @@ void free_rs_cache(void)
  * NROOTS - the number of roots in the RS code generator polynomial,
  *          which is the same as the number of parity symbols in a block.
             Integer variable or literal.
-	    * 
+	    *
  * NN - the total number of symbols in a RS block. Integer variable or literal.
  * PAD - the number of pad symbols in a block. Integer variable or literal.
  * ALPHA_TO - The address of an array of NN elements to convert Galois field

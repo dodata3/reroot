@@ -50,17 +50,18 @@ OSCPort::~OSCPort()
 void OSCPort::run()
 {
     QByteArray datagram(1536,0);
+    QHostAddress address;
     while(ibListening)
     {
         if(!iSocket->waitForReadyRead())    continue;
         if(!iSocket->hasPendingDatagrams()) continue;
 
         qint32 mbytesLength;
-        mbytesLength = iSocket->readDatagram(datagram.data(),1536);
+        mbytesLength = iSocket->readDatagram( datagram.data(),1536, &address );
         if(mbytesLength != -1)
         {
             OSCPacket& oscPacket = iConverter->convert(&datagram,mbytesLength);
-            iDispatcher->dispatchPacket(oscPacket);
+            iDispatcher->dispatchPacket(oscPacket, address);
             delete &oscPacket;
         }
     }
