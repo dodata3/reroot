@@ -6,6 +6,7 @@
 
 #include <QSystemTrayIcon>
 #include <QDialog>
+#include "Connector.h"
 
 class QAction;
 class QCheckBox;
@@ -68,6 +69,8 @@ private:
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
+
+	Connector mConnector;
 };
 
 #endif // MAINWINDOW_H_

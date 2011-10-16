@@ -1,6 +1,5 @@
 #include <QtGui>
 #include "MainWindow.h"
-#include "Connector.h"
 
 int main( int argc, char *argv[] )
 {
