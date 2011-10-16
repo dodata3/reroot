@@ -7,14 +7,14 @@
 #define OSCLISTENER_H
 
 #include <QDateTime>
+#include <QHostAddress>
 
 class OSCMessage;
 
 class OSCListener
 {
 public:
-
-    virtual void acceptMessage(QDateTime& time, OSCMessage& message) {}
+    virtual void acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message ) {}
 
 };
 

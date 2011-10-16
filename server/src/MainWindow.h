@@ -6,8 +6,6 @@
 
 #include <QSystemTrayIcon>
 #include <QDialog>
-#include "OSCPort.h"
-#include "Listener.h"
 
 class QAction;
 class QCheckBox;
@@ -37,6 +35,8 @@ private slots:
 	void iconActivated(QSystemTrayIcon::ActivationReason reason);
 	void showMessage();
 	void messageClicked();
+	void connectNew();
+	void disconnectAll();
 
 private:
 	void createIconGroupBox();
@@ -61,16 +61,13 @@ private:
 	QTextEdit *bodyEdit;
 	QPushButton *showMessageButton;
 
-	QAction *minimizeAction;
-	QAction *maximizeAction;
-	QAction *restoreAction;
-	QAction *quitAction;
+	QAction *connectAction;
+	QAction *advancedAction;
+	QAction *disconnectAllAction;
+	QAction *exitAction;
 
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
-
-	OSCPort* mpPort;
-	Listener mListener;
 };
 
 #endif // MAINWINDOW_H_

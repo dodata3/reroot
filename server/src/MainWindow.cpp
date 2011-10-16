@@ -12,18 +12,6 @@ MainWindow::MainWindow()
 	createIconGroupBox();
 	createMessageGroupBox();
 
-	// See here on how to do the OSC connection: http://www.illposed.com/software/javaosc.html
-	QHostAddress remoteAddress( "129.161.32.163" ); //Using Griffin's android for now.
-	qint16 port = OSCPort::defaultSCOSCPort();
-    mpPort = new OSCPort( remoteAddress, port );
-	QString msg("/control");
-	mpPort->addListener( msg, mListener );
-	mpPort->startListening();
-
-	// Listen in unix using
-	// sudo tcpdump -s 0 -pnli wlan0 proto UDP and port 57110
-
-
 	iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
 
 	createActions();
@@ -46,13 +34,12 @@ MainWindow::MainWindow()
 
 	setWindowTitle(tr("Systray"));
 	resize(400, 300);
+	setVisible( false );
 }
 
 void MainWindow::setVisible(bool visible)
 {
-	minimizeAction->setEnabled(visible);
-	maximizeAction->setEnabled(!isMaximized());
-	restoreAction->setEnabled(isMaximized() || !visible);
+	advancedAction->setEnabled(!isMaximized());
 	QDialog::setVisible(visible);
 }
 
@@ -188,28 +175,38 @@ void MainWindow::createMessageGroupBox()
 
 void MainWindow::createActions()
 {
-	minimizeAction = new QAction(tr("Mi&nimize"), this);
-	connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
+	connectAction = new QAction(tr("&Connect New Device"), this);
+	connect(connectAction, SIGNAL(triggered()), this, SLOT(connectNew()));
 
-	maximizeAction = new QAction(tr("Ma&ximize"), this);
-	connect(maximizeAction, SIGNAL(triggered()), this, SLOT(showMaximized()));
+	advancedAction = new QAction(tr("%Advanced..."), this);
+	connect(advancedAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
-	restoreAction = new QAction(tr("&Restore"), this);
-	connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+	disconnectAllAction = new QAction(tr("&Disconnect All Devices"), this);
+	connect(disconnectAllAction, SIGNAL(triggered()), this, SLOT(disconnectAll()));
 
-	quitAction = new QAction(tr("&Quit"), this);
-	connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+	exitAction = new QAction(tr("&Exit"), this);
+	connect(exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 
 void MainWindow::createTrayIcon()
 {
 	trayIconMenu = new QMenu(this);
-	trayIconMenu->addAction(minimizeAction);
-	trayIconMenu->addAction(maximizeAction);
-	trayIconMenu->addAction(restoreAction);
+	trayIconMenu->addAction(connectAction);
+	trayIconMenu->addAction(advancedAction);
+	trayIconMenu->addAction(disconnectAllAction);
 	trayIconMenu->addSeparator();
-	trayIconMenu->addAction(quitAction);
+	trayIconMenu->addAction(exitAction);
 
 	trayIcon = new QSystemTrayIcon(this);
 	trayIcon->setContextMenu(trayIconMenu);
+}
+
+void MainWindow::disconnectAll()
+{
+	// Tell the connector to disconnect all devices
+}
+
+void MainWindow::connectNew()
+{
+	// Spawn a new window which can be used to connect, give information to the connector
 }
