@@ -129,8 +129,8 @@ public class PadActivity extends Activity {
 		//
 		Object[] args = new Object[3];
 		args[0] = type;
-		args[1] = (float) (Math.pow(Math.abs(x), 1)) * xDir;
-		args[2] = (float) (Math.pow(Math.abs(y), 1)) * yDir;
+		args[1] = (int) ( (Math.pow(Math.abs(x), 1)) * xDir ) / 10;
+		args[2] = (int) ( (Math.pow(Math.abs(y), 1)) * yDir ) / 10;
 		// Log.d(TAG, String.valueOf(Settings.getSensitivity()));
 		//
 		OSCMessage msg = new OSCMessage("/mouse", args);
