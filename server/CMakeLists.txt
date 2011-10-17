@@ -80,6 +80,7 @@ SET( SOURCES
 	src/Connector.cpp
 	src/CipheredListener.cpp
 	src/Cipher.cpp
+	src/HandshakeListener.cpp
 	${OSC_CPP}
 	${QR_CPP}
 	${MOC_CPP}

@@ -96,7 +96,7 @@ QString OSCByteArrayToMsgConverter::readString()
     {
         stringChars.append(iBytes->at(iStreamPosition++));
     }
-    qDebug("readString:%s",QString(stringChars).toAscii().constData());
+    //qDebug("readString:%s",QString(stringChars).toAscii().constData());
     moveToFourByteBoundry();
     return QString(stringChars);
 }

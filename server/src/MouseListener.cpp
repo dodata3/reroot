@@ -16,7 +16,6 @@ MouseListener::MouseListener( Connector* connector ) :
 
 void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message )
 {
-    qDebug( "Moving Mouse" );
     QList< QVariant > args = message.getArguments();
     int dX = args[1].toInt();
     int dY = args[2].toInt();

@@ -13,4 +13,4 @@ public:
     virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message );
 };
 
-#endif // LISTENER_H_
+#endif // MOUSELISTENER_H_

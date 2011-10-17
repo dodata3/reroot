@@ -9,6 +9,7 @@
 #include "Global.h"
 #include "OSCPort.h"
 #include "MouseListener.h"
+#include "HandshakeListener.h"
 
 struct Device
 {
@@ -36,6 +37,7 @@ private:
 	QHostAddress mListenerAddress;
 	OSCPort* mIncomingPort;
 	MouseListener mMouse;
+	HandshakeListener mHandshake;
 	DeviceMap mDeviceMap;
 };
 

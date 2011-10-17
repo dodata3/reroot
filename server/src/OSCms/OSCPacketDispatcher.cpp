@@ -7,7 +7,7 @@
 
 OSCPacketDispatcher::OSCPacketDispatcher()
 {
-    iAddressToClassTable = new QHash<QString,OSCListener>();
+    iAddressToClassTable = new QHash<QString,OSCListener*>();
 }
 
 OSCPacketDispatcher::~OSCPacketDispatcher()
@@ -18,7 +18,7 @@ OSCPacketDispatcher::~OSCPacketDispatcher()
 
 void OSCPacketDispatcher::addListener(QString& address, OSCListener& listener)
 {
-    iAddressToClassTable->insert(address, listener);
+    iAddressToClassTable->insert(address, &listener);
 }
 
 void OSCPacketDispatcher::dispatchPacket(OSCPacket& packet, QHostAddress& address, QDateTime* timestamp)
@@ -62,8 +62,8 @@ void OSCPacketDispatcher::dispatchMessage(OSCMessage& message, QHostAddress& add
         const QString& addresskey = mkeys.at(i);
         if(addresskey==message.getAddress())
         {
-            OSCListener olistener = iAddressToClassTable->value(addresskey);
-            olistener.acceptMessage(address,time,message);
+            OSCListener* olistener = iAddressToClassTable->value(addresskey);
+            olistener->acceptMessage(address,time,message);
         }
     }
 }

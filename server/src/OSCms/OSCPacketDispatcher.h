@@ -8,7 +8,7 @@
 
 #include "OSCListener.h"
 #include "OSCBundle.h"
-#include"OSCMessage.h"
+#include "OSCMessage.h"
 //#include <QHash>
 
 class OSCPacketDispatcher
@@ -25,7 +25,7 @@ private:
     void dispatchMessage(OSCMessage& message, QHostAddress& address );
     void dispatchMessage(OSCMessage& message, QHostAddress& address, QDateTime& time);
 
-    QHash<QString,OSCListener>* iAddressToClassTable;
+    QHash<QString,OSCListener*>* iAddressToClassTable;
 
 };
 
