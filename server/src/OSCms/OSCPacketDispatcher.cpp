@@ -44,7 +44,7 @@ void OSCPacketDispatcher::dispatchBundle(OSCBundle& bundle, QHostAddress& addres
     QList<OSCPacket>& packets = bundle.getPackets();
     for (int i = 0; i < packets.length(); i++)
     {
-            dispatchPacket((OSCPacket&)packets.at(i), address, &timestamp);
+        dispatchPacket((OSCPacket&)packets.at(i), address, &timestamp);
     }
 }
 

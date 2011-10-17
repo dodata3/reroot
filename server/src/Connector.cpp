@@ -27,7 +27,6 @@ Connector::~Connector()
 
 void Connector::AddNewDevice( QHostAddress& inRemote, SecretKey inSecretKey )
 {
-	// Add the secret key to the local listener
 	Device dev;
 	dev.port = new OSCPort( inRemote, REROOT_PORT );
 	dev.secretKey = inSecretKey;

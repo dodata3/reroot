@@ -178,7 +178,7 @@ void MainWindow::createActions()
 	connectAction = new QAction(tr("&Connect New Device"), this);
 	connect(connectAction, SIGNAL(triggered()), this, SLOT(connectNew()));
 
-	advancedAction = new QAction(tr("%Advanced..."), this);
+	advancedAction = new QAction(tr("&Advanced..."), this);
 	connect(advancedAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
 	disconnectAllAction = new QAction(tr("&Disconnect All Devices"), this);
@@ -204,6 +204,7 @@ void MainWindow::createTrayIcon()
 void MainWindow::disconnectAll()
 {
 	// Tell the connector to disconnect all devices
+	mConnector.RemoveAllDevices();
 }
 
 void MainWindow::connectNew()

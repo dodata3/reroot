@@ -9,7 +9,7 @@
 class MouseListener : public CipheredListener
 {
 public:
-	explicit MouseListener( Connector* connector ) : CipheredListener( connector ) {}
+	MouseListener( Connector* connector );
     virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message );
 };
 

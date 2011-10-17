@@ -9,11 +9,17 @@
 
 using namespace std;
 
+MouseListener::MouseListener( Connector* connector ) :
+    CipheredListener( connector )
+{
+}
+
 void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message )
 {
+    qDebug( "Moving Mouse" );
     QList< QVariant > args = message.getArguments();
-    int dX = args[0].toInt();
-    int dY = args[1].toInt();
+    int dX = args[1].toInt();
+    int dY = args[2].toInt();
     QPoint curPos = QCursor::pos();
     QCursor::setPos( curPos.x() + dX, curPos.y() + dY );
 }

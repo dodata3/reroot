@@ -6,6 +6,7 @@
 
 #include <QMap>
 #include <QMutex>
+#include "Global.h"
 #include "OSCPort.h"
 #include "MouseListener.h"
 

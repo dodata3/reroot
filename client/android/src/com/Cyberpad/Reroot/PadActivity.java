@@ -69,24 +69,8 @@ public class PadActivity extends Activity {
 	    
 		touchpad.setOnTouchListener(new View.OnTouchListener(){
 			public boolean onTouch(View v, MotionEvent ev){
-				Object[] args = new Object[3];
-				args[0] = 1; /* key down */
-				args[1] = 96;// (int)c;
-				args[2] = new Character('a');
-				
-				OSCMessage msg = new OSCMessage("/control", args);
-				try {
-					Log.d(TAG, "Sending...");
-					sender.send(msg);
-					return true;
-				} catch (Exception ex) {
-					Log.d(TAG, "Failed to send...");
-					Log.d(TAG, ex.toString());
-					return false;
-				}
-        		
+				return onMouseMove( ev );
         	}
-        	
         });
 	    
 	    try{
