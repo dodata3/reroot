@@ -8,30 +8,27 @@ import com.illposed.osc.OSCPortOut;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
-import android.os.PowerManager;
+import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+
 
 public class PadActivity extends Activity {
 	private OSCPortOut sender;
+	//keyboard stuff
+	private FrameLayout soft_keys;
+	private Handler handler = new Handler();
+	//private boolean softShown = false;
+	private Runnable rMidDown;
+	private Runnable rMidUp;
+	
 	SharedPreferences preferences;
-	EditText test_msg;
 	private static final String TAG = "Reroot";
 	private float xHistory;
 	private float yHistory;
@@ -41,31 +38,20 @@ public class PadActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.test_layout);
-	    test_msg = (EditText)findViewById(R.id.edit_test);
+	    setContentView(R.layout.new_layout);
 	    //get preferences
 	    preferences = PreferenceManager.getDefaultSharedPreferences(this);
-	    Button submit_btn = (Button)findViewById(R.id.submit_btn);
 	    FrameLayout touchpad = (FrameLayout)findViewById(R.id.TouchPad);
-	    submit_btn.setOnClickListener( new OnClickListener() {
-        	public void onClick(View v){
-				Object[] args = new Object[3];
-				args[0] = 1; /* key down */
-				args[1] = 96;// (int)c;
-				args[2] = new Character('a');
-				
-				OSCMessage msg = new OSCMessage("/control", args);
-				try {
-					Log.d(TAG, "Sending...");
-					sender.send(msg);
-				} catch (Exception ex) {
-					Log.d(TAG, "Failed to send...");
-					Log.d(TAG, ex.toString());
-				}
-        		
-        	}
-        	
-        });
+	    FrameLayout keys = (FrameLayout)findViewById(R.id.keyboard_btn);
+	    
+	    keys.setOnTouchListener(new View.OnTouchListener(){
+	    	public boolean onTouch(View v, MotionEvent ev){
+	    		return onKeyTouch(ev);
+	    	}
+	    });
+	    soft_keys = keys;
+	    
+	    
 	    
 		touchpad.setOnTouchListener(new View.OnTouchListener(){
 			public boolean onTouch(View v, MotionEvent ev){
@@ -73,6 +59,18 @@ public class PadActivity extends Activity {
         	}
         });
 	    
+		//initialize keyboard stuff
+		this.rMidDown = new Runnable() {
+			public void run() {
+				drawSoftOn();
+			}
+		};
+		this.rMidUp = new Runnable() {
+			public void run() {
+				drawSoftOff();
+			}
+		};
+		
 	    try{
 	    	Log.d(TAG, "Trying to create the OSCPort: Address - " + preferences.getString("ip_address", "n/a"));
 	    	this.sender = new OSCPortOut(InetAddress.getByName(preferences.getString("ip_address", "n/a")),
@@ -88,6 +86,8 @@ public class PadActivity extends Activity {
 	
 	    // TODO Auto-generated method stub
 	}
+	
+	//mouse zone
 	
 	private boolean onMouseMove(MotionEvent ev) {
 		int type = 0;
@@ -140,6 +140,44 @@ public class PadActivity extends Activity {
 			Log.d(TAG, ex.toString());
 		}
 	}
+	
+	//keyboard zone
+	
+	private boolean onKeyTouch(MotionEvent ev) {
+		switch (ev.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			//
+			this.handler.post(this.rMidDown);
+			break;
+		case MotionEvent.ACTION_UP:
+			//
+			this.midButtonDown();
+			this.handler.post(this.rMidUp);
+			break;
+		}
+		//this.softShown = true;
+		//
+		return true;
+	}
+
+	private void midButtonDown() {
+		InputMethodManager man = (InputMethodManager) this.getApplicationContext()
+				.getSystemService(INPUT_METHOD_SERVICE);
+		man.toggleSoftInputFromWindow(this.soft_keys.getWindowToken(),
+				InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+	}
+	
+	private void drawSoftOn() {
+		this.soft_keys.setBackgroundResource(R.drawable.keyboard_on);
+	}
+
+	private void drawSoftOff() {
+		this.soft_keys.setBackgroundResource(R.drawable.keyboard_off);
+	}
 
 }
+
+
+
+
 
