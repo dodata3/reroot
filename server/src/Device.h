@@ -10,14 +10,17 @@
 #include "OSCPort.h"
 
 #include "Global.h"
+#include "Message.h"
+#include "HandshakeListener.h"
+#include "MouseListener.h"
 
 class Device
 {
     // static
 protected:
-    static const qint16 mDefaultPort = 57110;
+    static const qint16 sDefaultPort = 57110;
 public:
-    typedef int id_type;
+    typedef int ID;
 
     // non-static
 protected:
@@ -26,37 +29,44 @@ protected:
     QString mName;    // Reference name (for viewing and differentiating connected devices, etc.)
 public:
     Device( const QString& name, const QHostAddress& address, OSCPort* port );
+    ~Device();
 };
 
 class DeviceServer
 {
     // static
 private:
-    static const QString mDefaultName;
+    static const QString sDefaultName;
+
+    static const QString sMouseAddress;
+    static const QString sKeyboardAddress;
+    static const QString sJoystickAddress;
+    static const QString sHandshakeAddress;
 
     // non-static
 private:
 
-    id_type mIdNext; // Next id to assign a client device
+    ID mIdNext; // Next id to assign a client device
 
     QMutex mClientLock;
-	QHostAddress mListenerAddress;
+    QMap<ID, DeviceClient> mClients;
+
+	// Listeners
 	MouseListener mMouse;
 	HandshakeListener mHandshake;
-
-	QString mouseAddress = QString( "/mouse" );
-	mIncomingPort->addListener( mouseAddress, mMouse );
-	mIncomingPort->startListening();
 
 public:
     DeviceServer();
     ~DeviceServer();
+
     void generateQR() const;
-    type_id addClient(QHostAddress& address, SecretKey key);
-    bool removeClient(type_id id);
+
+    ID addClient(QHostAddress& address, SecretKey key);
+    bool removeClient(ID id);
     void removeAll();
 
-    QMap<type_id, DeviceClient> clients;
+    const DeviceClient& client(ID id) const;
+    DeviceClient& client(ID id);
 };
 
 class DeviceClient
@@ -64,16 +74,17 @@ class DeviceClient
 
     // static
 private:
-    static const QString mDefaultName;
-    static unsigned int mDefaultNameNumber = 0; // Number to append to default device name
+    static const QString sDefaultName;
+    static unsigned int sDefaultNameNumber = 0; // Number to append to default device name
+
     // non-static
 private:
-    const type_id mId;
+    const ID mId;
     SecretKey mKey;
 
 public:
-    DeviceClient( const QString& name, const QHostAddress& address, SecretKey key, id_type id );
-    DeviceClient( const QHostAddress& address, SecretKey key, id_type id ); // Default name constructor
+    DeviceClient( const QString& name, const QHostAddress& address, SecretKey key, ID id );
+    DeviceClient( const QHostAddress& address, SecretKey key, ID id ); // Default name constructor
     ~DeviceClient();
 
     bool send( Message const & message ) const;

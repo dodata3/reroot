@@ -5,11 +5,21 @@ Device::Device(const QString& name, const QString& address) : mName(name), mAddr
 
 }
 
-const QString DeviceServer::mDefaultName(tr("Server"));
+const QString DeviceServer::sDefaultName(tr("Server"));
 
-DeviceServer::DeviceServer() : Device(mDefaultName, QHostAddress::Any), mIdNext(1), mPort(new OSCPort(mAddress, mDefaultPort))
+// I'm assuming these shouldn't be (and don't need to be) localized
+const QString DeviceServer::sMouseAddress("/mouse");
+const QString DeviceServer::sKeyboardAddress("/keyboard");
+const QString DeviceServer::sJoystickAddress("/joystick");
+const QString DeviceServer::sHandshakeAddress("/handshake");
+
+DeviceServer::DeviceServer() : Device(sDefaultName, QHostAddress::Any), mIdNext(1), mPort(new OSCPort(mAddress, mDefaultPort))
 {
-
+	mPort->addListener(sMouseAddress,       mMouse);
+	//mPort->addListener(sKeyboardAddress,  mKeyboard);
+	//mPort->addListener(sJoystickAddress,  mJoystick);
+	mPort->addListener(sHandshakeAddress,   mHandshake);
+	mPort->startListening();
 }
 
 DeviceServer::~DeviceServer()
@@ -20,17 +30,17 @@ DeviceServer::~DeviceServer()
 	removeAll();
 }
 
-type_id DeviceServer::addClient(QHostAddress& address, SecretKey key)
+idType DeviceServer::addClient(QHostAddress& address, SecretKey key)
 {
     mClientsLock.lock();
     mClients.insert(mIdNext, DeviceClient(address, key, mIdNext));
-    type_id addedID = mIdNext++;
+    idType addedID = mIdNext++;
     mClientsLock.unlock();
 
     return addedID;
 }
 
-bool DeviceServer::removeClient(type_id id)
+bool DeviceServer::removeClient(idType id)
 {
     mClientsLock.lock();
     bool result = mClients.remove(id);
@@ -46,14 +56,31 @@ void DeviceServer::removeAll()
     mClientsLock.unlock();
 }
 
-const QString DeviceClient::mDefaultName(tr("Device "));
+// Currently will dereference end iterator if given an invalid id
+// Will need to either throw an exception or a 'not-found' DeviceClient object
+const DeviceClient& DeviceServer::client(idType id) const
+{
+    mClientsLock.lock();
+    const DeviceClient& found(*mClients.constFind());
+    mClientsLock.unlock();
+    return found;
+}
+DeviceClient& DeviceServer::client(idType id)
+{
+    mClientsLock.lock();
+    DeviceClient& found(*mClients.find());
+    mClientsLock.unlock();
+    return
+}
 
-DeviceClient::DeviceClient(const QString& name, const QHostAddress& address, SecretKey key, id_type id) : Device(name, address, new OSCPort( inRemote, mDefaultPort )), mId(id), mKey(key)
+const QString DeviceClient::sDefaultName(tr("Device "));
+
+DeviceClient::DeviceClient(const QString& name, const QHostAddress& address, SecretKey key, idType id) : Device(name, address, new OSCPort( address, sDefaultPort )), mId(id), mKey(key)
 {
 
 }
 
-DeviceClient::DeviceClient(const QHostAddress& address, SecretKey key, id_type id) : Device(QString(mDefaultName).append(QString().number(++mDefaultNameNumber)), address, new OSCPort( inRemote, mDefaultPort )), mId(id), mKey(key)
+DeviceClient::DeviceClient(const QHostAddress& address, SecretKey key, idType id) : Device(QString(sDefaultName).append(QString().number(++sDefaultNameNumber)), address, new OSCPort( address, sDefaultPort )), mId(id), mKey(key)
 {
     // Create a DeviceClient with a default name, incrementing the number count
 }
