@@ -1,4 +1,4 @@
-#include <Message.h>
+#include "Message.h"
 
 MessageString::MessageString(const QString& string) : mString(string)
 {

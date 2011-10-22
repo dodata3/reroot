@@ -77,10 +77,11 @@ SET( SOURCES
 	src/main.cpp
 	src/MainWindow.cpp
 	src/MouseListener.cpp
-	src/Connector.cpp
+	#src/Connector.cpp
 	src/CipheredListener.cpp
 	src/Cipher.cpp
 	src/HandshakeListener.cpp
+	src/Device.cpp
 	${OSC_CPP}
 	${QR_CPP}
 	${MOC_CPP}

@@ -204,7 +204,8 @@ void MainWindow::createTrayIcon()
 void MainWindow::disconnectAll()
 {
 	// Tell the connector to disconnect all devices
-	mConnector.RemoveAllDevices();
+	//mConnector.RemoveAllDevices();
+	mServer.removeAll();
 }
 
 void MainWindow::connectNew()

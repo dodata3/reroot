@@ -8,6 +8,7 @@
 #include "OSCListener.h"
 #include "Cipher.h"
 
+/*
 class Connector;
 
 class CipheredListener : public OSCListener, public Cipher
@@ -18,6 +19,21 @@ public:
     virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message ) = 0;
 private:
 	Connector* mpConnector;
+};
+*/
+
+class DeviceServer;
+
+class CipheredListener : public OSCListener, public Cipher
+{
+private:
+    DeviceServer * const mServer;
+public:
+    CipheredListener( DeviceServer* server );
+
+    virtual void acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message );
+    virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message ) = 0;
+
 };
 
 #endif // CIPHEREDLISTENER_H_

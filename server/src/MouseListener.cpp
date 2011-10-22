@@ -9,8 +9,15 @@
 
 using namespace std;
 
+/*
 MouseListener::MouseListener( Connector* connector ) :
     CipheredListener( connector )
+{
+}
+*/
+
+MouseListener::MouseListener( DeviceServer* server ) :
+    CipheredListener( server )
 {
 }
 

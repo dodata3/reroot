@@ -8,20 +8,21 @@
 
 class MouseListener : public CipheredListener
 {
-    enum buttonType
+    enum Button
     {
         Mouse1 = 0x1,
         Mouse2 = 0x2,
         Mouse3 = 0x4,
         Mouse4 = 0x8,
-        Mouse5 = 0x16
+        Mouse5 = 0x16,
+
+        MouseLeft = 0x1,
+        MouseRight = 0x2,
+        MouseMiddle = 0x4,
     };
 
-    typedef Mouse1 MouseLeft;
-    typedef Mouse2 MouseRight;
-    typedef Mouse3 MouseMiddle;
 public:
-	MouseListener( Connector* connector );
+	MouseListener( DeviceServer* server );
     virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message );
 };
 
