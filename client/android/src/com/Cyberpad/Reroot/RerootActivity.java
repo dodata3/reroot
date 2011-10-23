@@ -147,6 +147,7 @@ public class RerootActivity extends Activity {
     		edit.putString("public_key_exp", pub.getPublicExponent().toString());
     		edit.putString("private_key_mod", priv.getModulus().toString());
     		edit.putString("private_key_exp", priv.getPrivateExponent().toString());
+    		edit.putInt("key_pair", 1);
     		edit.commit();
     		
         }catch(Exception e){
