@@ -13,18 +13,21 @@ Device::~Device()
 
 const QString DeviceServer::sDefaultName(QObject::tr("Server"));
 
-// I'm assuming these shouldn't be (and don't need to be) localized
 QString DeviceServer::sMouseAddress("/mouse");
 QString DeviceServer::sKeyboardAddress("/keyboard");
 QString DeviceServer::sJoystickAddress("/joystick");
 QString DeviceServer::sHandshakeAddress("/handshake");
 
-DeviceServer::DeviceServer() : Device(sDefaultName, QHostAddress::Any, new OSCPort(mAddress, (const qint16)(sDefaultPort))), mIdNext(1),
+//DeviceServer::DeviceServer() : Device(sDefaultName, QHostAddress::Any, new OSCPort(mAddress, (const qint16)(sDefaultPort))), mIdNext(1),
+DeviceServer::DeviceServer() : Device(sDefaultName, QHostAddress::Any, NULL), mIdNext(1),
 mMouse(this),
 //mKeyboard(this),
 //mJoystick(this),
 mHandshake()
 {
+    // Initialize only once we have a mAddress initialized
+    mPort = new OSCPort(mAddress, (const qint16)(sDefaultPort));
+
 	mPort->addListener(sMouseAddress,       mMouse);
 	//mPort->addListener(sKeyboardAddress,  mKeyboard);
 	//mPort->addListener(sJoystickAddress,  mJoystick);
