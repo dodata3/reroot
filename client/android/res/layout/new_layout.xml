@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<FrameLayout android:background="@drawable/touchpad" 
+		android:layout_width="wrap_content" android:layout_height="317dp" 
+		android:layout_weight="0.80" android:id="@+id/TouchPad" 
+		android:layout_alignParentTop="true" android:layout_above="@+id/keyboard_btn"
+	/>
+	<EditText android:id="@+id/AdvancedText" android:layout_marginTop="-100dp" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true" android:layout_alignParentRight="true"
+		android:layout_centerHorizontal="true" android:maxHeight="32dp"
+		android:inputType="textMultiLine"
+		android:visibility="visible"
+	/>
+	<FrameLayout android:background="@drawable/keyboard" 
+		android:layout_height="wrap_content" android:layout_width="wrap_content" 
+		android:minHeight="100dp" android:minWidth="60dp" 
+		android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" 
+		android:id="@+id/keyboard_btn"
+	/>
+	
+</RelativeLayout>

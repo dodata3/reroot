@@ -1,12 +1,17 @@
 package com.Cyberpad.Reroot;
 
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -39,6 +44,9 @@ public class RerootActivity extends Activity {
         
         //initialize preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        if( !preferences.contains("key_pair") )
+        	GenerateKeyPair();
         
         view_btn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v){
@@ -121,26 +129,29 @@ public class RerootActivity extends Activity {
     	
     }
     
-	/*private void onConnectButton() {
-		String ip = this.tbIp.getText().toString();
-		if (ip.matches("^[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}$")) {
-			try {
-				Settings.setIp(ip);
-				//
-				Intent i = new Intent(this, PadActivity.class);
-				this.startActivity(i);
-				this.finish();
-			} catch (Exception ex) {
-				//this.tvError.setText("Invalid IP address");
-				//this.tvError.setVisibility(View.VISIBLE);
-				Toast.makeText(this, this.getResources().getText(R.string.toast_invalidIP), Toast.LENGTH_LONG).show();
-				Log.d(TAG, ex.toString());
-			}
-		} else {
-			//this.tvError.setText("Invalid IP address");
-			//this.tvError.setVisibility(View.VISIBLE);
-			Toast.makeText(this, this.getResources().getText(R.string.toast_invalidIP), Toast.LENGTH_LONG).show();
-		}
-	}*/
-   
+    public void GenerateKeyPair()
+    {       
+        try{
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+            kpg.initialize(2048);
+            KeyPair kp = kpg.genKeyPair();
+
+            KeyFactory fact = KeyFactory.getInstance("RSA");
+            RSAPublicKeySpec pub = fact.getKeySpec(kp.getPublic(),
+              RSAPublicKeySpec.class);
+            RSAPrivateKeySpec priv = fact.getKeySpec(kp.getPrivate(),
+              RSAPrivateKeySpec.class);
+            
+            Editor edit = preferences.edit();
+    		edit.putString("public_key_mod", pub.getModulus().toString());
+    		edit.putString("public_key_exp", pub.getPublicExponent().toString());
+    		edit.putString("private_key_mod", priv.getModulus().toString());
+    		edit.putString("private_key_exp", priv.getPrivateExponent().toString());
+    		edit.putInt("key_pair", 1);
+    		edit.commit();
+    		
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 }
