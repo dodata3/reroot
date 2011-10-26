@@ -19,8 +19,6 @@ import android.view.KeyCharacterMap;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -181,7 +179,7 @@ public class PadActivity extends Activity {
 	//mouse zone
 	
 	private boolean onMouseMove(MotionEvent ev) {
-		int type = 0;
+		int type = -1;
 		float xMove = 0f;
 		float yMove = 0f;
 		
@@ -189,6 +187,7 @@ public class PadActivity extends Activity {
 			case MotionEvent.ACTION_DOWN:
 				xMove = 0;
 				yMove = 0;
+				type = 0;
 				this.xHistory = ev.getX();
 				this.yHistory = ev.getY();
 				break;
@@ -206,7 +205,7 @@ public class PadActivity extends Activity {
 				break;
 		}
 		
-		if(type==2){
+		if(type >= 0 ){
 			this.sendMouseEvent(type, xMove, yMove);
 		}
 		return true;
