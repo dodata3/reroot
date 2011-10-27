@@ -81,6 +81,8 @@ SET( SOURCES
 	src/CipheredListener.cpp
 	src/Cipher.cpp
 	src/HandshakeListener.cpp
+	src/Mouse.cpp
+	src/Keyboard.cpp
 	${OSC_CPP}
 	${QR_CPP}
 	${MOC_CPP}
