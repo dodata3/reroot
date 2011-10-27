@@ -9,11 +9,14 @@
 
 Connector::Connector() :
 	mListenerAddress( QHostAddress::Any ),
-	mMouse( this )
+	mMouse( this ),
+	mKeyboard( this )
 {
 	mIncomingPort = new OSCPort( mListenerAddress, REROOT_PORT );
 	QString mouseAddress = QString( "/mouse" );
+	QString keyboardAddress = QString( "/keyboard" );
 	mIncomingPort->addListener( mouseAddress, mMouse );
+	mIncomingPort->addListener( keyboardAddress, mKeyboard );
 	mIncomingPort->startListening();
 }
 

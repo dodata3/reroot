@@ -248,7 +248,7 @@ void Mouse::scroll(signed int horizontal, signed int vertical)
 {
     // Scroll wheel X clicks, positive is scrolling up/right
     #ifdef OS_WINDOWS
-        INPUT input[2];
+        INPUT input[2]; // [horizontal, vertical]
         input[0].type = INPUT_MOUSE;
         input[0].mi.dx = 0;
         input[0].mi.dy = 0;

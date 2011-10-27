@@ -42,6 +42,33 @@ void Keyboard::down(Keycode key)
             }
         }
     #endif
+
+    #ifdef OS_LINUX
+        XEvent event;
+        memset(&event, 0, sizeof(event));
+        event.xkey.button = key;
+        event.xbutton.same_screen = True;
+        event.xbutton.subwindow = DefaultRootWindow(mDisplay);
+        while (event.xbutton.subwindow) // Find window
+        {
+            event.xbutton.window = event.xbutton.subwindow;
+            XQueryPointer(mDisplay,
+                          event.xbutton.window,
+                          &event.xbutton.root,
+                          &event.xbutton.subwindow,
+                          &event.xbutton.x_root,
+                          &event.xbutton.y_root,
+                          &event.xbutton.x,
+                          &event.xbutton.y,
+                          &event.xbutton.state);
+        }
+        event.type = KeyPress;
+        if (XSendEvent(mDisplay, PointerWindow, True, ButtonReleaseMask, &event))
+        {
+            // error
+        }
+        XFlush(mDisplay);
+    #endif
 }
 
 void Keyboard::up(Keycode key)
