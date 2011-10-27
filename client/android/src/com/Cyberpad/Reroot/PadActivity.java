@@ -55,7 +55,7 @@ public class PadActivity extends Activity {
 	    		WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 	    //get preferences
 	    preferences = PreferenceManager.getDefaultSharedPreferences(this);
-	    charmap = KeyCharacterMap.load(KeyCharacterMap.BUILT_IN_KEYBOARD);
+	    charmap = KeyCharacterMap.load(KeyCharacterMap.ALPHA);
 	    
 	    
 	    
@@ -297,6 +297,7 @@ public class PadActivity extends Activity {
 		
 		for(int i=0; i<keys.length();i++){
 			String c = keys.substring(i, i+1);
+			char c_c = c.charAt(0);
 			boolean isShift = false;
 			boolean isCtrl = false;
 			
@@ -347,6 +348,7 @@ public class PadActivity extends Activity {
 							break;
 						}
 			
+			
 			try{
 				if(isCtrl){
 					Object[] args = new Object[3];
@@ -369,8 +371,8 @@ public class PadActivity extends Activity {
 				{
 					Object[] args = new Object[3];
 					args[0] = 0; //key down
-					args[1] = key;
-					args[2] = c;
+					args[1] = key+68;
+					args[2] = c_c;
 					OSCMessage msg = new OSCMessage("/keyboard", args);
 					
 					this.sender.send(msg);
@@ -378,8 +380,8 @@ public class PadActivity extends Activity {
 				{
 					Object[] args = new Object[3];
 					args[0] = 1; /* key up */
-					args[1] = key;// (int)c;
-					args[2] = c;
+					args[1] = key+68;// (int)c;
+					args[2] = c_c;
 					OSCMessage msg = new OSCMessage("/keyboard", args);
 	
 					this.sender.send(msg);
