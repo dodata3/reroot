@@ -16,10 +16,23 @@ Mouse::Mouse()
     Init();
 }
 
+Mouse::~Mouse()
+{
+    #ifdef OS_LINUX
+        XCloseDisplay(mDisplay);
+    #endif
+}
+
 void Mouse::Init()
 {
     #ifdef OS_WINDOWS
 
+    #endif
+    #ifdef OS_LINUX
+        if ((mDisplay = XOpenDisplay(NULL)) == NULL) // Open Display according to environment variable
+        {
+            // error
+        }
     #endif
 }
 
@@ -89,6 +102,53 @@ void Mouse::down(unsigned int button)
             }
         }
     #endif
+    #ifdef OS_LINUX
+        XEvent event;
+        memset(&event, 0, sizeof(event));
+        switch (button)
+        {
+            case 1:
+                event.xbutton.button = Button1;
+                break;
+            case 2:
+                event.xbutton.button = Button2;
+                break;
+            case 3:
+                event.xbutton.button = Button3;
+                break;
+            case 4:
+                event.xbutton.button = Button4;
+                break;
+            case 5:
+                event.xbutton.button = Button5;
+                break;
+            default:
+                // Invalid button
+                break;
+        }
+        event.xbutton.same_screen = True;
+        event.xbutton.subwindow = DefaultRootWindow(mDisplay);
+        while (event.xbutton.subwindow) // Find window
+        {
+            event.xbutton.window = event.xbutton.subwindow;
+            XQueryPointer(mDisplay,
+                          event.xbutton.window,
+                          &event.xbutton.root,
+                          &event.xbutton.subwindow,
+                          &event.xbutton.x_root,
+                          &event.xbutton.y_root,
+                          &event.xbutton.x,
+                          &event.xbutton.y,
+                          &event.xbutton.state);
+        }
+        event.type = ButtonPress;
+        if (XSendEvent(mDisplay, PointerWindow, True, ButtonPressMask, &event))
+        {
+            // error
+        }
+        XFlush(mDisplay);
+
+    #endif
 }
 
 void Mouse::up(unsigned int button)
@@ -134,6 +194,53 @@ void Mouse::up(unsigned int button)
                     break;
             }
         }
+    #endif
+
+    #ifdef OS_LINUX
+        XEvent event;
+        memset(&event, 0, sizeof(event));
+        switch (button)
+        {
+            case 1:
+                event.xbutton.button = Button1;
+                break;
+            case 2:
+                event.xbutton.button = Button2;
+                break;
+            case 3:
+                event.xbutton.button = Button3;
+                break;
+            case 4:
+                event.xbutton.button = Button4;
+                break;
+            case 5:
+                event.xbutton.button = Button5;
+                break;
+            default:
+                // Invalid button
+                break;
+        }
+        event.xbutton.same_screen = True;
+        event.xbutton.subwindow = DefaultRootWindow(mDisplay);
+        while (event.xbutton.subwindow) // Find window
+        {
+            event.xbutton.window = event.xbutton.subwindow;
+            XQueryPointer(mDisplay,
+                          event.xbutton.window,
+                          &event.xbutton.root,
+                          &event.xbutton.subwindow,
+                          &event.xbutton.x_root,
+                          &event.xbutton.y_root,
+                          &event.xbutton.x,
+                          &event.xbutton.y,
+                          &event.xbutton.state);
+        }
+        event.type = ButtonPress;
+        if (XSendEvent(mDisplay, PointerWindow, True, ButtonReleaseMask, &event))
+        {
+            // error
+        }
+        XFlush(mDisplay);
     #endif
 }
 

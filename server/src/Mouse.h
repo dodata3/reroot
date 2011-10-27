@@ -14,12 +14,19 @@
     #include <Winuser.h>
     #include <Winable.h>
 #endif
+#ifdef OS_LINUX
+    #include <X11/Xlib.h>
+#endif
 
 class Mouse
 {
     // static
 private:
     static Mouse* sInstance;
+
+    #ifdef OS_LINUX
+
+    #endif
 
 public:
     static Mouse& get();
@@ -32,7 +39,12 @@ public:
 
     // non-static
 private:
+    #ifdef OS_LINUX
+        Display* mDisplay;
+    #endif
+
     Mouse();
+    ~Mouse();
     void Init();
 
 public:
