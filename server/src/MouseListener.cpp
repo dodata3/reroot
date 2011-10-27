@@ -18,10 +18,24 @@ MouseListener::MouseListener( Connector* connector ) :
 void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message )
 {
     QList< QVariant > args = message.getArguments();
-    int dX = args[1].toInt();
-    int dY = args[2].toInt();
-
-    Mouse::get().MovePosition(QPoint(dX, dY));
-    //QPoint curPos = QCursor::pos();
-    //QCursor::setPos( curPos.x() + dX, curPos.y() + dY );
+    int type = args[0].toInt();
+    switch (type)
+    {
+    case 0:
+        Mouse::get().down(Mouse::sLeft);
+        break;
+    case 1:
+        Mouse::get().up(Mouse::sLeft);
+        break;
+    case 2:
+    {
+        int dX = args[1].toInt();
+        int dY = args[2].toInt();
+        Mouse::get().MovePosition(QPoint(dX, dY));
+    }
+        break;
+    default:
+        // unknown type
+        break;
+    }
 }
