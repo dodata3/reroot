@@ -77,6 +77,7 @@ SET( SOURCES
 	src/main.cpp
 	src/MainWindow.cpp
 	src/MouseListener.cpp
+	src/KeyboardListener.cpp
 	src/Connector.cpp
 	src/CipheredListener.cpp
 	src/Cipher.cpp

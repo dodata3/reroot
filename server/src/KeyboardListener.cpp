@@ -28,7 +28,7 @@ void KeyboardListener::acceptDecipheredMessage( QHostAddress& address, QDateTime
         printf("Key down message: keycode %i character %i\n", keycode, character);
         break;
     case 1:
-        Keyboard::get().down(keycode);
+        Keyboard::get().up(keycode);
         printf("Key up message: keycode %i character %i\n", keycode, character);
         break;
     default:
