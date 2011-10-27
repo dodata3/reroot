@@ -5,6 +5,9 @@
 #include <iostream>
 #include "MainWindow.h"
 
+#include "Keyboard.h"
+#include "Mouse.h"
+
 using namespace std;
 
 MainWindow::MainWindow()
