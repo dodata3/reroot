@@ -1,11 +1,12 @@
 package com.Cyberpad.Reroot;
 
 import java.net.InetAddress;
+//import java.util.Timer;
+//import java.util.TimerTask;
 
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPort;
 import com.illposed.osc.OSCPortOut;
-
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import android.view.KeyEvent;
 
 
@@ -42,6 +44,9 @@ public class PadActivity extends Activity {
 	private static final String TAG = "Reroot";
 	private float xHistory;
 	private float yHistory;
+	//private Timer tapTimer;
+	private String tapstate = "no_tap";
+	private long last_tap = 0;
 	
 	
 	/** Called when the activity is first created. */
@@ -184,17 +189,50 @@ public class PadActivity extends Activity {
 		float yMove = 0f;
 		
 		switch(ev.getAction()){
-			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_DOWN:			
 				xMove = 0;
 				yMove = 0;
 				type = 0;
 				this.xHistory = ev.getX();
 				this.yHistory = ev.getY();
+				
+				//this.last_tap = System.currentTimeMillis();
+				
+				//handle tap-to-click
+				if(this.tapstate == "no_tap"){
+					//first tap
+					this.last_tap = System.currentTimeMillis();
+					this.tapstate = "first_tap";
+					//return without sending anything
+					return true;
+				}
+				
 				break;
 			case MotionEvent.ACTION_UP:
 				type = 1;
 				xMove = 0;
 				yMove = 0;
+				
+				//handle tap-to-click
+				if(this.tapstate == "first_tap"){
+					long now = System.currentTimeMillis();
+					long elapsed = now - this.last_tap;
+					/*Toast.makeText(PadActivity.this,
+							"Elapsed time is" + elapsed, Toast.LENGTH_LONG).show();
+					*/
+					if(elapsed <= 200){
+						//register the tap and send a click
+						type = 0;
+						
+					}
+					else{
+						//too much time passed to be a tap
+						this.last_tap = 0;
+					}
+					this.tapstate = "no_tap";
+					
+				}
+				
 				break;
 			case MotionEvent.ACTION_MOVE:
 				type = 2;
@@ -205,6 +243,7 @@ public class PadActivity extends Activity {
 				break;
 		}
 		
+		//0 is a click, 1 is a release, 2 is a move
 		if(type >= 0 ){
 			this.sendMouseEvent(type, xMove, yMove);
 		}
