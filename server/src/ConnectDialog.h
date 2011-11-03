@@ -6,6 +6,8 @@
 
 #include <QSystemTrayIcon>
 #include <QDialog>
+#include <QLabel>
+#include "QRWidget.h"
 #include "Connector.h"
 
 class QNetworkAddress;
@@ -26,6 +28,10 @@ protected:
 
 private slots:
 	void showMessage();
+
+private:
+    QRWidget mQRCode;
+    QLabel mConnectionCode;
 };
 
 #endif // CONNECTDIALOG_H_

@@ -27,6 +27,7 @@ ENDIF( NOT CMAKE_BUILD_TYPE )
 SET( QT_SOURCES
 	src/MainWindow.h
 	src/ConnectDialog.h
+	src/QRWidget.h
 )
 SET( QT_UIS
 )
@@ -87,6 +88,7 @@ SET( SOURCES
 	src/Connector.cpp
 	src/CipheredListener.cpp
 	src/Cipher.cpp
+	src/QRWidget.cpp
 	src/HandshakeListener.cpp
 	src/Mouse.cpp
 	src/Keyboard.cpp

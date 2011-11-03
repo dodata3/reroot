@@ -5,6 +5,7 @@
 #include <QtGlobal>
 #include <QHostAddress>
 #include <QNetworkInterface>
+#include <QVBoxLayout>
 #include <QDateTime>
 #include <QMap>
 #include <iostream>
@@ -17,6 +18,11 @@ ConnectDialog::ConnectDialog()
 	//iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
 
 	setWindowTitle( tr( "Reroot: Connect a Device" ) );
+    mConnectionCode.setAlignment( Qt::AlignHCenter );
+	QVBoxLayout* layout = new QVBoxLayout;
+	layout->addWidget( &mQRCode );
+	layout->addWidget( &mConnectionCode );
+	setLayout( layout );
 	resize( 400, 300 );
 	setVisible( false );
 }
@@ -59,13 +65,17 @@ QHostAddress ConnectDialog::AcquireServerIP()
 
 void ConnectDialog::ConnectNewDevice( Connector* connector )
 {
-    setVisible( true );
     QHostAddress hostaddress = AcquireServerIP();
     qsrand( QDateTime::currentDateTime().toTime_t() );
     quint32 randomNumber = qrand();
     quint32 ip = hostaddress.toIPv4Address();
     qDebug() << "Ip: " << hostaddress.toString() << " = " << ip;
     qDebug() << "RandomNumber: " << randomNumber;
-    QString connectionCode = QString( "%1%2" ).arg( ip, 8, 16 ).arg( randomNumber, 8, 16 ).toUpper();
+    QString connectionCode = QString( "%1%2" )
+        .arg( ip, 8, 16, QLatin1Char('0') )
+        .arg( randomNumber, 8, 16, QLatin1Char('0') ).toUpper();
     qDebug() << connectionCode;
+    mConnectionCode.setText( connectionCode );
+    mQRCode.RenderConnectionCode( connectionCode );
+    setVisible( true );
 }
