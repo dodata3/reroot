@@ -15,10 +15,11 @@ class ConnectDialog : public QDialog
 public:
 	ConnectDialog();
 
-	void setVisible(bool visible);
+	void setVisible( bool visible );
+	void ConnectNewDevice( Connector* connector );
 
 protected:
-	void closeEvent(QCloseEvent *event);
+	void closeEvent( QCloseEvent *event );
 
 private slots:
 	void showMessage();

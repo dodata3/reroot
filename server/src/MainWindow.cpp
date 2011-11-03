@@ -213,4 +213,5 @@ void MainWindow::disconnectAll()
 void MainWindow::connectNew()
 {
 	// Spawn a new window which can be used to connect, give information to the connector
+	mConnectDialog.ConnectNewDevice( &mConnector );
 }

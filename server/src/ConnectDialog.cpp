@@ -11,14 +11,14 @@ ConnectDialog::ConnectDialog()
 {
 	//iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
 
-	setWindowTitle(tr("Reroot: Connect a Device"));
-	resize(400, 300);
+	setWindowTitle( tr( "Reroot: Connect a Device" ) );
+	resize( 400, 300 );
 	setVisible( false );
 }
 
 void ConnectDialog::setVisible( bool visible )
 {
-	QDialog::setVisible(visible);
+	QDialog::setVisible( visible );
 }
 
 void ConnectDialog::closeEvent(QCloseEvent *event)
@@ -29,4 +29,9 @@ void ConnectDialog::closeEvent(QCloseEvent *event)
 void ConnectDialog::showMessage()
 {
 
+}
+
+void ConnectDialog::ConnectNewDevice( Connector* connector )
+{
+    setVisible( true );
 }
