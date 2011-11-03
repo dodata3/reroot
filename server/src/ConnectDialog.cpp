@@ -2,6 +2,11 @@
 // Description: Dialog which displays and handles connection protocol
 // (C) Cyberpad Technologies 2011
 #include <QtGui>
+#include <QtGlobal>
+#include <QHostAddress>
+#include <QNetworkInterface>
+#include <QDateTime>
+#include <QMap>
 #include <iostream>
 #include "ConnectDialog.h"
 
@@ -31,7 +36,36 @@ void ConnectDialog::showMessage()
 
 }
 
+QHostAddress ConnectDialog::AcquireServerIP()
+{
+    QStringList items;
+    QMap< QString, QHostAddress > addressmap;
+    foreach(QNetworkInterface interface, QNetworkInterface::allInterfaces())
+    {
+        if (interface.flags().testFlag(QNetworkInterface::IsRunning))
+            foreach (QNetworkAddressEntry entry, interface.addressEntries())
+            {
+                if ( interface.hardwareAddress() != "00:00:00:00:00:00" && entry.ip().toString().contains("."))
+                    addressmap[ interface.name() ] = entry.ip();
+            }
+    }
+
+    // Eventually we want to prefer wired interface connections over wireless connections
+    // It just so happens that on linux, wired connections are typically named "eth#"
+    // and wireless connections are "wlan#"  As such, we can lazily just pull the first
+    // interface and be done with it.
+    return addressmap.begin().value();
+}
+
 void ConnectDialog::ConnectNewDevice( Connector* connector )
 {
     setVisible( true );
+    QHostAddress hostaddress = AcquireServerIP();
+    qsrand( QDateTime::currentDateTime().toTime_t() );
+    quint32 randomNumber = qrand();
+    quint32 ip = hostaddress.toIPv4Address();
+    qDebug() << "Ip: " << hostaddress.toString() << " = " << ip;
+    qDebug() << "RandomNumber: " << randomNumber;
+    QString connectionCode = QString( "%1%2" ).arg( ip, 8, 16 ).arg( randomNumber, 8, 16 ).toUpper();
+    qDebug() << connectionCode;
 }

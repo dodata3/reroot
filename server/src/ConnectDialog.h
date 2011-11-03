@@ -8,6 +8,8 @@
 #include <QDialog>
 #include "Connector.h"
 
+class QNetworkAddress;
+
 class ConnectDialog : public QDialog
 {
 	Q_OBJECT
@@ -17,6 +19,7 @@ public:
 
 	void setVisible( bool visible );
 	void ConnectNewDevice( Connector* connector );
+	QHostAddress AcquireServerIP();
 
 protected:
 	void closeEvent( QCloseEvent *event );
