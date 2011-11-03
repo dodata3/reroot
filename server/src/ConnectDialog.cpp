@@ -3,20 +3,22 @@
 // (C) Cyberpad Technologies 2011
 #include <QtGui>
 #include <QtGlobal>
-#include <QHostAddress>
 #include <QNetworkInterface>
 #include <QVBoxLayout>
 #include <QDateTime>
 #include <QMap>
 #include <iostream>
 #include "ConnectDialog.h"
+#include "Connector.h"
+
+#define CONNECT_TIME 60000 // One Minute to Connect
 
 using namespace std;
 
-ConnectDialog::ConnectDialog()
+ConnectDialog::ConnectDialog( Connector* connector )
 {
 	//iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
-
+    mpConnector = connector;
 	setWindowTitle( tr( "Reroot: Connect a Device" ) );
     mConnectionCode.setAlignment( Qt::AlignHCenter );
 	QVBoxLayout* layout = new QVBoxLayout;
@@ -34,11 +36,7 @@ void ConnectDialog::setVisible( bool visible )
 
 void ConnectDialog::closeEvent(QCloseEvent *event)
 {
-
-}
-
-void ConnectDialog::showMessage()
-{
+    mpConnector->SetConnectKey();
 
 }
 
@@ -63,11 +61,12 @@ QHostAddress ConnectDialog::AcquireServerIP()
     return addressmap.begin().value();
 }
 
-void ConnectDialog::ConnectNewDevice( Connector* connector )
+void ConnectDialog::ConnectNewDevice()
 {
     QHostAddress hostaddress = AcquireServerIP();
     qsrand( QDateTime::currentDateTime().toTime_t() );
-    quint32 randomNumber = qrand();
+    quint32 randomNumber = 0;
+    while( !randomNumber ) randomNumber = qrand();
     quint32 ip = hostaddress.toIPv4Address();
     qDebug() << "Ip: " << hostaddress.toString() << " = " << ip;
     qDebug() << "RandomNumber: " << randomNumber;
@@ -77,5 +76,18 @@ void ConnectDialog::ConnectNewDevice( Connector* connector )
     qDebug() << connectionCode;
     mConnectionCode.setText( connectionCode );
     mQRCode.RenderConnectionCode( connectionCode );
+    mpConnector->SetConnectKey( randomNumber );
+
     setVisible( true );
+}
+
+void ConnectDialog::ConnectionSuccess()
+{
+    mpConnector->SetConnectKey();
+}
+
+void ConnectDialog::ConnectionTimeout()
+{
+    mpConnector->SetConnectKey();
+
 }

@@ -7,9 +7,10 @@
 #include <QSystemTrayIcon>
 #include <QDialog>
 #include <QLabel>
+#include <QHostAddress>
 #include "QRWidget.h"
-#include "Connector.h"
 
+class Connector;
 class QNetworkAddress;
 
 class ConnectDialog : public QDialog
@@ -17,19 +18,21 @@ class ConnectDialog : public QDialog
 	Q_OBJECT
 
 public:
-	ConnectDialog();
+	ConnectDialog( Connector* connector );
 
 	void setVisible( bool visible );
-	void ConnectNewDevice( Connector* connector );
+	void ConnectNewDevice();
 	QHostAddress AcquireServerIP();
 
 protected:
 	void closeEvent( QCloseEvent *event );
 
 private slots:
-	void showMessage();
+	void ConnectionTimeout();
+	void ConnectionSuccess();
 
 private:
+    Connector* mpConnector;
     QRWidget mQRCode;
     QLabel mConnectionCode;
 };

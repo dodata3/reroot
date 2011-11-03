@@ -28,6 +28,8 @@ SET( QT_SOURCES
 	src/MainWindow.h
 	src/ConnectDialog.h
 	src/QRWidget.h
+	src/Connector.h
+	src/HandshakeListener.h
 )
 SET( QT_UIS
 )

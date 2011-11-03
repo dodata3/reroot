@@ -10,7 +10,8 @@
 
 using namespace std;
 
-MainWindow::MainWindow()
+MainWindow::MainWindow() :
+    mConnectDialog( &mConnector )
 {
 	createIconGroupBox();
 	createMessageGroupBox();
@@ -213,5 +214,5 @@ void MainWindow::disconnectAll()
 void MainWindow::connectNew()
 {
 	// Spawn a new window which can be used to connect, give information to the connector
-	mConnectDialog.ConnectNewDevice( &mConnector );
+	mConnectDialog.ConnectNewDevice();
 }

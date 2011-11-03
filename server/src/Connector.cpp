@@ -14,7 +14,9 @@ using CryptoPP::RSA;
 
 Connector::Connector() :
 	mListenerAddress( QHostAddress::Any ),
-	mControl( this )
+	mControl( this ),
+	mHandshake( this ),
+	mConnectKey( 0 )
 {
     // Generate keys
     Cipher::GenerateKeypair( mPublicEncKey, mPrivateEncKey );
@@ -22,6 +24,8 @@ Connector::Connector() :
 	mIncomingPort = new OSCPort( mListenerAddress, REROOT_PORT );
 	QString controlAddress = QString( "/control" );
 	mIncomingPort->addListener( controlAddress, mControl );
+	QString handshakeAddress = QString( "/handshake_client" );
+	mIncomingPort->addListener( handshakeAddress, mHandshake );
 	mIncomingPort->startListening();
 }
 
@@ -37,17 +41,33 @@ Connector::~Connector()
 	RemoveAllDevices();
 }
 
-void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inMod, QByteArray inEncExp, QByteArray inSignExp )
+void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp, QByteArray inSignMod, QByteArray inSignExp )
 {
 	Device dev;
 	dev.port = new OSCPort( inRemote, REROOT_PORT );
-	dev.encKey.SetModulus( Integer( reinterpret_cast< byte* >( inMod.data() ), inMod.size(), Integer::UNSIGNED ) );
+	dev.encKey.SetModulus( Integer( reinterpret_cast< byte* >( inEncMod.data() ), inEncMod.size(), Integer::UNSIGNED ) );
 	dev.encKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inEncExp.data() ), inEncExp.size(), Integer::UNSIGNED ) );
-	dev.signKey.SetModulus( Integer( reinterpret_cast< byte* >( inMod.data() ), inMod.size(), Integer::UNSIGNED ) );
+	dev.signKey.SetModulus( Integer( reinterpret_cast< byte* >( inSignMod.data() ), inSignMod.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inSignExp.data() ), inSignExp.size(), Integer::UNSIGNED ) );
 	mLock.lock();
 	mDeviceMap[ inRemote.toString() ] = dev;
 	mLock.unlock();
+}
+
+void Connector::SetConnectKey( quint32 key )
+{
+    mLock.lock();
+    mConnectKey = key;
+    mLock.unlock();
+}
+
+quint32 Connector::GetConnectKey()
+{
+    quint32 key = 0;
+    mLock.lock();
+    key = mConnectKey;
+    mLock.unlock();
+    return key;
 }
 
 void Connector::RemoveDevice( QHostAddress& inRemote )
