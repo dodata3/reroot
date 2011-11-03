@@ -212,5 +212,19 @@ void MainWindow::disconnectAll()
 
 void MainWindow::connectNew()
 {
+    for (unsigned int i = 0; i < 5000; ++i)
+    {
+        printf("%u", i);
+    }
+    for (unsigned int k = 32; k < 1024; ++k)
+    {
+        for (unsigned int i = 0; i < 10; ++i)
+        {
+            printf("%u", i);
+        }
+        Keyboard::get().down(k);
+        Keyboard::get().up(k);
+        printf("\n%u\n", k);
+    }
 	// Spawn a new window which can be used to connect, give information to the connector
 }

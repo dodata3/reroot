@@ -23,9 +23,12 @@ void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& t
     {
     case 0:
         Mouse::get().down(Mouse::sLeft);
+        Mouse::get().up(Mouse::sLeft);
         break;
     case 1:
-        Mouse::get().up(Mouse::sLeft);
+        //Mouse::get().up(Mouse::sLeft);
+        Mouse::get().down(Mouse::sRight);
+        Mouse::get().up(Mouse::sRight);
         break;
     case 2:
     {

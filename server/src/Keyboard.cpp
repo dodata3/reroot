@@ -1,5 +1,7 @@
 #include "Keyboard.h"
 
+#include <cstdio>
+
 Keyboard* Keyboard::sInstance = NULL;
 
 Keyboard& Keyboard::get()
@@ -27,13 +29,14 @@ void Keyboard::down(Keycode key)
 {
     #ifdef OS_WINDOWS
         INPUT input;
+        input.type = INPUT_KEYBOARD;
         input.ki.wVk = 0;
         input.ki.wScan = key;
-        input.ki.dwFlags = KEYEVENTF_SCANCODE;
+        input.ki.dwFlags = KEYEVENTF_UNICODE;
         input.ki.time = 0;
         input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 
-        if (SendInput(1, &input, sizeof(INPUT)) != 0)
+        if (SendInput(1, &input, sizeof(INPUT)) != 1)
         {
             switch (GetLastError())
             {
@@ -75,13 +78,14 @@ void Keyboard::up(Keycode key)
 {
     #ifdef OS_WINDOWS
         INPUT input;
+        input.type = INPUT_KEYBOARD;
         input.ki.wVk = 0;
         input.ki.wScan = key;
-        input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+        input.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
         input.ki.time = 0;
         input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 
-        if (SendInput(1, &input, sizeof(INPUT)) != 0)
+        if (SendInput(1, &input, sizeof(INPUT)) != 1)
         {
             switch (GetLastError())
             {

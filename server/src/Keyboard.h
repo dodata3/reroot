@@ -4,12 +4,7 @@
 #ifndef KEYBOARD_H_
 #define KEYBOARD_H_
 
-#include "Global.h"
-
-// OS-specific includes
-#ifdef OS_WINDOWS
-    #include <windows.h>
-#endif
+#include "OS.h"
 
 class Keyboard
 {
