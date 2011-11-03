@@ -28,6 +28,10 @@ Connector::Connector() :
 Connector::~Connector()
 {
 	mIncomingPort->stopListening();
+	mIncomingPort->close();
+	mIncomingPort->terminate();
+	if( !mIncomingPort->wait() )
+        qWarning( "Incoming port thread termination timeout." );
 	delete mIncomingPort;
 	mIncomingPort = NULL;
 	RemoveAllDevices();
