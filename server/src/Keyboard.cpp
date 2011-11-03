@@ -1,3 +1,7 @@
+// $Id$
+// Description: Emulates keyboard input in a cross platform manner
+// (C) Cyberpad Technologies 2011
+#include <cstddef>
 #include "Keyboard.h"
 
 Keyboard* Keyboard::sInstance = NULL;

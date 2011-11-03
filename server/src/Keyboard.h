@@ -3,7 +3,9 @@
 // (C) Cyberpad Technologies 2011
 #ifndef KEYBOARD_H_
 #define KEYBOARD_H_
-
+// $Id$
+// Description: Emulates keyboard input in a cross platform manner
+// (C) Cyberpad Technologies 2011
 #include "Global.h"
 
 // OS-specific includes

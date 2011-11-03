@@ -4,18 +4,20 @@
 #ifndef CONNECTOR_H_
 #define CONNECTOR_H_
 
+#include <cryptopp/rsa.h>
 #include <QMap>
 #include <QMutex>
+#include <QByteArray>
 #include "Global.h"
 #include "OSCPort.h"
-#include "MouseListener.h"
-#include "KeyboardListener.h"
+#include "ControlListener.h"
 #include "HandshakeListener.h"
 
 struct Device
 {
 	OSCPort* port;
-	SecretKey secretKey;
+	CryptoPP::RSA::PublicKey encKey;
+	CryptoPP::RSA::PublicKey signKey;
 };
 
 typedef QMap< QString, Device > DeviceMap;
@@ -26,21 +28,29 @@ public:
 	Connector();
 	~Connector();
 
-	void AddNewDevice( QHostAddress& inRemote, SecretKey inSecretKey );
+	void AddNewDevice( QHostAddress& inRemote, QByteArray inMod, QByteArray inEncExp, QByteArray inSignExp );
 	void RemoveDevice( QHostAddress& inRemote );
 	void RemoveAllDevices();
 
-	SecretKey GetSecretKey( QHostAddress& inRemote );
-	OSCPort* GetPort( QHostAddress& inRemote );
+	CryptoPP::RSA::PublicKey GetClientEncKey( QHostAddress& inRemote );
+	CryptoPP::RSA::PublicKey GetClientSignKey( QHostAddress& inRemote );
+	OSCPort* GetClientPort( QHostAddress& inRemote );
+
+	CryptoPP::RSA::PublicKey PublicEncKey() { return mPublicEncKey; }
+	CryptoPP::RSA::PrivateKey PrivateEncKey() { return mPrivateEncKey; }
+	CryptoPP::RSA::PublicKey PublicSignKey() { return mPublicSignKey; }
+	CryptoPP::RSA::PrivateKey PrivateSignKey() { return mPrivateSignKey; }
 
 private:
 	QMutex mLock;
 	QHostAddress mListenerAddress;
 	OSCPort* mIncomingPort;
-	MouseListener mMouse;
-	KeyboardListener mKeyboard;
-	HandshakeListener mHandshake;
+	ControlListener mControl;
 	DeviceMap mDeviceMap;
+	CryptoPP::RSA::PublicKey mPublicEncKey;
+	CryptoPP::RSA::PrivateKey mPrivateEncKey;
+	CryptoPP::RSA::PublicKey mPublicSignKey;
+	CryptoPP::RSA::PrivateKey mPrivateSignKey;
 };
 
 #endif // CONNECTOR_H_

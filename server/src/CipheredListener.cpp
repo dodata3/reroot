@@ -14,18 +14,9 @@ CipheredListener::CipheredListener( Connector* connector )
 void CipheredListener::acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message )
 {
 	// Decipher arguments individually
-	SecretKey secretKey = mpConnector->GetSecretKey( address );
 	QList< QVariant > args = message.getArguments();
-	OSCMessage decipheredMessage;
-	for( int i = 0; i < args.size(); i++ )
-	{
-		QByteArray arg = args[i].toByteArray();
-		if( Decrypt( secretKey, arg ) )
-			decipheredMessage.addArgument( arg );
-		else
-			return;
-	}
-
-	// Send the Deciphered Message
-	acceptDecipheredMessage( address, time, decipheredMessage );
+	QString m = args[0].toString();
+	QString s = args[1].toString();
+	if( Decrypt( mpConnector->PrivateEncKey(), mpConnector->GetClientSignKey( address ), m, s ) )
+        acceptDecipheredMessage( address, time, m );
 }

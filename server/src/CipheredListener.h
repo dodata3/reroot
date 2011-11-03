@@ -15,7 +15,7 @@ class CipheredListener : public OSCListener, public Cipher
 public:
 	CipheredListener( Connector* connector );
     virtual void acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message );
-    virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, OSCMessage& message ) = 0;
+    virtual void acceptDecipheredMessage( QHostAddress& address, QDateTime& time, QString& message ) = 0;
 private:
 	Connector* mpConnector;
 };
