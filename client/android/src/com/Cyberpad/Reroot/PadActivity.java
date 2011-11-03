@@ -1,11 +1,12 @@
 package com.Cyberpad.Reroot;
 
 import java.net.InetAddress;
+//import java.util.Timer;
+//import java.util.TimerTask;
 
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPort;
 import com.illposed.osc.OSCPortOut;
-
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import android.view.KeyEvent;
 
 
@@ -40,8 +42,17 @@ public class PadActivity extends Activity {
 	
 	SharedPreferences preferences;
 	private static final String TAG = "Reroot";
+	
+	//touch stuff
 	private float xHistory;
 	private float yHistory;
+	//private Timer tapTimer;
+	private String tapstate = "no_tap";
+	private long last_tap = 0;
+	
+	//multitouch stuff
+	private int lastPointerCount = 0;
+	private boolean multiEnabled;
 	
 	
 	/** Called when the activity is first created. */
@@ -55,9 +66,9 @@ public class PadActivity extends Activity {
 	    		WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 	    //get preferences
 	    preferences = PreferenceManager.getDefaultSharedPreferences(this);
-	    charmap = KeyCharacterMap.load(KeyCharacterMap.BUILT_IN_KEYBOARD);
+	    charmap = KeyCharacterMap.load(KeyCharacterMap.ALPHA);
 	    
-	    
+	    multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 	    
 	    
 		//initialize keyboard stuff
@@ -183,28 +194,75 @@ public class PadActivity extends Activity {
 		float xMove = 0f;
 		float yMove = 0f;
 		
+		int pointerCount = 1;
+		if (multiEnabled){
+			pointerCount = WrappedMotionEvent.getPointerCount(ev);
+		}
+		
 		switch(ev.getAction()){
-			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_DOWN:			
 				xMove = 0;
 				yMove = 0;
 				type = 0;
 				this.xHistory = ev.getX();
 				this.yHistory = ev.getY();
+				
+				//this.last_tap = System.currentTimeMillis();
+				
+				//handle tap-to-click
+				if(this.tapstate == "no_tap" && (pointerCount == 1 || pointerCount == 2 )){
+					//first tap
+					this.last_tap = System.currentTimeMillis();
+					this.tapstate = "first_tap";
+					//return without sending anything
+					return true;
+				}
 				break;
 			case MotionEvent.ACTION_UP:
 				type = 1;
 				xMove = 0;
 				yMove = 0;
+				
+				//handle tap-to-click
+				if(this.tapstate == "first_tap"){
+					long now = System.currentTimeMillis();
+					long elapsed = now - this.last_tap;
+					/*Toast.makeText(PadActivity.this,
+							"Elapsed time is" + elapsed, Toast.LENGTH_LONG).show();
+					*/
+					if(elapsed <= 200){
+						//register the tap and send a click
+						if(pointerCount == 1)
+							type = 0;
+						else if(pointerCount == 2)
+							type = 1;	
+					}
+					else{
+						//too much time passed to be a tap
+						this.last_tap = 0;
+					}
+					this.tapstate = "no_tap";
+					
+				}
+				
 				break;
 			case MotionEvent.ACTION_MOVE:
-				type = 2;
-				xMove = ev.getX() - this.xHistory;
-				yMove = ev.getY() - this.yHistory;
-				this.xHistory = ev.getX();
-				this.yHistory = ev.getY();
+				if (pointerCount == 1){
+					type = 2;
+					if (lastPointerCount == 1){
+						xMove = ev.getX() - this.xHistory;
+						yMove = ev.getY() - this.yHistory;
+					}
+					this.xHistory = ev.getX();
+					this.yHistory = ev.getY();
+				}
+				else if(pointerCount == 2){
+					//MULTITOUCH ZONE
+				}
 				break;
 		}
 		
+		//0 is a left click, 1 is a right click, 2 is a move
 		if(type >= 0 ){
 			this.sendMouseEvent(type, xMove, yMove);
 		}
@@ -297,6 +355,7 @@ public class PadActivity extends Activity {
 		
 		for(int i=0; i<keys.length();i++){
 			String c = keys.substring(i, i+1);
+			char c_c = c.charAt(0);
 			boolean isShift = false;
 			boolean isCtrl = false;
 			
@@ -347,6 +406,7 @@ public class PadActivity extends Activity {
 							break;
 						}
 			
+			
 			try{
 				if(isCtrl){
 					Object[] args = new Object[3];
@@ -369,8 +429,8 @@ public class PadActivity extends Activity {
 				{
 					Object[] args = new Object[3];
 					args[0] = 0; //key down
-					args[1] = key;
-					args[2] = c;
+					args[1] = key+68;
+					args[2] = c_c;
 					OSCMessage msg = new OSCMessage("/keyboard", args);
 					
 					this.sender.send(msg);
@@ -378,8 +438,8 @@ public class PadActivity extends Activity {
 				{
 					Object[] args = new Object[3];
 					args[0] = 1; /* key up */
-					args[1] = key;// (int)c;
-					args[2] = c;
+					args[1] = key+68;// (int)c;
+					args[2] = c_c;
 					OSCMessage msg = new OSCMessage("/keyboard", args);
 	
 					this.sender.send(msg);
