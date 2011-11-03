@@ -42,11 +42,17 @@ public class PadActivity extends Activity {
 	
 	SharedPreferences preferences;
 	private static final String TAG = "Reroot";
+	
+	//touch stuff
 	private float xHistory;
 	private float yHistory;
 	//private Timer tapTimer;
 	private String tapstate = "no_tap";
 	private long last_tap = 0;
+	
+	//multitouch stuff
+	private int lastPointerCount = 0;
+	private boolean multiEnabled;
 	
 	
 	/** Called when the activity is first created. */
@@ -62,7 +68,7 @@ public class PadActivity extends Activity {
 	    preferences = PreferenceManager.getDefaultSharedPreferences(this);
 	    charmap = KeyCharacterMap.load(KeyCharacterMap.ALPHA);
 	    
-	    
+	    multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 	    
 	    
 		//initialize keyboard stuff
@@ -188,6 +194,11 @@ public class PadActivity extends Activity {
 		float xMove = 0f;
 		float yMove = 0f;
 		
+		int pointerCount = 1;
+		if (multiEnabled){
+			pointerCount = WrappedMotionEvent.getPointerCount(ev);
+		}
+		
 		switch(ev.getAction()){
 			case MotionEvent.ACTION_DOWN:			
 				xMove = 0;
@@ -199,14 +210,13 @@ public class PadActivity extends Activity {
 				//this.last_tap = System.currentTimeMillis();
 				
 				//handle tap-to-click
-				if(this.tapstate == "no_tap"){
+				if(this.tapstate == "no_tap" && (pointerCount == 1 || pointerCount == 2 )){
 					//first tap
 					this.last_tap = System.currentTimeMillis();
 					this.tapstate = "first_tap";
 					//return without sending anything
 					return true;
 				}
-				
 				break;
 			case MotionEvent.ACTION_UP:
 				type = 1;
@@ -222,8 +232,10 @@ public class PadActivity extends Activity {
 					*/
 					if(elapsed <= 200){
 						//register the tap and send a click
-						type = 0;
-						
+						if(pointerCount == 1)
+							type = 0;
+						else if(pointerCount == 2)
+							type = 1;	
 					}
 					else{
 						//too much time passed to be a tap
@@ -235,15 +247,22 @@ public class PadActivity extends Activity {
 				
 				break;
 			case MotionEvent.ACTION_MOVE:
-				type = 2;
-				xMove = ev.getX() - this.xHistory;
-				yMove = ev.getY() - this.yHistory;
-				this.xHistory = ev.getX();
-				this.yHistory = ev.getY();
+				if (pointerCount == 1){
+					type = 2;
+					if (lastPointerCount == 1){
+						xMove = ev.getX() - this.xHistory;
+						yMove = ev.getY() - this.yHistory;
+					}
+					this.xHistory = ev.getX();
+					this.yHistory = ev.getY();
+				}
+				else if(pointerCount == 2){
+					//MULTITOUCH ZONE
+				}
 				break;
 		}
 		
-		//0 is a click, 1 is a release, 2 is a move
+		//0 is a left click, 1 is a right click, 2 is a move
 		if(type >= 0 ){
 			this.sendMouseEvent(type, xMove, yMove);
 		}
