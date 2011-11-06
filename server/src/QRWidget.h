@@ -11,6 +11,10 @@ class QRWidget : public QWidget
 public:
 	QRWidget();
 	void RenderConnectionCode( QString& connectionCode );
+	virtual void paintEvent( QPaintEvent* );
+
+private:
+	QString mConnectionCode;
 };
 
 #endif // QRWIDGET_H_
