@@ -31,11 +31,6 @@ SET( QT_RESOURCES
 	res/RerootResources.qrc
 )
 
-# We need to use the special winmain symbol...
-IF (WIN32)
-    SET (QT_USE_QTMAIN TRUE)
-ENDIF (WIN32)
-
 QT4_WRAP_CPP( MOC_CPP ${QT_SOURCES} )
 QT4_WRAP_UI( UI_CPP ${QT_UIS} )
 QT4_ADD_RESOURCES( RES_H ${QT_RESOURCES} )
@@ -96,6 +91,14 @@ SET( LIBRARIES
 	${QT_LIBRARIES}
 	${QT_QTNETWORK_LIBRARY}
 )
+
+# We need to use the special winmain symbol...
+IF (WIN32)
+    SET (QT_USE_QTMAIN TRUE)
+    LIST(APPEND LIBRARIES
+        psapi
+    )
+ENDIF (WIN32)
 
 ADD_EXECUTABLE( ${PROJECT_NAME} ${SOURCES} )
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME} ${LIBRARIES} )
