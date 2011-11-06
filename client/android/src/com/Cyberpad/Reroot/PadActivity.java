@@ -3,6 +3,7 @@ package com.Cyberpad.Reroot;
 import java.net.InetAddress;
 //import java.util.Timer;
 //import java.util.TimerTask;
+import java.lang.Math;
 
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPort;
@@ -46,6 +47,8 @@ public class PadActivity extends Activity {
 	//touch stuff
 	private float xHistory;
 	private float yHistory;
+	//multitouch stuff
+	private float x1History, y1History, x2History, y2History;
 	//private Timer tapTimer;
 	private String tapstate = "no_tap";
 	private long last_tap = 0;
@@ -212,8 +215,19 @@ public class PadActivity extends Activity {
 				//handle tap-to-click
 				if(this.tapstate == "no_tap" && (pointerCount == 1 || pointerCount == 2 )){
 					//first tap
-					this.last_tap = System.currentTimeMillis();
-					this.tapstate = "first_tap";
+					
+					if(pointerCount == 1){
+						this.last_tap = System.currentTimeMillis();
+						this.tapstate = "first_tap";
+					}
+					if(pointerCount == 2 && System.currentTimeMillis() - this.last_tap < 200){
+						
+						this.last_tap = System.currentTimeMillis();
+						this.tapstate = "double_tap";
+						Toast.makeText(PadActivity.this,
+								"Pointer count is" + pointerCount, Toast.LENGTH_SHORT).show();
+					}
+					
 					//return without sending anything
 					return true;
 				}
@@ -222,20 +236,21 @@ public class PadActivity extends Activity {
 				type = 1;
 				xMove = 0;
 				yMove = 0;
+				x1History = y1History = x2History = y2History = 0;
 				
 				//handle tap-to-click
 				if(this.tapstate == "first_tap"){
 					long now = System.currentTimeMillis();
 					long elapsed = now - this.last_tap;
-					/*Toast.makeText(PadActivity.this,
-							"Elapsed time is" + elapsed, Toast.LENGTH_LONG).show();
-					*/
+					
+					
 					if(elapsed <= 200){
+						
 						//register the tap and send a click
 						if(pointerCount == 1)
 							type = 0;
 						else if(pointerCount == 2)
-							type = 1;	
+							type = 3;	
 					}
 					else{
 						//too much time passed to be a tap
@@ -244,6 +259,21 @@ public class PadActivity extends Activity {
 					this.tapstate = "no_tap";
 					
 				}
+				else if(this.tapstate == "double_tap"){
+					long now = System.currentTimeMillis();
+					long elapsed = now - this.last_tap;
+					
+					
+					if(elapsed <= 200){
+							type = 3;	
+					}
+					else{
+						//too much time passed to be a tap
+						this.last_tap = 0;
+					}
+					this.tapstate = "no_tap";
+				}
+				
 				
 				break;
 			case MotionEvent.ACTION_MOVE:
@@ -258,9 +288,56 @@ public class PadActivity extends Activity {
 				}
 				else if(pointerCount == 2){
 					//MULTITOUCH ZONE
+					float x1pos = WrappedMotionEvent.getX(ev, 1);
+					float y1pos = WrappedMotionEvent.getY(ev, 1);
+					float x2pos = WrappedMotionEvent.getX(ev, 2);
+					float y2pos = WrappedMotionEvent.getY(ev, 2);
+					
+					//we're just starting the touch
+					if(x1History ==0 && x2History == 0){
+						//store current pos into the histories for later interpretation
+						x1History = x1pos;
+						y1History = y1pos;
+						x2History = x2pos;
+						y2History = y2pos;
+					}
+					//we can interpret the touch
+					else{
+						//check for pinch out
+						if(Math.sqrt(Math.pow(x1pos-x2pos,2) + Math.pow(y1pos-y2pos, 2)) > 
+							Math.sqrt(Math.pow(x1History - x2History, 2) + Math.pow(y1History - y2History, 2))+50){
+							//send pinch out command
+						}
+						//check for pinch in
+						else if(Math.sqrt(Math.pow((double)(x1pos-x2pos),2) + Math.pow(y1pos-y2pos, 2)) + 50< 
+								Math.sqrt(Math.pow(x1History - x2History, 2) + Math.pow(y1History - y2History, 2))){
+							//send pinch in command
+						}
+						//check for vertical scroll down
+						else if(y1pos > y1History + 20 && y2pos > y2History + 20){
+							//send vertical scroll down command
+						}
+						//check for vertical scroll up
+						else if(y1pos < y1History + 20 && y2pos < y2History + 20){
+							//send vertical scroll up command
+						}
+						//check for horizontal scroll right
+						else if(x1pos > x1History + 20 && x2pos > x2History + 20){
+							//send horizontal scroll right
+						}
+						//check for horizontal scroll left
+						else if(x1pos < x1History + 20 && x2pos < x2History + 20){
+							//send horizontal scroll left command
+						}
+						
+					}
+					
+					
 				}
 				break;
 		}
+		
+		lastPointerCount = pointerCount;
 		
 		//0 is a left click, 1 is a right click, 2 is a move
 		if(type >= 0 ){
