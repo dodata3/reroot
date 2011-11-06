@@ -7,7 +7,7 @@ SET( PROJECT_NAME Reroot )
 PROJECT( ${PROJECT_NAME} )
 
 SET( CMAKE_BUILD_TYPE Release )
-SET( CMAKE_CXX_FLAGS "-Wall" )
+
 
 SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/" )
 
@@ -27,8 +27,11 @@ ENDIF( NOT CMAKE_BUILD_TYPE )
 SET( QT_SOURCES
 	src/MainWindow.h
 	src/ConnectDialog.h
+
 	src/QRWidget.h
+
 	src/Connector.h
+
 	src/HandshakeListener.h
 )
 SET( QT_UIS
@@ -85,15 +88,19 @@ INCLUDE_DIRECTORIES( ${CRYPTOPP_INCLUDE_DIRS} )
 SET( SOURCES
 	src/main.cpp
 	src/MainWindow.cpp
+	
 	src/ConnectDialog.cpp
+	
 	src/ControlListener.cpp
 	src/Connector.cpp
 	src/CipheredListener.cpp
 	src/Cipher.cpp
+	
 	src/QRWidget.cpp
 	src/HandshakeListener.cpp
 	src/Mouse.cpp
 	src/Keyboard.cpp
+	src/Context.cpp
 	${OSC_CPP}
 	${QR_CPP}
 	${MOC_CPP}

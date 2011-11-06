@@ -22,12 +22,12 @@ OSCPort::OSCPort(QHostAddress& remoteAddress)
  * @param newAddress InetAddress
  * @param newPort int
  */
-OSCPort::OSCPort(QHostAddress& remoteAddress, qint16 newPort)
+OSCPort::OSCPort(QHostAddress& remoteAddress, quint16 newPort)
 {
     construct(remoteAddress, newPort);
 }
 
-void OSCPort::construct(QHostAddress& newAddress, qint16 newPort)
+void OSCPort::construct(QHostAddress& newAddress, quint16 newPort)
 {
     iSocket  = new QUdpSocket();
     iDispatcher = new OSCPacketDispatcher();

@@ -28,13 +28,13 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
         switch( i.Action )
         {
         case Down:
-            Mouse::get().down(Mouse::sLeft);
+            Mouse::Get().Down(Mouse::sLeft);
             break;
         case Up:
-            Mouse::get().up(Mouse::sLeft);
+            Mouse::Get().Up(Mouse::sLeft);
             break;
         case Move:
-            Mouse::get().MovePosition( QPoint( i.Data1, i.Data2 ) );
+            Mouse::Get().MovePosition( QPoint( i.Data1, i.Data2 ) );
             break;
         default:
             // unknown action
@@ -46,11 +46,11 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
         switch( i.Action )
         {
         case Down:
-            Keyboard::get().down( i.Control );
+            Keyboard::Get().Down( i.Control );
             qDebug() << "Key down message: keycode " << i.Control << " character " << i.Data1;
             break;
         case Up:
-            Keyboard::get().up( i.Control );
+            Keyboard::Get().Up( i.Control );
             qDebug() << "Key down message: keycode " << i.Control << " character " << i.Data2;
             break;
         default:

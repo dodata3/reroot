@@ -2,7 +2,7 @@
 
 Mouse* Mouse::sInstance = NULL;
 
-Mouse& Mouse::get()
+Mouse& Mouse::Get()
 {
     if (sInstance == NULL)
     {
@@ -58,7 +58,7 @@ Mouse& Mouse::MovePosition(QPoint delta)
     return *this;
 }
 
-void Mouse::down(unsigned int button)
+void Mouse::Down(unsigned int button)
 {
     #ifdef OS_WINDOWS
         INPUT input;
@@ -151,7 +151,7 @@ void Mouse::down(unsigned int button)
     #endif
 }
 
-void Mouse::up(unsigned int button)
+void Mouse::Up(unsigned int button)
 {
     #ifdef OS_WINDOWS
         INPUT input;
@@ -244,7 +244,7 @@ void Mouse::up(unsigned int button)
     #endif
 }
 
-void Mouse::scroll(signed int horizontal, signed int vertical)
+void Mouse::Scroll(signed int horizontal, signed int vertical)
 {
     // Scroll wheel X clicks, positive is scrolling up/right
     #ifdef OS_WINDOWS

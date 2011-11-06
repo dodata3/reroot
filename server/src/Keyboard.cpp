@@ -4,9 +4,11 @@
 #include <cstddef>
 #include "Keyboard.h"
 
+#include <cstdio>
+
 Keyboard* Keyboard::sInstance = NULL;
 
-Keyboard& Keyboard::get()
+Keyboard& Keyboard::Get()
 {
     if (sInstance == NULL)
     {
@@ -27,17 +29,148 @@ void Keyboard::Init()
     #endif
 }
 
-void Keyboard::down(Keycode key)
+void Keyboard::ModifierUp(ModifierKeycode key)
 {
     #ifdef OS_WINDOWS
+        WORD wkey;
+        switch(key)
+        {
+        case ModCtrlL:
+            wkey = VK_LCONTROL;
+            break;
+        case ModCtrlR:
+            wkey = VK_RCONTROL;
+            break;
+        case ModCtrl:
+            wkey = VK_CONTROL;
+            break;
+        case ModAltL:
+            wkey = VK_LMENU;
+            break;
+        case ModAltR:
+            wkey = VK_RMENU;
+            break;
+        case ModAlt:
+            wkey = VK_MENU;
+            break;
+        case ModShiftL:
+            wkey = VK_LSHIFT;
+            break;
+        case ModShiftR:
+            wkey = VK_RSHIFT;
+            break;
+        case ModShift:
+            wkey = VK_SHIFT;
+            break;
+        case ModMetaL:
+            wkey = VK_LWIN; // This might not have any effect, Windows key may be read-only at user level
+            break;
+        case ModMetaR:
+            wkey = VK_RWIN;
+            break;
+        case ModMeta:
+            wkey = VK_LWIN; // Windows has no generic 'sideless' windows key, so just use left
+            break;
+        default:
+            wkey = 0;
+            break;
+        }
         INPUT input;
-        input.ki.wVk = 0;
-        input.ki.wScan = key;
-        input.ki.dwFlags = KEYEVENTF_SCANCODE;
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = wkey;
+        input.ki.wScan = 0;
+        input.ki.dwFlags = KEYEVENTF_KEYUP;
         input.ki.time = 0;
         input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 
-        if (SendInput(1, &input, sizeof(INPUT)) != 0)
+        if (SendInput(1, &input, sizeof(INPUT)) != 1)
+        {
+            switch (GetLastError())
+            {
+                default:
+                    break;
+            }
+        }
+    #endif
+}
+
+void Keyboard::ModifierDown(ModifierKeycode key)
+{
+    #ifdef OS_WINDOWS
+        WORD wkey;
+        switch(key)
+        {
+        case ModCtrlL:
+            wkey = VK_LCONTROL;
+            break;
+        case ModCtrlR:
+            wkey = VK_RCONTROL;
+            break;
+        case ModCtrl:
+            wkey = VK_CONTROL;
+            break;
+        case ModAltL:
+            wkey = VK_LMENU;
+            break;
+        case ModAltR:
+            wkey = VK_RMENU;
+            break;
+        case ModAlt:
+            wkey = VK_MENU;
+            break;
+        case ModShiftL:
+            wkey = VK_LSHIFT;
+            break;
+        case ModShiftR:
+            wkey = VK_RSHIFT;
+            break;
+        case ModShift:
+            wkey = VK_SHIFT;
+            break;
+        case ModMetaL:
+            wkey = VK_LWIN; // This might not have any effect, Windows key may be read-only at user level
+            break;
+        case ModMetaR:
+            wkey = VK_RWIN;
+            break;
+        case ModMeta:
+            wkey = VK_LWIN; // Windows has no generic 'sideless' windows key, so just use left
+            break;
+        default:
+            wkey = 0;
+            break;
+        }
+        INPUT input;
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = wkey;
+        input.ki.wScan = 0;
+        input.ki.dwFlags = 0;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = (ULONG_PTR)NULL;
+
+        if (SendInput(1, &input, sizeof(INPUT)) != 1)
+        {
+            switch (GetLastError())
+            {
+                default:
+                    break;
+            }
+        }
+    #endif
+}
+
+void Keyboard::Down(Keycode key)
+{
+    #ifdef OS_WINDOWS
+        INPUT input;
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = 0;
+        input.ki.wScan = key;
+        input.ki.dwFlags = KEYEVENTF_UNICODE;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = (ULONG_PTR)NULL;
+
+        if (SendInput(1, &input, sizeof(INPUT)) != 1)
         {
             switch (GetLastError())
             {
@@ -75,17 +208,18 @@ void Keyboard::down(Keycode key)
     #endif
 }
 
-void Keyboard::up(Keycode key)
+void Keyboard::Up(Keycode key)
 {
     #ifdef OS_WINDOWS
         INPUT input;
+        input.type = INPUT_KEYBOARD;
         input.ki.wVk = 0;
         input.ki.wScan = key;
-        input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+        input.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
         input.ki.time = 0;
         input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 
-        if (SendInput(1, &input, sizeof(INPUT)) != 0)
+        if (SendInput(1, &input, sizeof(INPUT)) != 1)
         {
             switch (GetLastError())
             {
