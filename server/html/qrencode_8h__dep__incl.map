@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mask_8c.html" title="src/qrencode/mask.c" alt="" coords="5,155,149,181"/>
+<area shape="rect" id="node5" href="$qrspec_8h.html" title="src/qrencode/qrspec.h" alt="" coords="193,80,343,107"/>
+<area shape="rect" id="node8" href="$qrencode_8c.html" title="src/qrencode/qrencode.c" alt="" coords="684,155,849,181"/>
+<area shape="rect" id="node10" href="$qrinput_8c.html" title="src/qrencode/qrinput.c" alt="" coords="349,155,499,181"/>
+<area shape="rect" id="node14" href="$split_8c.html" title="src/qrencode/split.c" alt="" coords="524,155,660,181"/>
+<area shape="rect" id="node16" href="$mmask_8c.html" title="src/qrencode/mmask.c" alt="" coords="1060,155,1215,181"/>
+<area shape="rect" id="node18" href="$mqrspec_8h.html" title="src/qrencode/mqrspec.h" alt="" coords="856,80,1019,107"/>
+<area shape="rect" id="node26" href="$qrinput_8h.html" title="src/qrencode/qrinput.h" alt="" coords="419,80,569,107"/>
+<area shape="rect" id="node32" href="$split_8h.html" title="src/qrencode/split.h" alt="" coords="645,80,781,107"/>
+<area shape="rect" id="node12" href="$qrspec_8c.html" title="src/qrencode/qrspec.c" alt="" coords="174,155,324,181"/>
+<area shape="rect" id="node21" href="$mqrspec_8c.html" title="src/qrencode/mqrspec.c" alt="" coords="873,155,1036,181"/>
+</map>

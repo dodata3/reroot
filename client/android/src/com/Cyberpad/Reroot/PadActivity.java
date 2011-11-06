@@ -247,8 +247,8 @@ public class PadActivity extends Activity {
 					long elapsed = now - this.last_tap;
 					
 					if(elapsed <= 200){
-						Toast.makeText(PadActivity.this,
-								"Pointer count is " + pointerCount, Toast.LENGTH_SHORT).show();
+						//Toast.makeText(PadActivity.this,
+						//		"Pointer count is " + pointerCount, Toast.LENGTH_SHORT).show();
 						
 						//register the tap and send a click
 						if(lastPointerCount  == 1)
