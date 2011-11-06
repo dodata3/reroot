@@ -200,6 +200,9 @@ public class PadActivity extends Activity {
 		int pointerCount = 1;
 		if (multiEnabled){
 			pointerCount = WrappedMotionEvent.getPointerCount(ev);
+			/*if(pointerCount ==2)
+				Toast.makeText(PadActivity.this,
+					"Pointer count is" + pointerCount, Toast.LENGTH_SHORT).show();*/
 		}
 		
 		switch(ev.getAction()){
@@ -220,12 +223,12 @@ public class PadActivity extends Activity {
 						this.last_tap = System.currentTimeMillis();
 						this.tapstate = "first_tap";
 					}
-					if(pointerCount == 2 && System.currentTimeMillis() - this.last_tap < 200){
+					if(pointerCount == 2){ //&& System.currentTimeMillis() - this.last_tap < 200){
 						
 						this.last_tap = System.currentTimeMillis();
 						this.tapstate = "double_tap";
 						Toast.makeText(PadActivity.this,
-								"Pointer count is" + pointerCount, Toast.LENGTH_SHORT).show();
+								"Started double tap...", Toast.LENGTH_SHORT).show();
 					}
 					
 					//return without sending anything
@@ -243,13 +246,16 @@ public class PadActivity extends Activity {
 					long now = System.currentTimeMillis();
 					long elapsed = now - this.last_tap;
 					
-					
 					if(elapsed <= 200){
+						Toast.makeText(PadActivity.this,
+								"Pointer count is " + pointerCount, Toast.LENGTH_SHORT).show();
 						
 						//register the tap and send a click
-						if(pointerCount == 1)
+						if(lastPointerCount  == 1)
 							type = 0;
-						else if(pointerCount == 2)
+						else if(lastPointerCount == 2)
+							Toast.makeText(PadActivity.this,
+									"Double tap successful", Toast.LENGTH_SHORT).show();
 							type = 3;	
 					}
 					else{
@@ -259,20 +265,22 @@ public class PadActivity extends Activity {
 					this.tapstate = "no_tap";
 					
 				}
-				else if(this.tapstate == "double_tap"){
+				/*else if(this.tapstate == "double_tap"){
 					long now = System.currentTimeMillis();
 					long elapsed = now - this.last_tap;
 					
 					
 					if(elapsed <= 200){
-							type = 3;	
+						Toast.makeText(PadActivity.this,
+								"Double tap successful", Toast.LENGTH_SHORT).show();
+						type = 3;	
 					}
 					else{
 						//too much time passed to be a tap
 						this.last_tap = 0;
 					}
 					this.tapstate = "no_tap";
-				}
+				}*/
 				
 				
 				break;
