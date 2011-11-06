@@ -20,7 +20,7 @@ private:
     #endif
 
 public:
-    static Multitouch& get();
+    static Multitouch& Get();
 
     // non-static
 private:
@@ -36,7 +36,7 @@ public:
     unsigned int MaximumTouch() const;
 
     void Touch();
-    void
+    //void
 
 };
 
