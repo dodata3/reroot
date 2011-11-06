@@ -84,6 +84,7 @@ SET( SOURCES
 	src/HandshakeListener.cpp
 	src/Mouse.cpp
 	src/Keyboard.cpp
+    src/Context.cpp
 	${OSC_CPP}
 	${QR_CPP}
 	${MOC_CPP}

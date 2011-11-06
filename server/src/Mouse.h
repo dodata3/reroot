@@ -29,7 +29,7 @@ private:
     #endif
 
 public:
-    static Mouse& get();
+    static Mouse& Get();
 
     static const unsigned int sLeft = 1;
     static const unsigned int sRight = 2;
@@ -54,11 +54,11 @@ public:
     Mouse& MovePosition(QPoint delta);
 
     // Clicks
-    void down(unsigned int button);
-    void up(unsigned int button);
+    void Down(unsigned int button);
+    void Up(unsigned int button);
 
     // Scrolls(TM)
-    void scroll(signed int horizontal, signed int vertical);
+    void Scroll(signed int horizontal, signed int vertical);
 };
 
 #endif // MOUSE_H_

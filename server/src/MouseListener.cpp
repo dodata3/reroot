@@ -19,22 +19,26 @@ void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& t
 {
     QList< QVariant > args = message.getArguments();
     int type = args[0].toInt();
+    std::cout << "Type: " << type << '\n';
     switch (type)
     {
     case 0:
-        Mouse::get().down(Mouse::sLeft);
-        Mouse::get().up(Mouse::sLeft);
+        Mouse::Get().Down(Mouse::sLeft);
+        std::cout << "Left click";
+        Mouse::Get().Up(Mouse::sLeft);
         break;
     case 1:
-        //Mouse::get().up(Mouse::sLeft);
-        Mouse::get().down(Mouse::sRight);
-        Mouse::get().up(Mouse::sRight);
+        //Mouse::Get().Up(Mouse::sLeft);
+        Mouse::Get().Down(Mouse::sRight);
+        std::cout << "Right click";
+        Mouse::Get().Up(Mouse::sRight);
         break;
     case 2:
     {
         int dX = args[1].toInt();
         int dY = args[2].toInt();
-        Mouse::get().MovePosition(QPoint(dX, dY));
+        std::cout << "x: " << dX << " y: " << dY << '\n';
+        Mouse::Get().MovePosition(QPoint(dX, dY));
     }
         break;
     default:

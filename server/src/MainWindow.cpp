@@ -7,6 +7,7 @@
 
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Context.h"
 
 using namespace std;
 
@@ -222,9 +223,11 @@ void MainWindow::connectNew()
         {
             printf("%u", i);
         }
-        Keyboard::get().down(k);
-        Keyboard::get().up(k);
+        Keyboard::Get().Down(k);
+        Keyboard::Get().Up(k);
         printf("\n%u\n", k);
     }
+    Context::Get().Title();
+    Context::Get().ProcessID();
 	// Spawn a new window which can be used to connect, give information to the connector
 }
