@@ -253,10 +253,11 @@ public class PadActivity extends Activity {
 						//register the tap and send a click
 						if(lastPointerCount  == 1)
 							type = 0;
-						else if(lastPointerCount == 2)
+						else if(lastPointerCount == 2){
 							Toast.makeText(PadActivity.this,
 									"Double tap successful", Toast.LENGTH_SHORT).show();
 							type = 3;	
+						}
 					}
 					else{
 						//too much time passed to be a tap
