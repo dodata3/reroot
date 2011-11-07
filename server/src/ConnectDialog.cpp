@@ -12,12 +12,12 @@
 #include "Connector.h"
 
 #define CONNECT_TIME 60000 // One Minute to Connect
+#define FEEDBACK_TIME 5000 // 5 Seconds of Visual Feedback
 
 using namespace std;
 
 ConnectDialog::ConnectDialog( Connector* connector )
 {
-	//iconLabel->setMinimumWidth(durationLabel->sizeHint().width());
     mpConnector = connector;
 	setWindowTitle( tr( "Reroot: Connect a Device" ) );
     mConnectionCode.setAlignment( Qt::AlignHCenter );
@@ -27,6 +27,8 @@ ConnectDialog::ConnectDialog( Connector* connector )
 	setLayout( layout );
 	resize( 400, 300 );
 	setVisible( false );
+	connect( &mTimeout, SIGNAL( timeout() ), this, SLOT( ConnectionTimeout() ) );
+	mTimeout.setSingleShot( true );
 }
 
 void ConnectDialog::setVisible( bool visible )
@@ -37,7 +39,6 @@ void ConnectDialog::setVisible( bool visible )
 void ConnectDialog::closeEvent(QCloseEvent *event)
 {
     mpConnector->SetConnectKey();
-
 }
 
 QHostAddress ConnectDialog::AcquireServerIP()
@@ -77,17 +78,32 @@ void ConnectDialog::ConnectNewDevice()
     mConnectionCode.setText( connectionCode );
     mQRCode.RenderConnectionCode( connectionCode );
     mpConnector->SetConnectKey( randomNumber );
-
     setVisible( true );
+
+	// Schedule a ConnectionTimeout event
+	mTimeout.start( CONNECT_TIME );
 }
 
-void ConnectDialog::ConnectionSuccess()
+void ConnectDialog::ConnectionSuccess( QString name )
 {
+	qDebug() << "Connection Success: " << name << " Connected.";
     mpConnector->SetConnectKey();
+
+	// Cancel Timeout Timer
+	mTimeout.stop();
+
+	// Show the success pane
+
+	// This is likely a problem: What if they open a new QR Code while this timer is running?
+	QTimer::singleShot( FEEDBACK_TIME, this, SLOT( hide() ) );
 }
 
 void ConnectDialog::ConnectionTimeout()
 {
     mpConnector->SetConnectKey();
 
+	// Show the Failure Pane
+
+	// This is likely a problem: What if they open a new QR Code while this timer is running?
+	QTimer::singleShot( FEEDBACK_TIME, this, SLOT( hide() ) );
 }

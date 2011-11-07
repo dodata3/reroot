@@ -52,6 +52,7 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 	mLock.lock();
 	mDeviceMap[ inRemote.toString() ] = dev;
 	mLock.unlock();
+	emit HandshakeSuccessful( inRemote.toString() );
 }
 
 void Connector::SetConnectKey( quint32 key )
