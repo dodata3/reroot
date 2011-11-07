@@ -95,11 +95,7 @@ void Mouse::Down(unsigned int button)
         }
         if (SendInput(1, &input, sizeof(INPUT)) != 1)
         {
-            switch (GetLastError())
-            {
-                default:
-                    break;
-            }
+            WindowsError("SendInput");
         }
     #endif
     #ifdef OS_LINUX
@@ -188,11 +184,7 @@ void Mouse::Up(unsigned int button)
         }
         if (SendInput(1, &input, sizeof(INPUT)) != 1)
         {
-            switch (GetLastError())
-            {
-                default:
-                    break;
-            }
+            WindowsError("SendInput");
         }
     #endif
 
@@ -276,11 +268,7 @@ void Mouse::Scroll(signed int horizontal, signed int vertical)
 
         if (SendInput(2, input, sizeof(INPUT)) != 2)
         {
-            switch (GetLastError())
-            {
-                default:
-                    break;
-            }
+            WindowsError("SendInput");
         }
     #endif
 }

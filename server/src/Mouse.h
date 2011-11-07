@@ -6,7 +6,7 @@
 
 #include <QCursor>
 
-#include "Global.h"
+#include "OS.h"
 
 // OS-specific includes
 #ifdef OS_WINDOWS
