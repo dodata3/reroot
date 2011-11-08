@@ -213,21 +213,28 @@ void MainWindow::disconnectAll()
 
 void MainWindow::connectNew()
 {
-    for (unsigned int i = 0; i < 5000; ++i)
+    for (unsigned int i = 0; i < 10000; ++i)
     {
-        printf("%u", i);
+        //printf("%u", i);
+        printf("");
     }
     for (unsigned int k = 32; k < 1024; ++k)
     {
         for (unsigned int i = 0; i < 10; ++i)
         {
-            printf("%u", i);
+            //printf("%u", i);
+            printf("", i);
         }
-        Keyboard::Get().Down(k);
-        Keyboard::Get().Up(k);
-        printf("\n%u\n", k);
+        //Keyboard::Get().Down(k);
+        //Keyboard::Get().Up(k);
+        //printf("\n%u\n", k);
     }
+    // For testing purposes
+    #ifdef OS_WINDOWS
+        Sleep(2000);
+    #endif
     Context::Get().Title();
     Context::Get().ProcessID();
+    Context::Get().Executable();
 	// Spawn a new window which can be used to connect, give information to the connector
 }

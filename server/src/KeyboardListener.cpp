@@ -33,6 +33,7 @@ void KeyboardListener::acceptDecipheredMessage( QHostAddress& address, QDateTime
         break;
     default:
         // unknown type
+        printf("Unknown keyboard type\n");
         break;
     }
 }

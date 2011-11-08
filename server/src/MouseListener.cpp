@@ -24,14 +24,11 @@ void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& t
     {
     case 0:
         Mouse::Get().Down(Mouse::sLeft);
-        std::cout << "Left click";
         Mouse::Get().Up(Mouse::sLeft);
+        std::cout << "Left click\n";
         break;
     case 1:
-        //Mouse::Get().Up(Mouse::sLeft);
-        Mouse::Get().Down(Mouse::sRight);
-        std::cout << "Right click";
-        Mouse::Get().Up(Mouse::sRight);
+        std::cout << "Release\n";
         break;
     case 2:
     {
@@ -41,8 +38,14 @@ void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& t
         Mouse::Get().MovePosition(QPoint(dX, dY));
     }
         break;
+    case 3:
+        Mouse::Get().Down(Mouse::sRight);
+        Mouse::Get().Up(Mouse::sRight);
+        std::cout << "Right click\n";
+        break;
     default:
         // unknown type
+        printf("Unknown mouse type\n");
         break;
     }
 }
