@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$struct___q_rinput___input_list.html" title="_QRinput_InputList" alt="" coords="5,291,136,317"/>
-<area shape="rect" id="node4" href="$struct___q_rinput.html" title="_QRinput" alt="" coords="33,200,108,227"/>
-<area shape="rect" id="node6" href="$struct___q_rinput___list.html" title="_QRinput_List" alt="" coords="19,96,123,123"/>
-<area shape="rect" id="node8" href="$struct_bit_stream.html" title="BitStream" alt="" coords="31,5,111,32"/>
+<area shape="rect" id="node2" href="$struct___q_rinput___input_list.html" title="{_QRinput_InputList\n|+ input\l+ next\l|}" alt="" coords="5,606,136,698"/>
+<area shape="rect" id="node4" href="$struct___q_rinput.html" title="{_QRinput\n|+ version\l+ level\l+ head\l+ tail\l+ mqr\l+ fnc1\l+ appid\l|}" alt="" coords="33,376,108,541"/>
+<area shape="rect" id="node6" href="$struct___q_rinput___list.html" title="{_QRinput_List\n|+ mode\l+ size\l+ data\l+ bstream\l+ next\l|}" alt="" coords="19,163,123,299"/>
+<area shape="rect" id="node8" href="$struct_bit_stream.html" title="{BitStream\n|+ length\l+ data\l|}" alt="" coords="31,6,111,98"/>
 </map>

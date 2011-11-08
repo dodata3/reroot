@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$class_o_s_c_port.html" title="OSCPort" alt="" coords="168,96,243,123"/>
-<area shape="rect" id="node4" href="$class_o_s_c_byte_array_to_msg_converter.html" title="OSCByteArrayToMsgConverter" alt="" coords="5,5,205,32"/>
-<area shape="rect" id="node6" href="$class_o_s_c_packet_dispatcher.html" title="OSCPacketDispatcher" alt="" coords="230,5,383,32"/>
+<area shape="rect" id="node2" href="$class_o_s_c_port.html" title="{OSCPort\n|# iAddress\l# ibListening\l# iDispatcher\l# iConverter\l# iSocket\l# iPort\l|+ OSCPort()\l+ OSCPort()\l+ ~OSCPort()\l+ close()\l+ startListening()\l+ stopListening()\l+ isListening()\l+ addListener()\l+ send()\l+ construct()\l+ defaultSCOSCPort()\l+ defaultSCLangOSCPort()\l# run()\l}" alt="" coords="145,427,324,754"/>
+<area shape="rect" id="node4" href="$class_o_s_c_byte_array_to_msg_converter.html" title="{OSCByteArrayToMsgConverter\n|&#45; iBytes\l&#45; iBytesLength\l&#45; iStreamPosition\l|+ OSCByteArrayToMsgConverter()\l+ ~OSCByteArrayToMsgConverter()\l+ convert()\l&#45; isBundle()\l&#45; convertBundle()\l&#45; convertMessage()\l&#45; readString()\l&#45; readTypes()\l&#45; readArgument()\l&#45; readChar()\l&#45; readDouble()\l&#45; readFloat()\l&#45; readBigInteger()\l&#45; readInteger()\l&#45; readTimeTag()\l&#45; readArray()\l&#45; lengthOfCurrentString()\l&#45; moveToFourByteBoundry()\l}" alt="" coords="5,6,235,362"/>
+<area shape="rect" id="node6" href="$class_o_s_c_packet_dispatcher.html" title="{OSCPacketDispatcher\n|&#45; iAddressToClassTable\l|+ OSCPacketDispatcher()\l+ ~OSCPacketDispatcher()\l+ addListener()\l+ dispatchPacket()\l&#45; dispatchBundle()\l&#45; dispatchMessage()\l&#45; dispatchMessage()\l}" alt="" coords="259,101,440,267"/>
 </map>
