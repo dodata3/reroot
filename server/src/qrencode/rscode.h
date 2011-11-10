@@ -7,7 +7,7 @@
  * Copyright (C) 2002, 2003, 2004, 2006 Phil Karn, KA9Q
  * (libfec is released under the GNU Lesser General Public License.)
  *
- * Copyright (C) 2006-2010 Kentaro Fukuchi <kentaro@fukuchi.org>
+ * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,6 +33,7 @@
 
 typedef struct _RS RS;
 
+/* WARNING: Thread unsafe!!! */
 extern RS *init_rs(int symsize, int gfpoly, int fcr, int prim, int nroots, int pad);
 extern void encode_rs_char(RS *rs, const unsigned char *data, unsigned char *parity);
 extern void free_rs_char(RS *rs);

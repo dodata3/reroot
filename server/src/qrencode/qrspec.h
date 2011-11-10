@@ -2,7 +2,7 @@
  * qrencode - QR Code encoder
  *
  * QR Code specification in convenient format. 
- * Copyright (C) 2006-2010 Kentaro Fukuchi <kentaro@fukuchi.org>
+ * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,11 @@
 /******************************************************************************
  * Version and capacity
  *****************************************************************************/
+
+/**
+ * Maximum version (size) of QR-code symbol.
+ */
+#define QRSPEC_VERSION_MAX 40
 
 /**
  * Maximum width of a symbol
@@ -151,6 +156,7 @@ extern unsigned int QRspec_getFormatInfo(int mask, QRecLevel level);
  * Return a copy of initialized frame.
  * When the same version is requested twice or more, a copy of cached frame
  * is returned.
+ * WARNING: Thread unsafe!!!
  * @param version
  * @return Array of unsigned char. You can free it by free().
  */
@@ -158,24 +164,8 @@ extern unsigned char *QRspec_newFrame(int version);
 
 /**
  * Clear the frame cache. Typically for debug.
+ * WARNING: Thread unsafe!!!
  */
 extern void QRspec_clearCache(void);
 
-/******************************************************************************
- * Mode indicator
- *****************************************************************************/
-
-/**
- * Mode indicator. See Table 2 of JIS X0510:2004, pp.16.
- */
-#define QRSPEC_MODEID_ECI        7
-#define QRSPEC_MODEID_NUM        1
-#define QRSPEC_MODEID_AN         2
-#define QRSPEC_MODEID_8          4
-#define QRSPEC_MODEID_KANJI      8
-#define QRSPEC_MODEID_FNC1FIRST  5
-#define QRSPEC_MODEID_FNC1SECOND 9
-#define QRSPEC_MODEID_STRUCTURE  3
-#define QRSPEC_MODEID_TERMINATOR 0
- 
 #endif /* __QRSPEC_H__ */

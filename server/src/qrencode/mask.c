@@ -2,7 +2,7 @@
  * qrencode - QR Code encoder
  *
  * Masking.
- * Copyright (C) 2006-2010 Kentaro Fukuchi <kentaro@fukuchi.org>
+ * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,26 +19,23 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <errno.h>
-
 #include "qrencode.h"
 #include "qrspec.h"
 #include "mask.h"
 
-int Mask_writeFormatInformation(int width, unsigned char *frame, int mask, QRecLevel level)
+#define __STATIC
+
+__STATIC int Mask_writeFormatInformation(int width, unsigned char *frame, int mask, QRecLevel level)
 {
 	unsigned int format;
 	unsigned char v;
 	int i;
 	int blacks = 0;
 
-	format = QRspec_getFormatInfo(mask, level);
+	format =  QRspec_getFormatInfo(mask, level);
 
 	for(i=0; i<8; i++) {
 		if(format & 1) {
@@ -140,35 +137,15 @@ static int Mask_mask7(int width, const unsigned char *s, unsigned char *d)
 	MASKMAKER((((x*y)%3)+((x+y)&1))&1)
 }
 
-#define maskNum (8)
 typedef int MaskMaker(int, const unsigned char *, unsigned char *);
-static MaskMaker *maskMakers[maskNum] = {
+static MaskMaker *maskMakers[] = {
 	Mask_mask0, Mask_mask1, Mask_mask2, Mask_mask3,
 	Mask_mask4, Mask_mask5, Mask_mask6, Mask_mask7
 };
 
-#ifdef WITH_TESTS
-unsigned char *Mask_makeMaskedFrame(int width, unsigned char *frame, int mask)
-{
-	unsigned char *masked;
-
-	masked = (unsigned char *)malloc(width * width);
-	if(masked == NULL) return NULL;
-
-	maskMakers[mask](width, frame, masked);
-
-	return masked;
-}
-#endif
-
 unsigned char *Mask_makeMask(int width, unsigned char *frame, int mask, QRecLevel level)
 {
 	unsigned char *masked;
-
-	if(mask < 0 || mask >= maskNum) {
-		errno = EINVAL;
-		return NULL;
-	}
 
 	masked = (unsigned char *)malloc(width * width);
 	if(masked == NULL) return NULL;
@@ -179,6 +156,7 @@ unsigned char *Mask_makeMask(int width, unsigned char *frame, int mask, QRecLeve
 	return masked;
 }
 
+static int runLength[QRSPEC_WIDTH_MAX + 1];
 
 //static int n1;
 //static int n2;
@@ -218,14 +196,13 @@ static int Mask_calcN1N3(int length, int *runLength)
 	return demerit;
 }
 
-int Mask_evaluateSymbol(int width, unsigned char *frame)
+__STATIC int Mask_evaluateSymbol(int width, unsigned char *frame)
 {
 	int x, y;
 	unsigned char *p;
 	unsigned char b22, w22;
 	int head;
 	int demerit = 0;
-	int runLength[QRSPEC_WIDTH_MAX + 1];
 
 	p = frame;
 	for(y=0; y<width; y++) {
@@ -294,7 +271,7 @@ unsigned char *Mask_mask(int width, unsigned char *frame, QRecLevel level)
 	if(mask == NULL) return NULL;
 	bestMask = NULL;
 
-	for(i=0; i<maskNum; i++) {
+	for(i=0; i<8; i++) {
 //		n1 = n2 = n3 = n4 = 0;
 		demerit = 0;
 		blacks = maskMakers[i](width, frame, mask);
@@ -307,10 +284,12 @@ unsigned char *Mask_mask(int width, unsigned char *frame, QRecLevel level)
 		if(demerit < minDemerit) {
 			minDemerit = demerit;
 			bestMaskNum = i;
-			free(bestMask);
-			bestMask = mask;
-			mask = (unsigned char *)malloc(width * width);
-			if(mask == NULL) break;
+			if(bestMask != NULL) {
+				free(bestMask);
+			}
+			bestMask = (unsigned char *)malloc(width * width);
+			if(bestMask == NULL) break;
+			memcpy(bestMask, mask, width * width);
 		}
 	}
 	free(mask);

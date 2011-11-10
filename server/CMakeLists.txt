@@ -69,8 +69,8 @@ SET( OSC_CPP
 SET( QR_CPP
 	src/qrencode/bitstream.c
 	src/qrencode/mask.c
-	src/qrencode/mmask.c
-	src/qrencode/mqrspec.c
+	#src/qrencode/mmask.c
+	#src/qrencode/mqrspec.c
 	src/qrencode/qrencode.c
 	src/qrencode/qrinput.c
 	src/qrencode/qrspec.c

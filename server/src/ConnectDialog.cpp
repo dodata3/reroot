@@ -22,10 +22,14 @@ ConnectDialog::ConnectDialog( Connector* connector )
 	setWindowTitle( tr( "Reroot: Connect a Device" ) );
     mConnectionCode.setAlignment( Qt::AlignHCenter );
 	QVBoxLayout* layout = new QVBoxLayout;
+	mQRCode.setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+	mQRCode.sizePolicy().setHeightForWidth( true );
+	mConnectionCode.setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+	mConnectionCode.setScaledContents( true );
 	layout->addWidget( &mQRCode );
 	layout->addWidget( &mConnectionCode );
 	setLayout( layout );
-	resize( 400, 300 );
+	resize( 400, 450 );
 	setVisible( false );
 }
 

@@ -7,7 +7,7 @@
  * Copyright (C) 2002, 2003, 2004, 2006 Phil Karn, KA9Q
  * (libfec is released under the GNU Lesser General Public License.)
  *
- * Copyright (C) 2006-2010 Kentaro Fukuchi <kentaro@fukuchi.org>
+ * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,15 +24,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_LIBPTHREAD
-#  include <pthread.h>
-#endif
-
 #include "rscode.h"
 
 /* Stuff specific to the 8-bit symbol version of the general purpose RS codecs
@@ -60,15 +53,8 @@ struct _RS {
 };
 
 static RS *rslist = NULL;
-#ifdef HAVE_LIBPTHREAD
-static pthread_mutex_t rslist_mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif
 
-#ifdef _MSC_VER
-static __inline int modnn(RS *rs, int x){
-#else
 static inline int modnn(RS *rs, int x){
-#endif
 	while (x >= rs->nn) {
 		x -= rs->nn;
 		x = (x >> rs->mm) + (x & rs->nn);
@@ -81,7 +67,7 @@ static inline int modnn(RS *rs, int x){
 
 #define MM (rs->mm)
 #define NN (rs->nn)
-#define ALPHA_TO (rs->alpha_to)
+#define ALPHA_TO (rs->alpha_to) 
 #define INDEX_OF (rs->index_of)
 #define GENPOLY (rs->genpoly)
 #define NROOTS (rs->nroots)
@@ -217,9 +203,6 @@ RS *init_rs(int symsize, int gfpoly, int fcr, int prim, int nroots, int pad)
 {
 	RS *rs;
 
-#ifdef HAVE_LIBPTHREAD
-	pthread_mutex_lock(&rslist_mutex);
-#endif
 	for(rs = rslist; rs != NULL; rs = rs->next) {
 		if(rs->pad != pad) continue;
 		if(rs->nroots != nroots) continue;
@@ -237,9 +220,6 @@ RS *init_rs(int symsize, int gfpoly, int fcr, int prim, int nroots, int pad)
 	rslist = rs;
 
 DONE:
-#ifdef HAVE_LIBPTHREAD
-	pthread_mutex_unlock(&rslist_mutex);
-#endif
 	return rs;
 }
 
@@ -256,19 +236,12 @@ void free_rs_cache(void)
 {
 	RS *rs, *next;
 
-#ifdef HAVE_LIBPTHREAD
-	pthread_mutex_lock(&rslist_mutex);
-#endif
 	rs = rslist;
 	while(rs != NULL) {
 		next = rs->next;
 		free_rs_char(rs);
 		rs = next;
 	}
-	rslist = NULL;
-#ifdef HAVE_LIBPTHREAD
-	pthread_mutex_unlock(&rslist_mutex);
-#endif
 }
 
 /* The guts of the Reed-Solomon encoder, meant to be #included
@@ -281,7 +254,7 @@ void free_rs_cache(void)
  * NROOTS - the number of roots in the RS code generator polynomial,
  *          which is the same as the number of parity symbols in a block.
             Integer variable or literal.
-	    *
+	    * 
  * NN - the total number of symbols in a RS block. Integer variable or literal.
  * PAD - the number of pad symbols in a block. Integer variable or literal.
  * ALPHA_TO - The address of an array of NN elements to convert Galois field

@@ -19,8 +19,6 @@ import android.widget.Toast;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 
-
-
 public class RerootActivity extends Activity {
 	//private EditText text[];
 	private static final String TAG = "Reroot";
@@ -132,26 +130,23 @@ public class RerootActivity extends Activity {
     public void GenerateKeyPair()
     {       
         try{
-            KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-            kpg.initialize(2048);
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance( "RSA" );
+            kpg.initialize( 2048 );
             KeyPair kp = kpg.genKeyPair();
 
-            KeyFactory fact = KeyFactory.getInstance("RSA");
-            RSAPublicKeySpec pub = fact.getKeySpec(kp.getPublic(),
-              RSAPublicKeySpec.class);
-            RSAPrivateKeySpec priv = fact.getKeySpec(kp.getPrivate(),
-              RSAPrivateKeySpec.class);
+            KeyFactory fact = KeyFactory.getInstance( "RSA" );
+            RSAPublicKeySpec pub = fact.getKeySpec( kp.getPublic(), RSAPublicKeySpec.class );
+            RSAPrivateKeySpec priv = fact.getKeySpec( kp.getPrivate(), RSAPrivateKeySpec.class );
             
             Editor edit = preferences.edit();
-    		edit.putString("public_key_mod", pub.getModulus().toString());
-    		edit.putString("public_key_exp", pub.getPublicExponent().toString());
-    		edit.putString("private_key_mod", priv.getModulus().toString());
-    		edit.putString("private_key_exp", priv.getPrivateExponent().toString());
-    		edit.putInt("key_pair", 1);
+    		edit.putString( "public_key_mod", pub.getModulus().toString() );
+    		edit.putString( "public_key_exp", pub.getPublicExponent().toString() );
+    		edit.putString( "private_key_mod", priv.getModulus().toString() );
+    		edit.putString( "private_key_exp", priv.getPrivateExponent().toString() );
+    		edit.putInt( "key_pair", 1 );
     		edit.commit();
-    		
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+        } catch( Exception e ) {
+            System.out.println( e.getMessage() );
         }
     }
 }

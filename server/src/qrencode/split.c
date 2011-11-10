@@ -2,12 +2,12 @@
  * qrencode - QR Code encoder
  *
  * Input data splitter.
- * Copyright (C) 2006-2010 Kentaro Fukuchi <kentaro@fukuchi.org>
+ * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
  *
  * The following data / specifications are taken from
  * "Two dimensional symbol -- QR-code -- Basic Specification" (JIS X0510:2004)
  *  or
- * "Automatic identification and data capture techniques --
+ * "Automatic identification and data capture techniques -- 
  *  QR Code 2005 bar code symbology specification" (ISO/IEC 18004:2006)
  *
  * This library is free software; you can redistribute it and/or
@@ -25,9 +25,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -38,17 +35,6 @@
 
 #define isdigit(__c__) ((unsigned char)((signed char)(__c__) - '0') < 10)
 #define isalnum(__c__) (QRinput_lookAnTable(__c__) >= 0)
-
-#if !HAVE_STRDUP
-#undef strdup
-char *strdup(const char *s)
-{
-	size_t len = strlen(s) + 1;
-	void *new = malloc(len);
-	if(new == NULL) return NULL;
-	return (char *)memcpy(new, s, len);
-}
-#endif
 
 static QRencodeMode Split_identifyMode(const char *string, QRencodeMode hint)
 {
