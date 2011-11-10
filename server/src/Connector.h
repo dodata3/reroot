@@ -48,6 +48,9 @@ public:
 	CryptoPP::RSA::PublicKey PublicSignKey() { return mPublicSignKey; }
 	CryptoPP::RSA::PrivateKey PrivateSignKey() { return mPrivateSignKey; }
 
+signals:
+	void HandshakeSuccessful( QString name );
+
 private:
 	QMutex mLock;
 	QHostAddress mListenerAddress;

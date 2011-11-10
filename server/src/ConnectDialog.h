@@ -7,6 +7,7 @@
 #include <QSystemTrayIcon>
 #include <QDialog>
 #include <QLabel>
+#include <QTimer>
 #include <QHostAddress>
 #include "QRWidget.h"
 
@@ -29,12 +30,13 @@ protected:
 
 private slots:
 	void ConnectionTimeout();
-	void ConnectionSuccess();
+	void ConnectionSuccess( QString name );
 
 private:
     Connector* mpConnector;
     QRWidget mQRCode;
     QLabel mConnectionCode;
+	QTimer mTimeout;
 };
 
 #endif // CONNECTDIALOG_H_
