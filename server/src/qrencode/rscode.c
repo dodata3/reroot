@@ -54,7 +54,7 @@ struct _RS {
 
 static RS *rslist = NULL;
 
-static inline int modnn(RS *rs, int x){
+static __inline int modnn(RS *rs, int x){
 	while (x >= rs->nn) {
 		x -= rs->nn;
 		x = (x >> rs->mm) + (x & rs->nn);

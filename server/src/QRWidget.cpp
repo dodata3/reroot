@@ -25,11 +25,11 @@ void QRWidget::paintEvent( QPaintEvent* paintEvent )
 	unsigned int squareWidth = width() / ( codeWidth + 2 );
 
 	QPainter painter( this );
-    for(int i = 0; i < code->width; i++)
+    for(int i = code->width -1; i >=0; i--)
     {
         for(int j = 0; j < code->width; j++)
         {
-            unsigned char data = code->data[ ( code->width * j ) + i ];
+            unsigned char data = code->data[ ( code->width * i ) + j ];
             QRect rect = QRect( ( j + 1 ) * squareWidth, ( i + 1 ) * squareWidth, squareWidth, squareWidth );
             if( data & 00000001 ) painter.fillRect( rect, Qt::black ); else painter.fillRect( rect, Qt::white );
 		}
