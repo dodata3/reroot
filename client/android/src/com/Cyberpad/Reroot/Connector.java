@@ -10,7 +10,6 @@ import com.illposed.osc.*;
 public class Connector {
 	private OSCPortOut mSender;
 	private OSCPortIn mReceiver;
-	private boolean mAuthenticated = false;
 	private Crypto mCrypto;
 	
 	// Constructor
@@ -18,7 +17,6 @@ public class Connector {
 	{	
 		// Upon initialization, we have not authenticated yet
 		mCrypto = new Crypto( preferences );
-		mAuthenticated = false;
 		
 		// Create a listener port which will listen for a server handshake
 		try {
@@ -35,7 +33,7 @@ public class Connector {
 	
 	public void Authenticate( String publicEncKeyMod, String publicEncKeyExp, String publicSignKeyMod, String publicSignKeyExp )
 	{
-		mAuthenticated = mCrypto.SetRemoteKeys( publicEncKeyMod, publicEncKeyExp, publicSignKeyMod, publicSignKeyExp );
+		mCrypto.SetRemoteKeys( publicEncKeyMod, publicEncKeyExp, publicSignKeyMod, publicSignKeyExp );
 	}
 	
 	// Simple handshake listener class which shouldn't be needed outside of connector
