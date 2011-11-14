@@ -169,11 +169,13 @@ public class Crypto {
 	// Helper function for converting string to hex
 	// This method should be implemented Server side too!
 	private static final char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-	private static String ByteArrayToHexString(byte[] bytes) {
-	    StringBuilder sb = new StringBuilder(bytes.length * 2);
-	    for (final byte b : bytes) {
-	        sb.append(hex[(b & 0xF0) >> 4]);
-	        sb.append(hex[b & 0x0F]);
+	private static String ByteArrayToHexString( byte[] bytes )
+	{
+	    StringBuilder sb = new StringBuilder( bytes.length * 2 );
+	    for( final byte b : bytes ) 
+	    {
+	        sb.append( hex[ ( b & 0xF0 ) >> 4 ] );
+	        sb.append( hex[ b & 0x0F ] );
 	    }
 	    return sb.toString();
 	}
