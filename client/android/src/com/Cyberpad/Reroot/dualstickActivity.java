@@ -11,6 +11,8 @@ import com.illposed.osc.OSCPortOut;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -26,6 +28,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.KeyEvent;
 
@@ -45,6 +48,9 @@ public class dualstickActivity extends Activity {
 	private float left_yHistory;
 	private float right_xHistory;
 	private float right_yHistory;
+	private int head_y;
+	private int l_head_x;
+	private int r_head_x;
 	
 	private boolean multiEnabled;
 	
@@ -56,12 +62,16 @@ public class dualstickActivity extends Activity {
 		//set display on our new layout
 		setContentView(R.layout.dualstick_layout);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//force the screen to always be landscape
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 		
 		//assume that we will have access to OSC connection and initialize buttons	
+		initLeftCarriage();
+		initRightCarriage();
 		
 	}
 	
@@ -91,6 +101,7 @@ public class dualstickActivity extends Activity {
 		int type = -1;
 		float xMove = 0f;
 		float yMove = 0f;
+		ImageView left = (ImageView)this.findViewById(R.id.left_head);
 		
 		switch(ev.getAction()){
 			//finger down
@@ -100,6 +111,8 @@ public class dualstickActivity extends Activity {
 				type = 0;
 				this.left_xHistory = ev.getX();
 				this.right_yHistory = ev.getY();
+				this.l_head_x = left.getLeft();
+				this.head_y = left.getTop();
 				
 				break;
 			//finger up
@@ -108,6 +121,7 @@ public class dualstickActivity extends Activity {
 				xMove = 0;
 				yMove = 0;
 				this.left_xHistory = this.left_yHistory = 0;
+				left.scrollTo(this.l_head_x, this.head_y);
 				
 				break;
 			//finger moved
@@ -119,14 +133,16 @@ public class dualstickActivity extends Activity {
 				this.left_xHistory = ev.getX();
 				this.left_yHistory = ev.getY();
 				
+				//move the dual stick head to reflect movement
+				left.scrollBy((int)xMove, (int)yMove);
+				
 				break;	
 		}
 		
 		//0 is a touch down, 1 is a release, 2 is a move
 		//send message here
 		
-		FrameLayout left = (FrameLayout)this.findViewById(R.id.left_carriage);
-		//left.
+		
 		
 		return true;
 	}
@@ -136,6 +152,8 @@ public class dualstickActivity extends Activity {
 		int type = -1;
 		float xMove = 0f;
 		float yMove = 0f;
+		ImageView right = (ImageView)findViewById(R.id.right_head);
+		
 		
 		switch(ev.getAction()){
 			//finger down
@@ -145,6 +163,7 @@ public class dualstickActivity extends Activity {
 				type = 0;
 				this.right_xHistory = ev.getX();
 				this.right_yHistory = ev.getY();
+				this.r_head_x = right.getLeft();
 				
 				break;
 			//finger up
@@ -153,6 +172,7 @@ public class dualstickActivity extends Activity {
 				xMove = 0;
 				yMove = 0;
 				this.right_xHistory = this.right_yHistory = 0;
+				right.scrollTo(r_head_x, head_y);
 				
 				break;
 			//finger moved
@@ -164,11 +184,15 @@ public class dualstickActivity extends Activity {
 				this.right_xHistory = ev.getX();
 				this.right_yHistory = ev.getY();
 				
+				right.scrollBy((int)xMove, (int)yMove);
+				
 				break;	
 		}
 		
 		//0 is a touch down, 1 is a release, 2 is a move
 		//send message here
+		
+		
 		
 		return true;
 				
