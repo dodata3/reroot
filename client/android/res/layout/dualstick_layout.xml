@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  	<FrameLayout android:layout_height="163dp" android:layout_width="172dp" android:id="@+id/left_carriage" android:background="@drawable/dualstick_carriage" android:layout_x="40dp" android:layout_y="51dp"></FrameLayout>
+  	<FrameLayout android:layout_height="161dp" android:layout_width="177dp" android:id="@+id/right_carriage" android:background="@drawable/dualstick_carriage" android:layout_x="314dp" android:layout_y="51dp"></FrameLayout>
+  	
+    
+</AbsoluteLayout>
