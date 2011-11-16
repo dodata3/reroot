@@ -57,6 +57,8 @@ public class PadActivity extends Activity {
 	private int lastPointerCount = 0;
 	private boolean multiEnabled;
 	
+	private Connector mConnector;
+	
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -73,6 +75,8 @@ public class PadActivity extends Activity {
 	    
 	    multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 	    
+	    
+	    mConnector = Connector.getInstance( this );
 	    
 		//initialize keyboard stuff
 		this.rMidDown = new Runnable() {
@@ -356,22 +360,14 @@ public class PadActivity extends Activity {
 	}
 	
 	private void sendMouseEvent(int type, float x, float y) {
-		//
 		float xDir = x == 0 ? 1 : x / Math.abs(x);
 		float yDir = y == 0 ? 1 : y / Math.abs(y);
-		//
-		Object[] args = new Object[3];
-		args[0] = type;
-		args[1] = (int) ( (Math.pow(Math.abs(x), 1)) * xDir );
-		args[2] = (int) ( (Math.pow(Math.abs(y), 1)) * yDir );
-		// Log.d(TAG, String.valueOf(Settings.getSensitivity()));
-		//
-		OSCMessage msg = new OSCMessage("/mouse", args);
-		try {
-			this.sender.send(msg);
-		} catch (Exception ex) {
-			Log.d(TAG, ex.toString());
-		}
+		
+		mConnector.SendControlMessage( 
+			new MouseMessage( 
+				MouseMessage.TOUCH_1, 
+				ControlMessage.CONTROL_MOVE, 
+				(int)xDir, (int)yDir ) );
 	}
 	
 	//keyboard zone

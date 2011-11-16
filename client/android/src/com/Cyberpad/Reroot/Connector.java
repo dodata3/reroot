@@ -4,7 +4,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Date;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.illposed.osc.*;
@@ -14,8 +16,20 @@ public class Connector {
 	private OSCPortIn mReceiver;
 	private Crypto mCrypto;
 	
+	static private Connector mInstance;
+	
+	public static synchronized Connector getInstance( Context c )
+	{
+		if( mInstance == null )
+		{
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( c );
+			mInstance = new Connector( preferences );
+		}
+		return mInstance;
+	}
+	
 	// Constructor
-	Connector( SharedPreferences preferences )
+	private Connector( SharedPreferences preferences )
 	{	
 		// Upon initialization, we have not authenticated yet
 		mCrypto = new Crypto( preferences );
