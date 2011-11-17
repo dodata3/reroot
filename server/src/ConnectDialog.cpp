@@ -47,6 +47,7 @@ void ConnectDialog::closeEvent(QCloseEvent *event)
 
 QHostAddress ConnectDialog::AcquireServerIP()
 {
+    // Issue: PROXY SERVERS.  Blarg.
     QStringList items;
     QMap< QString, QHostAddress > addressmap;
     foreach(QNetworkInterface interface, QNetworkInterface::allInterfaces())

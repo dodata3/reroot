@@ -5,6 +5,7 @@ import java.net.SocketException;
 import java.util.Date;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,26 +16,28 @@ public class Connector {
 	private OSCPortOut mSender;
 	private OSCPortIn mReceiver;
 	private Crypto mCrypto;
+	Context mContext;
 	
 	private static final int REROOT_SERVER_PORT = 57110;
 	private static final int REROOT_CLIENT_PORT = 57220;
+	
+	public static final String AUTH_INTENT = "com.Cyberpad.Reroot.AUTHENTICATED";
 	
 	static private Connector mInstance;
 	
 	public static synchronized Connector getInstance( Context c )
 	{
 		if( mInstance == null )
-		{
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( c );
-			mInstance = new Connector( preferences );
-		}
+			mInstance = new Connector( c );
 		return mInstance;
 	}
 	
 	// Constructor
-	private Connector( SharedPreferences preferences )
+	private Connector( Context c )
 	{	
 		// Upon initialization, we have not authenticated yet
+		mContext = c;
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( c );
 		mCrypto = new Crypto( preferences );
 		
 		// Create a listener port which will listen for a server handshake
@@ -93,7 +96,13 @@ public class Connector {
 	
 	private void Authenticate( String publicEncKeyMod, String publicEncKeyExp, String publicSignKeyMod, String publicSignKeyExp )
 	{
+		// Set the remote public keys
 		mCrypto.SetRemoteKeys( publicEncKeyMod, publicEncKeyExp, publicSignKeyMod, publicSignKeyExp );
+		
+		// Create a new "authenticated intent" which should be broadcast to the system
+		Intent i = new Intent();
+		i.setAction( AUTH_INTENT );
+		mContext.sendBroadcast(i);
 	}
 	
 	// Simple handshake listener class which shouldn't be needed outside of connector
