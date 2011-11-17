@@ -16,6 +16,9 @@ public class Connector {
 	private OSCPortIn mReceiver;
 	private Crypto mCrypto;
 	
+	private static final int REROOT_SERVER_PORT = 57110;
+	private static final int REROOT_CLIENT_PORT = 57220;
+	
 	static private Connector mInstance;
 	
 	public static synchronized Connector getInstance( Context c )
@@ -36,7 +39,7 @@ public class Connector {
 		
 		// Create a listener port which will listen for a server handshake
 		try {
-			mReceiver = new OSCPortIn( OSCPort.defaultSCOSCPort() );
+			mReceiver = new OSCPortIn( REROOT_CLIENT_PORT );
 		} catch ( SocketException e ) {
 			e.printStackTrace();
 		}
@@ -52,7 +55,7 @@ public class Connector {
 		// Close the connection to any previous server and open a new server port
 		if( mSender != null ) mSender.close();
 		try {
-			mSender = new OSCPortOut( address );
+			mSender = new OSCPortOut( address, REROOT_SERVER_PORT );
 		} catch( SocketException e ) {
 			Log.d( "Connector", "Unable to create outward OSC port. Exception: " + e.getMessage() );
 		}

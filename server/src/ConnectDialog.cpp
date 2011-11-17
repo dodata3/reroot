@@ -68,17 +68,18 @@ QHostAddress ConnectDialog::AcquireServerIP()
 
 void ConnectDialog::ConnectNewDevice()
 {
+    qDebug() << "=============== INITIATING CONNECT SEQUENCE ===============";
     QHostAddress hostaddress = AcquireServerIP();
     qsrand( QDateTime::currentDateTime().toTime_t() );
     qint32 randomNumber = 0;
     while( !randomNumber ) randomNumber = qrand() % 127;
     quint32 ip = hostaddress.toIPv4Address();
     qDebug() << "Ip: " << hostaddress.toString() << " = " << ip;
-    qDebug() << "RandomNumber: " << randomNumber;
+    qDebug() << "Random Number: " << randomNumber;
     QString connectionCode = QString( "%1%2" )
         .arg( ip, 8, 16, QLatin1Char('0') )
         .arg( randomNumber, 2, 16, QLatin1Char('0') ).toUpper();
-    qDebug() << connectionCode;
+    qDebug() << "Connection Code: " << connectionCode;
     mConnectionCode.setText( connectionCode );
     mQRCode.RenderConnectionCode( connectionCode );
     mpConnector->SetConnectKey( randomNumber );
@@ -86,6 +87,7 @@ void ConnectDialog::ConnectNewDevice()
 
 	// Schedule a ConnectionTimeout event
 	mTimeout.start( CONNECT_TIME );
+	qDebug() << "Waiting for connection from client...";
 }
 
 void ConnectDialog::ConnectionSuccess( QString name )
@@ -100,14 +102,17 @@ void ConnectDialog::ConnectionSuccess( QString name )
 
 	// This is likely a problem: What if they open a new QR Code while this timer is running?
 	QTimer::singleShot( FEEDBACK_TIME, this, SLOT( hide() ) );
+	qDebug() << "=============== FINISHED CONNECT SEQUENCE ===============";
 }
 
 void ConnectDialog::ConnectionTimeout()
 {
+    qDebug() << "Connection attempt failed: Timeout.";
     mpConnector->SetConnectKey();
 
 	// Show the Failure Pane
 
 	// This is likely a problem: What if they open a new QR Code while this timer is running?
 	QTimer::singleShot( FEEDBACK_TIME, this, SLOT( hide() ) );
+    qDebug() << "=============== FINISHED CONNECT SEQUENCE ===============";
 }

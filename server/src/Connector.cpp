@@ -22,7 +22,7 @@ Connector::Connector() :
     // Generate keys
     Cipher::GenerateKeypair( mPublicEncKey, mPrivateEncKey );
     Cipher::GenerateKeypair( mPublicSignKey, mPrivateSignKey );
-	mIncomingPort = new OSCPort( mListenerAddress, REROOT_PORT );
+	mIncomingPort = new OSCPort( mListenerAddress, REROOT_SERVER_PORT );
 	QString controlAddress = QString( "/control" );
 	mIncomingPort->addListener( controlAddress, mControl );
 	QString handshakeAddress = QString( "/handshake_client" );
@@ -45,7 +45,7 @@ Connector::~Connector()
 void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp, QByteArray inSignMod, QByteArray inSignExp )
 {
 	Device dev;
-	dev.port = new OSCPort( inRemote, REROOT_PORT );
+	dev.port = new OSCPort( inRemote, REROOT_CLIENT_PORT );
 	dev.encKey.SetModulus( Integer( reinterpret_cast< byte* >( inEncMod.data() ), inEncMod.size(), Integer::UNSIGNED ) );
 	dev.encKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inEncExp.data() ), inEncExp.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetModulus( Integer( reinterpret_cast< byte* >( inSignMod.data() ), inSignMod.size(), Integer::UNSIGNED ) );

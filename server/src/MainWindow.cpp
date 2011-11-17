@@ -76,8 +76,9 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
 	switch (reason) {
 	case QSystemTrayIcon::Trigger:
+        break;
 	case QSystemTrayIcon::DoubleClick:
-	iconComboBox->setCurrentIndex((iconComboBox->currentIndex() + 1) % iconComboBox->count());
+        connectNew();
 		break;
 	case QSystemTrayIcon::MiddleClick:
 		showMessage();
