@@ -13,9 +13,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:label="Preferences" android:name="Preferences"></activity>
-        <activity android:name="PadActivity">
+        <activity android:label="Preferences" android:name="Preferences"></activity><activity android:name="PadActivity">
         </activity>
+        
+        <activity android:name="MainMenuActivity"></activity>
+        <activity android:name="dualstickActivity"></activity>
 
     </application>
     

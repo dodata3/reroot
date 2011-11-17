@@ -5,13 +5,10 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
   	<AbsoluteLayout android:layout_height="173dp" android:id="@+id/left_carriage" android:layout_width="183dp" android:background="@drawable/dualstick_carriage" android:layout_x="36dp" android:layout_y="53dp">
-  		<AbsoluteLayout android:layout_y="57dp" android:layout_height="48dp" android:id="@+id/left_stick" android:layout_width="35dp" android:background="@drawable/dualstick_stick" android:layout_x="68dp"></AbsoluteLayout>
-  		<ImageView android:layout_y="33dp" android:layout_height="107dp" android:layout_width="107dp" android:id="@+id/left_head" android:background="@drawable/dualstick_head" android:layout_x="38dp"></ImageView>
   	</AbsoluteLayout>
   	<AbsoluteLayout android:layout_height="174dp" android:id="@+id/right_carriage" android:layout_width="190dp" android:background="@drawable/dualstick_carriage" android:layout_x="300dp" android:layout_y="52dp">
-  		<AbsoluteLayout android:layout_y="57dp" android:layout_height="47dp" android:id="@+id/right_stick" android:layout_width="30dp" android:background="@drawable/dualstick_stick" android:layout_x="68dp"></AbsoluteLayout>
-  		<ImageView android:layout_height="107dp" android:layout_width="107dp" android:id="@+id/right_head" android:background="@drawable/dualstick_head" android:layout_x="39dp" android:layout_y="33dp"></ImageView>
   	</AbsoluteLayout>
+  
   
     
 </AbsoluteLayout>
