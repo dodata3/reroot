@@ -12,7 +12,7 @@
 #include "Connector.h"
 
 #define CONNECT_TIME 60000 // One Minute to Connect
-#define FEEDBACK_TIME 5000 // 5 Seconds of Visual Feedback
+#define FEEDBACK_TIME 2000 // 2 Seconds of Visual Feedback
 
 using namespace std;
 

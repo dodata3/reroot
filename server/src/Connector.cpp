@@ -61,23 +61,32 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 void Connector::SendHandshake( QString inDeviceName )
 {
     QList< QVariant > args;
+    QString num;
     std::ostringstream oss;
 
     oss.str("");
     oss << mPublicEncKey.GetModulus();
-    args.append( QString::fromStdString( oss.str() ) );
+    num = QString::fromStdString( oss.str() );
+    num.chop(1);
+    args << num;
 
     oss.str("");
     oss << mPublicEncKey.GetPublicExponent();
-    args.append( QString::fromStdString( oss.str() ) );
+    num = QString::fromStdString( oss.str() );
+    num.chop(1);
+    args << num;
 
     oss.str("");
     oss << mPublicSignKey.GetModulus();
-    args.append( QString::fromStdString( oss.str() ) );
+    num = QString::fromStdString( oss.str() );
+    num.chop(1);
+    args << num;
 
     oss.str("");
     oss << mPublicSignKey.GetPublicExponent();
-    args.append( QString::fromStdString( oss.str() ) );
+    num = QString::fromStdString( oss.str() );
+    num.chop(1);
+    args << num;
 
     QString address = QString( "/handshake_server" );
     OSCMessage handshake( address, args );
@@ -85,7 +94,6 @@ void Connector::SendHandshake( QString inDeviceName )
     mLock.lock();
     mDeviceMap[ inDeviceName ].port->send( handshake );
     mLock.unlock();
-
 }
 
 void Connector::SetConnectKey( qint32 key )

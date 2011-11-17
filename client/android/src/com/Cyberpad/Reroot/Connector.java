@@ -104,8 +104,16 @@ public class Connector {
 		public void acceptMessage( Date time, OSCMessage message ) 
 		{
 			// Parse message, pull keys, call *authenticate* method
-			String[] args = ( String[] ) message.getArguments();
-			mConnector.Authenticate( args[0], args[1], args[2], args[3] );
+			Object[] args = message.getArguments();
+			if( args.length == 4 )
+			{
+				String encMod = ( String )args[0];
+				String encExp = ( String )args[1];
+				String signMod = ( String )args[2];
+				String signExp = ( String )args[3];
+				mConnector.Authenticate( encMod, encExp, signMod, signExp );
+				Log.d( "Connector", "Recieved server handshake, keys exchanged." );
+			}
 		}
 	}
 	
