@@ -296,52 +296,39 @@ public class dualstickActivity extends Activity {
 				break;	
 		}
 		
-		//0 is a touch down, 1 is a release, 2 is a move
-		//send message here
-		
-		//make sure that we are within bounds
-		double offset = Math.sqrt(Math.pow(xMove,2)+Math.pow(yMove,2));
-		if(offset > centerx){
-			double angle = Math.atan2(yMove, xMove);
-			double drawback = centerx/offset;
-			int new_x = (int)(Math.cos(angle)*offset*drawback);
-			int new_y = (int)(Math.sin(angle)*offset*drawback);
-			
-			//Toast.makeText(dualstickActivity.this,
-			//		"out of bounds, new_x: "+ Math.cos(angle) + ", drawback:" + drawback, Toast.LENGTH_SHORT).show();
-			
-			xMove = new_x;
-			yMove = new_y;
-			
-		}
-		
 		cosX = (int)xMove + offsetx;
 		cosY = (int)yMove + offsety;
 		
-		//do bounding box for the cosmetic dual stick
-		double cosOffset = Math.sqrt(Math.pow(cosX, 2)+Math.pow(cosY, 2));
-		if(cosOffset > centerx - head_width/2){
+		//make sure that we are within bounds
+		double offset = Math.sqrt(Math.pow(xMove,2)+Math.pow(yMove,2));
+		//bound cosmetic joy stick
+		if(offset > centerx - head_width/2){
+			double angle = Math.atan2(yMove, xMove);
+			double cos_drawback = (centerx - (3*head_width/4))/offset;
+			cosX = (int)(Math.cos(angle)*offset*cos_drawback) + offsetx;
+			cosY = (int)(Math.sin(angle)*offset*cos_drawback) + offsety;
+			//Toast.makeText(dualstickActivity.this,
+			//		"out of bounds, new_x: "+ (centerx - head_width/2) + ", drawback:" + cosX, Toast.LENGTH_SHORT).show();
+			//now do xMove and yMove if we need to
+			if(offset > centerx){
+				double drawback = centerx/offset;
+				int new_x = (int)(Math.cos(angle)*offset*drawback);
+				int new_y = (int)(Math.sin(angle)*offset*drawback);
 			
-			double angle = Math.atan2(cosY, cosX);
-			double drawback = (centerx - head_width/2)/cosOffset;
 			
-			Toast.makeText(dualstickActivity.this,
-					"offset:: "+ cosOffset + ", drawback:" + drawback, Toast.LENGTH_SHORT).show();
 			
-			int new_cos_x = (int)(Math.cos(angle)*cosOffset*drawback);
-			int new_cos_y = (int)(Math.sin(angle)*cosOffset*drawback);
-			
-			cosX = new_cos_x;
-			cosY = new_cos_y;
-			
+				xMove = new_x;
+				yMove = new_y;
+			}
 		}
-
-		
 		
 		left_carriage.addView(left,
 				new AbsoluteLayout.LayoutParams(left_head.getWidth(), left_head.getHeight(), 
 						cosX, cosY));
 
+		
+		//0 is a touch down, 1 is a release, 2 is a move
+		//send message here
 		
 		
 		return true;
