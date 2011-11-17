@@ -23,11 +23,11 @@ void KeyboardListener::acceptDecipheredMessage( QHostAddress& address, QDateTime
     int character = args[2].toInt();
     switch (type)
     {
-    case 0:
+    case 0: // Keydown message
         Keyboard::Get().Down(keycode);
         printf("Key down message: keycode %i character %i\n", keycode, character);
         break;
-    case 1:
+    case 1: // Keyup message
         Keyboard::Get().Up(keycode);
         printf("Key up message: keycode %i character %i\n", keycode, character);
         break;

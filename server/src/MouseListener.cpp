@@ -22,12 +22,12 @@ void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& t
     std::cout << "Type: " << type << '\n';
     switch (type)
     {
-    case 0:
+    case 0: // Left click message
         Mouse::Get().Down(Mouse::sLeft);
         Mouse::Get().Up(Mouse::sLeft);
         std::cout << "Left click\n";
         break;
-    case 1:
+    case 1: // Touch release
         std::cout << "Release\n";
         break;
     case 2:
@@ -38,7 +38,7 @@ void MouseListener::acceptDecipheredMessage( QHostAddress& address, QDateTime& t
         Mouse::Get().MovePosition(QPoint(dX, dY));
     }
         break;
-    case 3:
+    case 3: // Right click message
         Mouse::Get().Down(Mouse::sRight);
         Mouse::Get().Up(Mouse::sRight);
         std::cout << "Right click\n";
