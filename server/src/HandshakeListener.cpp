@@ -2,15 +2,34 @@
 // Description: Listens for a handshake message from a device for a connection
 // (C) Cyberpad Technologies 2011
 
-#include <QCursor>
 #include "OSCMessage.h"
 #include "HandshakeListener.h"
+#include "Connector.h"
 
-HandshakeListener::HandshakeListener()
+HandshakeListener::HandshakeListener( Connector* connector ) :
+    mpConnector( connector )
 {
 }
 
 void HandshakeListener::acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message )
 {
-    qDebug() << "Handshake";
+    qDebug() << "Handshake Recieved!";
+    quint32 connectKey = mpConnector->GetConnectKey();
+    qDebug() << "Expected ConnectKey = " << connectKey;
+    if( connectKey )
+    {
+        // The connect key is nonzero, we're waiting for a handshake.
+		QList< QVariant > args = message.getArguments();
+		QByteArray encKeyMod = args[0].toByteArray();
+		QByteArray encKeyExp = args[1].toByteArray();
+		QByteArray signKeyMod = args[2].toByteArray();
+		QByteArray signKeyExp = args[3].toByteArray();
+		qint32 randKey = args[4].toInt();
+
+		qDebug() << "Recieved ConnectKey = " << randKey;
+
+        // If keys match up, we can add the device's address and public keys to the connector
+		if( randKey == mpConnector->GetConnectKey() )
+			mpConnector->AddNewDevice( address, encKeyMod, encKeyExp, signKeyMod, signKeyExp );
+    }
 }

@@ -11,7 +11,7 @@
 
 class OSCMessage;
 
-class OSCListener
+class OSCListener : public QObject
 {
 public:
     virtual void acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message ) {}

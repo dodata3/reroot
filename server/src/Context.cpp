@@ -98,7 +98,6 @@ int Context::ProcessID()
         GetWindowThreadProcessId(window, ppid);
 
         printf("pid: %i\n", int(pid));
-
         return int(pid);
     #endif
 }

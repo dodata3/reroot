@@ -11,7 +11,8 @@
 
 using namespace std;
 
-MainWindow::MainWindow()
+MainWindow::MainWindow() :
+    mConnectDialog( &mConnector )
 {
 	createIconGroupBox();
 	createMessageGroupBox();
@@ -213,6 +214,7 @@ void MainWindow::disconnectAll()
 
 void MainWindow::connectNew()
 {
+    /*
     for (unsigned int i = 0; i < 10000; ++i)
     {
         //printf("%u", i);
@@ -236,5 +238,8 @@ void MainWindow::connectNew()
     Context::Get().Title();
     Context::Get().ProcessID();
     Context::Get().Executable();
+    */
 	// Spawn a new window which can be used to connect, give information to the connector
+	mConnectDialog.ConnectNewDevice();
+
 }

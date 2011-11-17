@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include <cstring>
 
 Mouse* Mouse::sInstance = NULL;
 

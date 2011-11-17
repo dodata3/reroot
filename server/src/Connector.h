@@ -4,43 +4,65 @@
 #ifndef CONNECTOR_H_
 #define CONNECTOR_H_
 
+#include <QObject>
 #include <QMap>
 #include <QMutex>
+#include <QByteArray>
+#include <cryptopp/rsa.h>
 #include "Global.h"
 #include "OSCPort.h"
-#include "MouseListener.h"
-#include "KeyboardListener.h"
+#include "ControlListener.h"
 #include "HandshakeListener.h"
 
 struct Device
 {
 	OSCPort* port;
-	SecretKey secretKey;
+	CryptoPP::RSA::PublicKey encKey;
+	CryptoPP::RSA::PublicKey signKey;
 };
 
 typedef QMap< QString, Device > DeviceMap;
 
-class Connector
+class Connector : public QObject
 {
+    Q_OBJECT
+
 public:
 	Connector();
 	~Connector();
 
-	void AddNewDevice( QHostAddress& inRemote, SecretKey inSecretKey );
+	void AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp,
+                    QByteArray inSignMod, QByteArray inSignExp );
 	void RemoveDevice( QHostAddress& inRemote );
 	void RemoveAllDevices();
+	void SetConnectKey( qint32 key = 0 );
+    quint32 GetConnectKey();
 
-	SecretKey GetSecretKey( QHostAddress& inRemote );
-	OSCPort* GetPort( QHostAddress& inRemote );
+	CryptoPP::RSA::PublicKey GetClientEncKey( QHostAddress& inRemote );
+	CryptoPP::RSA::PublicKey GetClientSignKey( QHostAddress& inRemote );
+	OSCPort* GetClientPort( QHostAddress& inRemote );
+
+
+	CryptoPP::RSA::PublicKey PublicEncKey() { return mPublicEncKey; }
+	CryptoPP::RSA::PrivateKey PrivateEncKey() { return mPrivateEncKey; }
+	CryptoPP::RSA::PublicKey PublicSignKey() { return mPublicSignKey; }
+	CryptoPP::RSA::PrivateKey PrivateSignKey() { return mPrivateSignKey; }
+
+signals:
+	void HandshakeSuccessful( QString name );
 
 private:
 	QMutex mLock;
 	QHostAddress mListenerAddress;
 	OSCPort* mIncomingPort;
-	MouseListener mMouse;
-	KeyboardListener mKeyboard;
+	ControlListener mControl;
 	HandshakeListener mHandshake;
 	DeviceMap mDeviceMap;
+	CryptoPP::RSA::PublicKey mPublicEncKey;
+	CryptoPP::RSA::PrivateKey mPrivateEncKey;
+	CryptoPP::RSA::PublicKey mPublicSignKey;
+	CryptoPP::RSA::PrivateKey mPrivateSignKey;
+	qint32 mConnectKey;
 };
 
 #endif // CONNECTOR_H_
