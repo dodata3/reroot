@@ -116,7 +116,7 @@ public class Crypto {
 			Signature instance = Signature.getInstance( "SHA1withRSA" );
 			instance.initSign( mLocalPrivSignKey );
 			instance.update( ioMessage.getBytes() );
-			signature = ByteArrayToHexString( instance.sign() );
+			signature = Utility.ByteArrayToHexString( instance.sign() );
 		} catch( Exception e ) {
 			Log.d( "Crypto", "Failed to sign message. Exception: " + e.getMessage() );
 		}
@@ -125,7 +125,7 @@ public class Crypto {
 		try {
 			Cipher cipher = Cipher.getInstance( "RSA" );
 			cipher.init( Cipher.ENCRYPT_MODE, mRemotePubEncKey );
-			ioMessage = ByteArrayToHexString( cipher.doFinal( ioMessage.getBytes() ) );
+			ioMessage = Utility.ByteArrayToHexString( cipher.doFinal( ioMessage.getBytes() ) );
 		} catch( Exception e ) {
 			Log.d( "Crypto", "Failed to encrypt message. Exception: " + e.getMessage() );
 		}
@@ -141,7 +141,7 @@ public class Crypto {
 		try {
 			Cipher cipher = Cipher.getInstance( "RSA" );
 			cipher.init( Cipher.DECRYPT_MODE, mLocalPrivEncKey );
-			ioMessage = ByteArrayToHexString( cipher.doFinal( ioMessage.getBytes() ) );
+			ioMessage = Utility.ByteArrayToHexString( cipher.doFinal( ioMessage.getBytes() ) );
 		} catch( Exception e ) {
 			Log.d( "Crypto", "Failed to decrypt message. Exception: " + e.getMessage() );
 		}
@@ -166,17 +166,5 @@ public class Crypto {
 	public RSAPublicKey GetPublicEncryptionKey() { return mLocalPubEncKey; }
 	public RSAPublicKey GetPublicSigningKey() { return mLocalPubSignKey; }
 	
-	// Helper function for converting string to hex
-	// This method should be implemented Server side too!
-	private static final char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-	private static String ByteArrayToHexString( byte[] bytes )
-	{
-	    StringBuilder sb = new StringBuilder( bytes.length * 2 );
-	    for( final byte b : bytes ) 
-	    {
-	        sb.append( hex[ ( b & 0xF0 ) >> 4 ] );
-	        sb.append( hex[ b & 0x0F ] );
-	    }
-	    return sb.toString();
-	}
+	
 }

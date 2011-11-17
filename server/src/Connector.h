@@ -35,7 +35,7 @@ public:
                     QByteArray inSignMod, QByteArray inSignExp );
 	void RemoveDevice( QHostAddress& inRemote );
 	void RemoveAllDevices();
-	void SetConnectKey( quint32 key = 0 );
+	void SetConnectKey( qint32 key = 0 );
     quint32 GetConnectKey();
 
 	CryptoPP::RSA::PublicKey GetClientEncKey( QHostAddress& inRemote );
@@ -62,7 +62,7 @@ private:
 	CryptoPP::RSA::PrivateKey mPrivateEncKey;
 	CryptoPP::RSA::PublicKey mPublicSignKey;
 	CryptoPP::RSA::PrivateKey mPrivateSignKey;
-	quint32 mConnectKey;
+	qint32 mConnectKey;
 };
 
 #endif // CONNECTOR_H_

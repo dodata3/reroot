@@ -52,10 +52,11 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 	mLock.lock();
 	mDeviceMap[ inRemote.toString() ] = dev;
 	mLock.unlock();
+	qDebug() << "Added new device: " << inRemote.toString() << " to list of allowed devices";
 	emit HandshakeSuccessful( inRemote.toString() );
 }
 
-void Connector::SetConnectKey( quint32 key )
+void Connector::SetConnectKey( qint32 key )
 {
     mLock.lock();
     mConnectKey = key;

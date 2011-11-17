@@ -46,6 +46,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -101,6 +104,7 @@ public final class QRConnectActivity extends Activity implements SurfaceHolder.C
   private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
   private BeepManager beepManager;
+  private Connector mConnector;
 
   RerootViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -127,6 +131,7 @@ public final class QRConnectActivity extends Activity implements SurfaceHolder.C
     lastResult = null;
     hasSurface = false;
     beepManager = new BeepManager(this);
+    mConnector = Connector.getInstance(this);
 
     showHelpOnFirstLaunch();
   }
@@ -334,19 +339,20 @@ public final class QRConnectActivity extends Activity implements SurfaceHolder.C
       beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
-        case NATIVE_APP_INTENT:
-        case PRODUCT_SEARCH_LINK:
-          handleDecodeExternally(rawResult, resultHandler, barcode);
-          break;
-        case ZXING_LINK:
-          if (returnUrlTemplate == null){
-            handleDecodeInternally(rawResult, resultHandler, barcode);
-          } else {
-            handleDecodeExternally(rawResult, resultHandler, barcode);
-          }
-          break;
         case NONE:
-            handleDecodeInternally(rawResult, resultHandler, barcode);
+        	// Call the connector
+            CharSequence displayContents = resultHandler.getDisplayContents();
+            String address = displayContents.subSequence( 0, 8 ).toString();
+            int key = Utility.HexStringToInteger( displayContents.subSequence( 8, displayContents.length() ).toString() );
+			try {
+				InetAddress serverAddress = InetAddress.getByAddress( Utility.HexStringToByteArray( address ) );
+				Log.d( "QRConnectActivity", "Attempting to connect to " + serverAddress.toString() + " with key " + key );
+				mConnector.ConnectToServer( serverAddress, key );
+			} catch( UnknownHostException e ) {
+				e.printStackTrace();
+			}
+          break;
+        default: // We won't try to handle any other type of result.
           break;
       }
     }
@@ -462,53 +468,6 @@ public final class QRConnectActivity extends Activity implements SurfaceHolder.C
     if (copyToClipboard && !resultHandler.areContentsSecure()) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       clipboard.setText(displayContents);
-    }
-  }
-
-  // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
-  private void handleDecodeExternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
-    viewfinderView.drawResultBitmap(barcode);
-
-    // Since this message will only be shown for a second, just tell the user what kind of
-    // barcode was found (e.g. contact info) rather than the full contents, which they won't
-    // have time to read.
-
-    if (copyToClipboard && !resultHandler.areContentsSecure()) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-      clipboard.setText(resultHandler.getDisplayContents());
-    }
-
-    if (source == Source.NATIVE_APP_INTENT) {
-      // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
-      // the deprecated intent is retired.
-      Intent intent = new Intent(getIntent().getAction());
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
-      intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-      byte[] rawBytes = rawResult.getRawBytes();
-      if (rawBytes != null && rawBytes.length > 0) {
-        intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
-      }
-      Message message = Message.obtain(handler, R.id.return_scan_result);
-      message.obj = intent;
-      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-    } else if (source == Source.PRODUCT_SEARCH_LINK) {
-      // Reformulate the URL which triggered us into a query, so that the request goes to the same
-      // TLD as the scan URL.
-      Message message = Message.obtain(handler, R.id.launch_product_query);
-      int end = sourceUrl.lastIndexOf("/scan");
-      message.obj = sourceUrl.substring(0, end) + "?q=" +
-          resultHandler.getDisplayContents().toString() + "&source=zxing";
-      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-    } else if (source == Source.ZXING_LINK) {
-      // Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
-      // with the scanned code. This allows both queries and REST-style URLs to work.
-      if (returnUrlTemplate != null) {
-        Message message = Message.obtain(handler, R.id.launch_product_query);
-        message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER,
-                                                String.valueOf(resultHandler.getDisplayContents()));
-        handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-      }
     }
   }
 

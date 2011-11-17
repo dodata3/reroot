@@ -15,6 +15,7 @@ void HandshakeListener::acceptMessage( QHostAddress& address, QDateTime& time, O
 {
     qDebug() << "Handshake Recieved!";
     quint32 connectKey = mpConnector->GetConnectKey();
+    qDebug() << "Expected ConnectKey = " << connectKey;
     if( connectKey )
     {
         // The connect key is nonzero, we're waiting for a handshake.
@@ -23,7 +24,9 @@ void HandshakeListener::acceptMessage( QHostAddress& address, QDateTime& time, O
 		QByteArray encKeyExp = args[1].toByteArray();
 		QByteArray signKeyMod = args[2].toByteArray();
 		QByteArray signKeyExp = args[3].toByteArray();
-		quint32 randKey = args[4].toUInt();
+		qint32 randKey = args[4].toInt();
+
+		qDebug() << "Recieved ConnectKey = " << randKey;
 
         // If keys match up, we can add the device's address and public keys to the connector
 		if( randKey == mpConnector->GetConnectKey() )
