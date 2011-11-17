@@ -36,12 +36,12 @@ public:
 	void RemoveDevice( QHostAddress& inRemote );
 	void RemoveAllDevices();
 	void SetConnectKey( qint32 key = 0 );
+	void SendHandshake( QString inDeviceName );
     quint32 GetConnectKey();
 
 	CryptoPP::RSA::PublicKey GetClientEncKey( QHostAddress& inRemote );
 	CryptoPP::RSA::PublicKey GetClientSignKey( QHostAddress& inRemote );
 	OSCPort* GetClientPort( QHostAddress& inRemote );
-
 
 	CryptoPP::RSA::PublicKey PublicEncKey() { return mPublicEncKey; }
 	CryptoPP::RSA::PrivateKey PrivateEncKey() { return mPrivateEncKey; }
@@ -49,7 +49,7 @@ public:
 	CryptoPP::RSA::PrivateKey PrivateSignKey() { return mPrivateSignKey; }
 
 signals:
-	void HandshakeSuccessful( QString name );
+	void HandshakeSuccessful( QString deviceName );
 
 private:
 	QMutex mLock;

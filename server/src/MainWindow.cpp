@@ -28,6 +28,8 @@ MainWindow::MainWindow() :
 	connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
 	connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
 		this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+    connect( &mConnector, SIGNAL( HandshakeSuccessful( QString ) ),
+        &mConnectDialog, SLOT( ConnectionSuccess( QString ) ) );
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(iconGroupBox);

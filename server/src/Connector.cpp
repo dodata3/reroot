@@ -5,6 +5,7 @@
 #include "Connector.h"
 #include "Cipher.h"
 
+#include <sstream>
 #include <cryptopp/integer.h>
 using CryptoPP::Integer;
 using CryptoPP::RSA;
@@ -52,8 +53,39 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 	mLock.lock();
 	mDeviceMap[ inRemote.toString() ] = dev;
 	mLock.unlock();
+	SendHandshake( inRemote.toString() );
 	qDebug() << "Added new device: " << inRemote.toString() << " to list of allowed devices";
 	emit HandshakeSuccessful( inRemote.toString() );
+}
+
+void Connector::SendHandshake( QString inDeviceName )
+{
+    QList< QVariant > args;
+    std::ostringstream oss;
+
+    oss.str("");
+    oss << mPublicEncKey.GetModulus();
+    args.append( QString::fromStdString( oss.str() ) );
+
+    oss.str("");
+    oss << mPublicEncKey.GetPublicExponent();
+    args.append( QString::fromStdString( oss.str() ) );
+
+    oss.str("");
+    oss << mPublicSignKey.GetModulus();
+    args.append( QString::fromStdString( oss.str() ) );
+
+    oss.str("");
+    oss << mPublicSignKey.GetPublicExponent();
+    args.append( QString::fromStdString( oss.str() ) );
+
+    QString address = QString( "/handshake_server" );
+    OSCMessage handshake( address, args );
+
+    mLock.lock();
+    mDeviceMap[ inDeviceName ].port->send( handshake );
+    mLock.unlock();
+
 }
 
 void Connector::SetConnectKey( qint32 key )
