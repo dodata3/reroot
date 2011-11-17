@@ -202,10 +202,13 @@ public class dualstickActivity extends Activity {
 	}
 	
 	//handles movement in the left carriage
+	@SuppressWarnings("deprecation")
 	private boolean onLeftMove( MotionEvent ev ){
 		int type = -1;
 		float xMove = 0f;
 		float yMove = 0f;
+		int cosX = 0;
+		int cosY = 0;
 		//ImageView left = (ImageView)this.findViewById(R.id.left_head);
 		AbsoluteLayout left_carriage = (AbsoluteLayout)this.findViewById(R.id.left_carriage);
 		left_carriage.removeAllViews();
@@ -218,12 +221,21 @@ public class dualstickActivity extends Activity {
 		ImageView left = new ImageView(this);
 		left.setImageDrawable(bmd);
 		
+		//do calculation for the center of the carriage 'n' such
+		int head_width = left.getDrawable().getIntrinsicWidth();
+		int head_height = left.getDrawable().getIntrinsicHeight();
+		int centerx = left_carriage.getWidth()/2;
+		int centery = left_carriage.getHeight()/2;
 		
+		int offsetx = (left_carriage.getWidth() - head_width)/4;
+		int offsety = (left_carriage.getHeight() - head_height)/4;
+		
+		//Toast.makeText(dualstickActivity.this,
+		//		"Movement detected..."+ head_width + "," +head_height, Toast.LENGTH_SHORT).show();
 		
 		//make a matrix
-		/*Matrix matrix = left.getImageMatrix();
-		if(matrix == null){
-			Toast.makeText(dualstickActivity.this,
+		/*Matrix matrix = left.getImageMatrix();			
+		 * Toast.makeText(dualstickActivity.this,
 					"Movement detected..."+ xMove + "," +yMove, Toast.LENGTH_SHORT).show();
 		}*/
 		
@@ -239,8 +251,8 @@ public class dualstickActivity extends Activity {
 		switch(ev.getAction()){
 			//finger down
 			case MotionEvent.ACTION_DOWN:
-				xMove = 0;
-				yMove = 0;
+				xMove = ev.getX()-centerx;
+				yMove = ev.getY()-centery;
 				type = 0;
 				this.left_xHistory = ev.getX();
 				this.right_yHistory = ev.getY();
@@ -264,8 +276,9 @@ public class dualstickActivity extends Activity {
 			//finger moved
 			case MotionEvent.ACTION_MOVE:
 				type = 2;
-				xMove = ev.getX() - this.left_xHistory;
-				yMove = ev.getY() - this.left_yHistory;
+				xMove = ev.getX() - centerx;
+				yMove = ev.getY() - centery;
+
 				
 				this.left_xHistory = ev.getX();
 				this.left_yHistory = ev.getY();
@@ -286,9 +299,48 @@ public class dualstickActivity extends Activity {
 		//0 is a touch down, 1 is a release, 2 is a move
 		//send message here
 		
+		//make sure that we are within bounds
+		double offset = Math.sqrt(Math.pow(xMove,2)+Math.pow(yMove,2));
+		if(offset > centerx){
+			double angle = Math.atan2(yMove, xMove);
+			double drawback = centerx/offset;
+			int new_x = (int)(Math.cos(angle)*offset*drawback);
+			int new_y = (int)(Math.sin(angle)*offset*drawback);
+			
+			//Toast.makeText(dualstickActivity.this,
+			//		"out of bounds, new_x: "+ Math.cos(angle) + ", drawback:" + drawback, Toast.LENGTH_SHORT).show();
+			
+			xMove = new_x;
+			yMove = new_y;
+			
+		}
+		
+		cosX = (int)xMove + offsetx;
+		cosY = (int)yMove + offsety;
+		
+		//do bounding box for the cosmetic dual stick
+		double cosOffset = Math.sqrt(Math.pow(cosX, 2)+Math.pow(cosY, 2));
+		if(cosOffset > centerx - head_width/2){
+			
+			double angle = Math.atan2(cosY, cosX);
+			double drawback = (centerx - head_width/2)/cosOffset;
+			
+			Toast.makeText(dualstickActivity.this,
+					"offset:: "+ cosOffset + ", drawback:" + drawback, Toast.LENGTH_SHORT).show();
+			
+			int new_cos_x = (int)(Math.cos(angle)*cosOffset*drawback);
+			int new_cos_y = (int)(Math.sin(angle)*cosOffset*drawback);
+			
+			cosX = new_cos_x;
+			cosY = new_cos_y;
+			
+		}
+
+		
+		
 		left_carriage.addView(left,
 				new AbsoluteLayout.LayoutParams(left_head.getWidth(), left_head.getHeight(), 
-						95-(int)(left_head.getWidth()/2)+(int)xMove, 90-(int)(left_head.getHeight()/2)+(int)yMove));
+						cosX, cosY));
 
 		
 		
@@ -306,8 +358,8 @@ public class dualstickActivity extends Activity {
 		switch(ev.getAction()){
 			//finger down
 			case MotionEvent.ACTION_DOWN:
-				xMove = 0;
-				yMove = 0;
+				xMove = ev.getX();
+				yMove = ev.getY();
 				type = 0;
 				this.right_xHistory = ev.getX();
 				this.right_yHistory = ev.getY();
@@ -326,8 +378,8 @@ public class dualstickActivity extends Activity {
 			//finger moved
 			case MotionEvent.ACTION_MOVE:
 				type = 2;
-				xMove = ev.getX() - this.right_xHistory;
-				yMove = ev.getY() - this.right_yHistory;
+				xMove = ev.getX() - 95-30;//this.right_xHistory;
+				yMove = ev.getY() - 95-30;//this.right_yHistory;
 				
 				this.right_xHistory = ev.getX();
 				this.right_yHistory = ev.getY();
