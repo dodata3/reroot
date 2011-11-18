@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:id="@+id/background" android:weightSum="1">
+  <AbsoluteLayout
+  android:background = "@drawable/dualstick_carriage_padded" android:layout_width="250dp" android:id="@+id/left_carriage_padded" android:layout_weight="0.18" android:layout_height="256dp">
+  		<ImageView android:layout_height="wrap_content" android:background="@drawable/dualstick_head" android:layout_width="wrap_content" android:layout_x="63dp" android:layout_y="66dp"></ImageView>
+  </AbsoluteLayout>
+  <AbsoluteLayout android:id="@+id/right_carriage_padded" android:layout_width="250dp" android:background="@drawable/dualstick_carriage_padded" android:layout_weight="0.33" android:layout_height="252dp">
+	  <ImageView android:layout_height="wrap_content" android:background="@drawable/dualstick_head" android:layout_width="wrap_content" android:layout_x="66dp" android:layout_y="62dp"></ImageView>
+  </AbsoluteLayout>
+</LinearLayout>
