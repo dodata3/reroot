@@ -8,17 +8,14 @@
 
 #include "Global.h"
 
-#if defined(__WIN32__)
+#if defined(_WIN32)
     #define OS_WINDOWS
     // Require Windows 2000+
     //#define _WIN32_WINNT 0x0500
     // Require Windows Vista+
     #define _WIN32_WINNT 0x0600
-
-
-
-#elif defined(LINUX) || defined(__LINUX)
-    #define OS_LINUX
+#elif defined(LINUX) || defined(__LINUX) || defined( __linux ) || defined( __linux__ )
+    //#define OS_LINUX
 #else
     #error "Unsupported operating system"
 #endif
@@ -53,7 +50,7 @@
         LocalFree(lpMsgBuf);
         //ExitProcess(dw);
     }
-#endif
+#endif // OS_WINDOWS
 
 #endif // OS_H_
 

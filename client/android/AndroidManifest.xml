@@ -8,18 +8,38 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".RerootActivity"
                   android:label="@string/app_name">
+        </activity>
+        
+        <activity android:label="Preferences" android:name="Preferences">
+        </activity>
+        
+        <activity android:name="PadActivity">
+        </activity>
+        
+        <activity android:name=".QRConnectActivity"
+              android:screenOrientation="landscape"
+              android:clearTaskOnLaunch="true"
+              android:stateNotNeeded="true"
+              android:configChanges="orientation|keyboardHidden"
+              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+              android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.Cyberpad.Reroot.AUTHENTICATED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
-        <activity android:label="Preferences" android:name="Preferences"></activity><activity android:name="PadActivity">
-        </activity>
-        
         <activity android:name="MainMenuActivity"></activity>
         <activity android:name="dualstickActivity"></activity>
 
+
     </application>
     
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+	<uses-permission android:name="android.permission.VIBRATE"/>
+	
 </manifest>

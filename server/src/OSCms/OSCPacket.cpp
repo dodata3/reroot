@@ -7,6 +7,7 @@
 
 OSCPacket::OSCPacket()
 {
+    isByteArrayComputed = false;
 }
 
 OSCPacket::~OSCPacket()

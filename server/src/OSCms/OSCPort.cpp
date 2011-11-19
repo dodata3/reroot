@@ -74,8 +74,8 @@ void OSCPort::startListening()
 {
     if(!ibListening)
     {
-        start();
         ibListening = TRUE;
+        start();
     }
 }
 
