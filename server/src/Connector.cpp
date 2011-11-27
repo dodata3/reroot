@@ -145,7 +145,7 @@ QString Connector::IntegerToHexString( Integer integer )
 {
     string s;
     byte* buffer = new byte[ 1024 ];
-    for( int i = 0; i < integer.ByteCount(); i++ )
+    for( unsigned int i = 0; i < integer.ByteCount(); i++ )
         buffer[ integer.ByteCount() - 1 - i ] = integer.GetByte( i );
     buffer[ integer.ByteCount() ] = 0;
 
