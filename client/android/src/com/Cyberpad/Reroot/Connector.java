@@ -66,10 +66,10 @@ public class Connector {
 		// Send a handshake message to the server
 		// Consider converting these to hex strings
 		Object[] args = new Object[5];
-		args[0] = mCrypto.GetPublicEncryptionKey().getModulus().toString();
-		args[1] = mCrypto.GetPublicEncryptionKey().getPublicExponent().toString();
-		args[2] = mCrypto.GetPublicSigningKey().getModulus().toString();
-		args[3] = mCrypto.GetPublicSigningKey().getPublicExponent().toString();
+		args[0] = Utility.ByteArrayToHexString( mCrypto.GetPublicEncryptionKey().getModulus().toByteArray() );
+		args[1] = Utility.ByteArrayToHexString( mCrypto.GetPublicEncryptionKey().getPublicExponent().toByteArray() );
+		args[2] = Utility.ByteArrayToHexString( mCrypto.GetPublicSigningKey().getModulus().toByteArray() );
+		args[3] = Utility.ByteArrayToHexString( mCrypto.GetPublicSigningKey().getPublicExponent().toByteArray() );
 		args[4] = connectionKey;
 		OSCMessage msg = new OSCMessage( "/handshake_client", args );
 		SendMessage( msg );
@@ -78,15 +78,16 @@ public class Connector {
 	public void SendControlMessage( ControlMessage message )
 	{
 		// Encrypt and sign the control message
-		String cipherText = message.FormatMessage();
-		String signature = mCrypto.Encrypt( cipherText );
+		EncryptedMessage emsg = mCrypto.Encrypt( message.FormatMessage() );
 		
-		if( signature != "" )
+		if( emsg.mSignature != "" )
 		{
 			// Send the control message
 			Object[] args = new Object[2];
-			args[0] = cipherText;
-			args[1] = signature;
+			args[0] = emsg.mCipherText;
+			args[1] = emsg.mSignature;
+			Log.d( "Connector", "Cipher = " + emsg.mCipherText );
+			Log.d( "Connector", "Signature = " + emsg.mSignature );
 			OSCMessage msg = new OSCMessage( "/control", args );
 			SendMessage( msg );
 		}

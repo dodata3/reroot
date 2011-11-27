@@ -19,6 +19,8 @@ public class Utility {
 	
 	public static byte[] HexStringToByteArray( String s ) 
 	{
+		if( s.length() % 2 == 1 )
+			s = "0".concat( s );
 	    int len = s.length();
 	    byte[] data = new byte[ len / 2 ];
 	    for( int i = 0; i < len; i += 2 ) {

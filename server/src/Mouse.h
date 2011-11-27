@@ -30,11 +30,11 @@ private:
 public:
     static Mouse& Get();
 
-    static const unsigned int sLeft = 1;
-    static const unsigned int sRight = 2;
-    static const unsigned int sMiddle = 3;
-    static const unsigned int sMouse4 = 4;
-    static const unsigned int sMouse5 = 5;
+    static const unsigned int sLeft = 0;
+    static const unsigned int sRight = 1;
+    static const unsigned int sMiddle = 2;
+    static const unsigned int sMouse4 = 3;
+    static const unsigned int sMouse5 = 4;
 
     // non-static
 private:

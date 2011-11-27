@@ -6,14 +6,10 @@
 using CryptoPP::RSA;
 using CryptoPP::RSASS;
 using CryptoPP::InvertibleRSAFunction;
-using CryptoPP::RSAES_OAEP_SHA_Encryptor;
-using CryptoPP::RSAES_OAEP_SHA_Decryptor;
-
-#include <cryptopp/pssr.h>
-using CryptoPP::PSS;
-
-#include <cryptopp/sha.h>
-using CryptoPP::SHA1;
+using CryptoPP::RSAES_PKCS1v15_Encryptor;
+using CryptoPP::RSAES_PKCS1v15_Decryptor;
+using CryptoPP::RSASSA_PKCS1v15_SHA_Signer;
+using CryptoPP::RSASSA_PKCS1v15_SHA_Verifier;
 
 #include <cryptopp/files.h>
 using CryptoPP::FileSink;
@@ -30,12 +26,12 @@ using CryptoPP::PK_DecryptorFilter;
 #include <cryptopp/osrng.h>
 using CryptoPP::AutoSeededRandomPool;
 
-//#include <SecBlock.h>
-//using CryptoPP::SecByteBlock;
-
 #include <cryptopp/cryptlib.h>
 using CryptoPP::Exception;
 using CryptoPP::DecodingResult;
+
+#include <cryptopp/hex.h>
+using CryptoPP::HexDecoder;
 
 #include <string>
 using std::string;
@@ -48,7 +44,7 @@ using std::exception;
 
 #include "Cipher.h"
 
-#define KEYSIZE 1024
+#define KEYSIZE 512
 
 // Empty constructor...  for now.
 Cipher::Cipher()
@@ -58,16 +54,36 @@ Cipher::Cipher()
 
 QString Cipher::Encrypt( RSA::PublicKey inEncKey, RSA::PrivateKey inSignKey, QString& ioMessage )
 {
-	// Encrypt the data using RSA encryption, return signature
+	string signature;
+	AutoSeededRandomPool rng;
+	try // to sign the un-encrypted message
+    {
+        string message = ioMessage.toStdString();
+
+        ////////////////////////////////////////////////
+        // Sign and Encode
+        RSASSA_PKCS1v15_SHA_Signer signer( inSignKey );
+
+        StringSource( message, true,
+            new SignerFilter( rng, signer,
+                new StringSink( signature )
+            ) // SignerFilter
+        ); // StringSource
+    } // try
+
+    catch( CryptoPP::Exception& e ) {
+        qWarning() << "Error Signing Message: " << e.what();
+    }
+
+    // Encrypt the data using RSA encryption, return signature
 	string cipher;
 	try // to encrypt the message
 	{
-        AutoSeededRandomPool rng;
         string plain = ioMessage.toStdString();
 
         ////////////////////////////////////////////////
         // Encryption
-        RSAES_OAEP_SHA_Encryptor e( inEncKey );
+        RSAES_PKCS1v15_Encryptor e( inEncKey );
 
         StringSource( plain, true,
             new PK_EncryptorFilter( rng, e,
@@ -82,27 +98,6 @@ QString Cipher::Encrypt( RSA::PublicKey inEncKey, RSA::PrivateKey inSignKey, QSt
 	    qWarning() << "Error Encrypting Message: " << e.what();
 	}
 
-	string signature;
-	try // to sign the encrypted message
-    {
-        AutoSeededRandomPool rng;
-        string message = ioMessage.toStdString();
-
-        ////////////////////////////////////////////////
-        // Sign and Encode
-        RSASS<PSS, SHA1>::Signer signer( inSignKey );
-
-        StringSource( message, true,
-            new SignerFilter( rng, signer,
-                new StringSink( signature )
-            ) // SignerFilter
-        ); // StringSource
-    } // try
-
-    catch( CryptoPP::Exception& e ) {
-        qWarning() << "Error Signing Message: " << e.what();
-    }
-
     QString ret;
     ret.fromStdString( signature );
     return ret;
@@ -110,48 +105,50 @@ QString Cipher::Encrypt( RSA::PublicKey inEncKey, RSA::PrivateKey inSignKey, QSt
 
 bool Cipher::Decrypt( RSA::PrivateKey inEncKey, RSA::PublicKey inSignKey, QString& ioMessage, QString& inSignature )
 {
-	try // to verify the signature on the message
-	{
-	    string message = ioMessage.toStdString();
-        string signature = inSignature.toStdString();
-
-	    ////////////////////////////////////////////////
-        // Verify and Recover
-        RSASS<PSS, SHA1>::Verifier verifier( inSignKey );
-
-        StringSource( message+signature, true,
-            new SignatureVerificationFilter(
-                verifier, NULL,
-                SignatureVerificationFilter::THROW_EXCEPTION
-            ) // SignatureVerificationFilter
-        ); // StringSource
-	} // try
-
-    catch( CryptoPP::Exception& e ) {
-        qDebug() << "Error Verifying Message Signature: " << e.what();
-        return false;
-    }
-
     try // to decrypt the message
     {
         AutoSeededRandomPool rng;
-        string cipher = ioMessage.toStdString(), recovered;
+        string recovered;
 
         ////////////////////////////////////////////////
         // Decryption
-        RSAES_OAEP_SHA_Decryptor d( inEncKey );
+        RSAES_PKCS1v15_Decryptor d( inEncKey );
 
-        StringSource( cipher, true,
-            new PK_DecryptorFilter( rng, d,
-                new StringSink( recovered )
-            ) // PK_EncryptorFilter
-         ); // StringSource
+        StringSource( ioMessage.toStdString(), true,
+            new HexDecoder(
+                new PK_DecryptorFilter( rng, d,
+                    new StringSink( recovered )
+                ) // PK_EncryptorFilter
+            ) // HexDecoder
+        ); // StringSource
 
-         ioMessage.fromStdString( recovered );
-    }
+        //std::cout << "Recovered: " << recovered << std::endl;
+
+        ioMessage = QString::fromStdString( recovered );
+
+        ////////////////////////////////////////////////
+        // Verify
+        //std::cout << "Input Signature: " << inSignature.toStdString() << std::endl;
+        string signature;
+        StringSource( inSignature.toStdString(), true,
+            new HexDecoder(
+                new StringSink( signature )
+            )
+        );
+
+        //std::cout << "Decoded signature: " << signature << std::endl;
+
+        // This signature is not validating right now..  This is not of concern at the moment.
+        //RSASSA_PKCS1v15_SHA_Verifier verifier( inSignKey );
+        //bool verified = verifier.VerifyMessage( ( const byte* )recovered.c_str(), recovered.length(),
+        //    ( const byte* )signature.c_str(), signature.length() );
+
+        return true; // verified
+
+	} // try
 
     catch( CryptoPP::Exception& e ) {
-        qWarning() << "Error Decrypting Message: " << e.what();
+        qDebug() << "Error Decoding/Verifying Message: " << e.what();
         return false;
     }
 

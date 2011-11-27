@@ -28,13 +28,16 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
         switch( i.Action )
         {
         case Down:
-            Mouse::Get().Down(Mouse::sLeft);
+            Mouse::Get().Down( i.Control );
+            qDebug() << "MouseDown";
             break;
         case Up:
-            Mouse::Get().Up(Mouse::sLeft);
+            Mouse::Get().Up( i.Control );
+            qDebug() << "MouseUp";
             break;
         case Move:
             Mouse::Get().MovePosition( QPoint( i.Data1, i.Data2 ) );
+            qDebug() << "MouseMove(" << i.Data1 << "," << i.Data2 << ")";
             break;
         default:
             // unknown action
@@ -63,7 +66,7 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
         break;
 
     default:
-        // unknown device
+        qDebug() << "Unknown Device Command: idx = " << i.Device;
         break;
     }
 }

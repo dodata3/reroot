@@ -7,8 +7,10 @@
 
 #include <sstream>
 #include <cryptopp/integer.h>
-using CryptoPP::Integer;
-using CryptoPP::RSA;
+#include <cryptopp/hex.h>
+
+using namespace CryptoPP;
+using namespace std;
 
 // Listen in *nix using
 // sudo tcpdump -s 0 -pnli wlan0 proto UDP and port 57110
@@ -61,32 +63,12 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 void Connector::SendHandshake( QString inDeviceName )
 {
     QList< QVariant > args;
-    QString num;
-    std::ostringstream oss;
+    args << IntegerToHexString( mPublicEncKey.GetModulus() );
+    args << IntegerToHexString( mPublicEncKey.GetPublicExponent() );
+    args << IntegerToHexString( mPublicSignKey.GetModulus() );
+    args << IntegerToHexString( mPublicSignKey.GetPublicExponent() );
 
-    oss.str("");
-    oss << mPublicEncKey.GetModulus();
-    num = QString::fromStdString( oss.str() );
-    num.chop(1);
-    args << num;
-
-    oss.str("");
-    oss << mPublicEncKey.GetPublicExponent();
-    num = QString::fromStdString( oss.str() );
-    num.chop(1);
-    args << num;
-
-    oss.str("");
-    oss << mPublicSignKey.GetModulus();
-    num = QString::fromStdString( oss.str() );
-    num.chop(1);
-    args << num;
-
-    oss.str("");
-    oss << mPublicSignKey.GetPublicExponent();
-    num = QString::fromStdString( oss.str() );
-    num.chop(1);
-    args << num;
+    qDebug() << "Handshake: " << args;
 
     QString address = QString( "/handshake_server" );
     OSCMessage handshake( address, args );
@@ -157,4 +139,18 @@ OSCPort* Connector::GetClientPort( QHostAddress& address )
         port = mDeviceMap[ address.toString() ].port;
 	mLock.unlock();
 	return port;
+}
+
+QString Connector::IntegerToHexString( Integer integer )
+{
+    string s;
+    byte* buffer = new byte[ 1024 ];
+    for( int i = 0; i < integer.ByteCount(); i++ )
+        buffer[ integer.ByteCount() - 1 - i ] = integer.GetByte( i );
+    buffer[ integer.ByteCount() ] = 0;
+
+    StringSource( buffer, integer.ByteCount(), true,
+        new HexEncoder( new StringSink( s ) ) );
+
+    return QString::fromStdString( s );
 }
