@@ -12,7 +12,6 @@
 #ifdef OS_WINDOWS
     #include <Windows.h>
     #include <Winuser.h>
-    #include <Winable.h>
 #endif
 #ifdef OS_LINUX
     #include <X11/Xlib.h>
@@ -40,12 +39,22 @@ public:
     // non-static
 private:
     #ifdef OS_LINUX
-        Display* mDisplay;
+    Display* mDisplay;
     #endif
 
     Mouse();
     ~Mouse();
     void Init();
+    void Deinit();
+
+    #ifdef OS_WINDOWS
+    void WindowsButton(unisgned int button, bool up);
+
+    #endif //OSWINDOWS
+
+    #ifdef OS_LINUX
+    void LinuxButton(unsigned int button, bool up);
+    #endif //OS_LINUX
 
 public:
     // Position

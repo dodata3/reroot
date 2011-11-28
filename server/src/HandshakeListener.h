@@ -6,11 +6,17 @@
 
 #include "OSCListener.h"
 
+class Connector;
+
 class HandshakeListener : public OSCListener
 {
+
 public:
-	HandshakeListener();
+	HandshakeListener( Connector* connector );
     virtual void acceptMessage( QHostAddress& address, QDateTime& time, OSCMessage& message );
+
+private:
+    Connector* mpConnector;
 };
 
 #endif // HANDSHAKELISTENER_H_

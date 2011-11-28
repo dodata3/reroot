@@ -425,7 +425,7 @@ static int QRinput_encodeModeNum(QRinput_List *entry, int version, int mqr)
 	} else {
 		ret = BitStream_appendNum(entry->bstream, 4, QRSPEC_MODEID_NUM);
 		if(ret < 0) goto ABORT;
-	
+
 		ret = BitStream_appendNum(entry->bstream, QRspec_lengthIndicator(QR_MODE_NUM, version), entry->size);
 		if(ret < 0) goto ABORT;
 	}
@@ -778,7 +778,7 @@ static int QRinput_encodeModeFNC1Second(QRinput_List *entry, int version)
 
 	ret = BitStream_appendNum(entry->bstream, 4, QRSPEC_MODEID_FNC1SECOND);
 	if(ret < 0) goto ABORT;
-	
+
 	ret = BitStream_appendBytes(entry->bstream, 1, entry->data);
 	if(ret < 0) goto ABORT;
 
@@ -846,7 +846,7 @@ static int QRinput_encodeModeECI(QRinput_List *entry, int version)
 
 	ret = BitStream_appendNum(entry->bstream, 4, QRSPEC_MODEID_ECI);
 	if(ret < 0) goto ABORT;
-	
+
 	ret = BitStream_appendNum(entry->bstream, words * 8, code);
 	if(ret < 0) goto ABORT;
 
@@ -1510,7 +1510,7 @@ int QRinput_Struct_appendInput(QRinput_Struct *s, QRinput *input)
 void QRinput_Struct_free(QRinput_Struct *s)
 {
 	QRinput_InputList *list, *next;
-	
+
 	if(s != NULL) {
 		list = s->head;
 		while(list != NULL) {
