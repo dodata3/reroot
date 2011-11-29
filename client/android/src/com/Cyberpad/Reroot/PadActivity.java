@@ -1,13 +1,6 @@
 package com.Cyberpad.Reroot;
 
-import java.net.InetAddress;
-//import java.util.Timer;
-//import java.util.TimerTask;
 import java.lang.Math;
-
-import com.illposed.osc.OSCMessage;
-import com.illposed.osc.OSCPort;
-import com.illposed.osc.OSCPortOut;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -30,7 +23,6 @@ import android.view.KeyEvent;
 
 
 public class PadActivity extends Activity {
-	private OSCPortOut sender;
 	//keyboard stuff
 	private FrameLayout soft_keys;
 	private Handler handler = new Handler();
@@ -89,10 +81,6 @@ public class PadActivity extends Activity {
 		};
 		
 	    try{
-	    	Log.d(TAG, "Trying to create the OSCPort: Address - " + preferences.getString("ip_address", "n/a"));
-	    	this.sender = new OSCPortOut(InetAddress.getByName(preferences.getString("ip_address", "n/a")),
-	    			OSCPort
-	    			.defaultSCOSCPort());
 	    	//initialize the touch pad and keyboard button
 	    	this.initTouchpad();
 	    	this.initKeys();
@@ -346,7 +334,6 @@ public class PadActivity extends Activity {
 						
 						if(multi_type >=0)
 							this.sendMultitouchEvent(multi_type);
-						
 					}
 					
 					

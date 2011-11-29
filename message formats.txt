@@ -1,0 +1,28 @@
+Message Format:
+
+
+<int Device>,<int Control>,<int Action>,<int meta1>,<int meta2>
+
+Mouse Messages:
+Device: 0
+Control: 0 = Down, 1 = Up, 2 = Move
+Action: 0 = left_button, 1 = right_button, 2 = middle_button, 5 = 	touch_1
+meta1 = xMove
+meta2 = yMove
+
+Keyboard Messages:
+Device: 1
+meta1: should contain ascii values for the keys
+meta2: 0 (throwaway token due ot inheritance scheme)
+
+Joystick Messages:
+Device: 2
+Action: Left_stick = 0, right_stick = 1
+meta1 = xOffset
+meta2 = yOffset
+(joystick functions with an offset from center value instead of with an xmove ymove like the mouse)
+
+Multitouch Messages:
+Device: 3
+Action: 0 = pinch_in, 1 = pinch_out, 2 = vert_scroll_up, 3 = vert_scroll_down, 4 = horizonal_scroll_left, 5 = horizontal_scroll_right
+meta1 = meta2 = 0
