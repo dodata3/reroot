@@ -310,32 +310,42 @@ public class PadActivity extends Activity {
 					}
 					//we can interpret the touch
 					else{
+						int multi_type = -1;
 						//check for pinch out
 						if(Math.sqrt(Math.pow(x1pos-x2pos,2) + Math.pow(y1pos-y2pos, 2)) > 
 							Math.sqrt(Math.pow(x1History - x2History, 2) + Math.pow(y1History - y2History, 2))+50){
 							//send pinch out command
+							multi_type = 1;
 						}
 						//check for pinch in
 						else if(Math.sqrt(Math.pow((double)(x1pos-x2pos),2) + Math.pow(y1pos-y2pos, 2)) + 50< 
 								Math.sqrt(Math.pow(x1History - x2History, 2) + Math.pow(y1History - y2History, 2))){
 							//send pinch in command
+							multi_type = 0;
 						}
 						//check for vertical scroll down
 						else if(y1pos > y1History + 20 && y2pos > y2History + 20){
 							//send vertical scroll down command
+							multi_type = 3;
 						}
 						//check for vertical scroll up
 						else if(y1pos < y1History + 20 && y2pos < y2History + 20){
 							//send vertical scroll up command
+							multi_type = 2;
 						}
 						//check for horizontal scroll right
 						else if(x1pos > x1History + 20 && x2pos > x2History + 20){
 							//send horizontal scroll right
+							multi_type = 5;
 						}
 						//check for horizontal scroll left
 						else if(x1pos < x1History + 20 && x2pos < x2History + 20){
 							//send horizontal scroll left command
+							multi_type = 4;
 						}
+						
+						if(multi_type >=0)
+							this.sendMultitouchEvent(multi_type);
 						
 					}
 					
@@ -351,6 +361,15 @@ public class PadActivity extends Activity {
 			this.sendMouseEvent(type, xMove, yMove);
 		}
 		return true;
+		
+	}
+	
+	private void sendMultitouchEvent(int type){
+		mConnector.SendControlMessage(
+				new MultitouchMessage(
+						type,
+						ControlMessage.CONTROL_DOWN,
+						0, 0));
 		
 	}
 	
