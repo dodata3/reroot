@@ -21,9 +21,9 @@ public:
 
     typedef enum ActionEnum
     {
-        Move = 0,
-        Down,
-        Up
+        Down = 0,
+        Up,
+        Move
     } ActionEnum;
 
     struct Instruction

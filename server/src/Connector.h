@@ -52,6 +52,8 @@ signals:
 	void HandshakeSuccessful( QString deviceName );
 
 private:
+    QString IntegerToHexString( CryptoPP::Integer integer );
+
 	QMutex mLock;
 	QHostAddress mListenerAddress;
 	OSCPort* mIncomingPort;

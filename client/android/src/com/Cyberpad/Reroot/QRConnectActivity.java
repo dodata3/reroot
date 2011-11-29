@@ -14,8 +14,11 @@ import com.google.zxing.client.android.result.ResultHandlerFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -204,22 +207,40 @@ public final class QRConnectActivity extends Activity implements SurfaceHolder.C
       characterSet = null;
     }
     beepManager.updatePrefs();
+    
+    // Register the authentication broadcast receiver 
+    IntentFilter filter = new IntentFilter();
+    filter.addAction( Connector.AUTH_INTENT );
+    registerReceiver( mAuthReceiver, filter );
   }
 
   @Override
   protected void onPause() {
     super.onPause();
+    cameraManager.closeDriver();
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
     }
-    cameraManager.closeDriver();
+    
+    // Unregister intents
+    unregisterReceiver( mAuthReceiver );
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
   }
+  
+  private BroadcastReceiver mAuthReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+          // TODO Auto-generated method stub
+          Log.d( "QRConnectActivity", "We've authenticated.  Launching PadActivity!" );
+          Intent padIntent = new Intent( QRConnectActivity.this, MainMenuActivity.class);
+          startActivity( padIntent );
+      }
+  };
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {

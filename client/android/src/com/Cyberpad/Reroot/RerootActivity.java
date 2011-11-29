@@ -108,12 +108,12 @@ public class RerootActivity extends Activity {
     	String ip_address = preferences.getString("ip_address", "n/a");
     	if (ip_address.matches("^[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}$")){
     		try{
-    			Intent i = new Intent(this, PadActivity.class);
+    			Intent i = new Intent(this, MainMenuActivity.class);
     			this.startActivity(i);
     			this.finish();
     		}
     		catch(Exception ex){
-    			Toast.makeText(this, "Failure", Toast.LENGTH_LONG).show(); Log.d(TAG, ex.toString());
+    			Toast.makeText(this, "couldn't connect to main", Toast.LENGTH_LONG).show(); Log.d(TAG, ex.toString());
     		}
     		
     	}

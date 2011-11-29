@@ -7,8 +7,10 @@
 
 #include <sstream>
 #include <cryptopp/integer.h>
-using CryptoPP::Integer;
-using CryptoPP::RSA;
+#include <cryptopp/hex.h>
+
+using namespace CryptoPP;
+using namespace std;
 
 // Listen in *nix using
 // sudo tcpdump -s 0 -pnli wlan0 proto UDP and port 57110
@@ -22,7 +24,7 @@ Connector::Connector() :
     // Generate keys
     Cipher::GenerateKeypair( mPublicEncKey, mPrivateEncKey );
     Cipher::GenerateKeypair( mPublicSignKey, mPrivateSignKey );
-	mIncomingPort = new OSCPort( mListenerAddress, REROOT_PORT );
+	mIncomingPort = new OSCPort( mListenerAddress, REROOT_SERVER_PORT );
 	QString controlAddress = QString( "/control" );
 	mIncomingPort->addListener( controlAddress, mControl );
 	QString handshakeAddress = QString( "/handshake_client" );
@@ -45,7 +47,7 @@ Connector::~Connector()
 void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp, QByteArray inSignMod, QByteArray inSignExp )
 {
 	Device dev;
-	dev.port = new OSCPort( inRemote, REROOT_PORT );
+	dev.port = new OSCPort( inRemote, REROOT_CLIENT_PORT );
 	dev.encKey.SetModulus( Integer( reinterpret_cast< byte* >( inEncMod.data() ), inEncMod.size(), Integer::UNSIGNED ) );
 	dev.encKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inEncExp.data() ), inEncExp.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetModulus( Integer( reinterpret_cast< byte* >( inSignMod.data() ), inSignMod.size(), Integer::UNSIGNED ) );
@@ -61,23 +63,12 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 void Connector::SendHandshake( QString inDeviceName )
 {
     QList< QVariant > args;
-    std::ostringstream oss;
+    args << IntegerToHexString( mPublicEncKey.GetModulus() );
+    args << IntegerToHexString( mPublicEncKey.GetPublicExponent() );
+    args << IntegerToHexString( mPublicSignKey.GetModulus() );
+    args << IntegerToHexString( mPublicSignKey.GetPublicExponent() );
 
-    oss.str("");
-    oss << mPublicEncKey.GetModulus();
-    args.append( QString::fromStdString( oss.str() ) );
-
-    oss.str("");
-    oss << mPublicEncKey.GetPublicExponent();
-    args.append( QString::fromStdString( oss.str() ) );
-
-    oss.str("");
-    oss << mPublicSignKey.GetModulus();
-    args.append( QString::fromStdString( oss.str() ) );
-
-    oss.str("");
-    oss << mPublicSignKey.GetPublicExponent();
-    args.append( QString::fromStdString( oss.str() ) );
+    qDebug() << "Handshake: " << args;
 
     QString address = QString( "/handshake_server" );
     OSCMessage handshake( address, args );
@@ -85,7 +76,6 @@ void Connector::SendHandshake( QString inDeviceName )
     mLock.lock();
     mDeviceMap[ inDeviceName ].port->send( handshake );
     mLock.unlock();
-
 }
 
 void Connector::SetConnectKey( qint32 key )
@@ -149,4 +139,18 @@ OSCPort* Connector::GetClientPort( QHostAddress& address )
         port = mDeviceMap[ address.toString() ].port;
 	mLock.unlock();
 	return port;
+}
+
+QString Connector::IntegerToHexString( Integer integer )
+{
+    string s;
+    byte* buffer = new byte[ 1024 ];
+    for( unsigned int i = 0; i < integer.ByteCount(); i++ )
+        buffer[ integer.ByteCount() - 1 - i ] = integer.GetByte( i );
+    buffer[ integer.ByteCount() ] = 0;
+
+    StringSource( buffer, integer.ByteCount(), true,
+        new HexEncoder( new StringSink( s ) ) );
+
+    return QString::fromStdString( s );
 }

@@ -200,12 +200,8 @@ public class PadActivity extends Activity {
 		float yMove = 0f;
 		
 		int pointerCount = 1;
-		if (multiEnabled){
+		if (multiEnabled)
 			pointerCount = WrappedMotionEvent.getPointerCount(ev);
-			/*if(pointerCount ==2)
-				Toast.makeText(PadActivity.this,
-					"Pointer count is" + pointerCount, Toast.LENGTH_SHORT).show();*/
-		}
 		
 		switch(ev.getAction()){
 			case MotionEvent.ACTION_DOWN:			
@@ -314,32 +310,42 @@ public class PadActivity extends Activity {
 					}
 					//we can interpret the touch
 					else{
+						int multi_type = -1;
 						//check for pinch out
 						if(Math.sqrt(Math.pow(x1pos-x2pos,2) + Math.pow(y1pos-y2pos, 2)) > 
 							Math.sqrt(Math.pow(x1History - x2History, 2) + Math.pow(y1History - y2History, 2))+50){
 							//send pinch out command
+							multi_type = 1;
 						}
 						//check for pinch in
 						else if(Math.sqrt(Math.pow((double)(x1pos-x2pos),2) + Math.pow(y1pos-y2pos, 2)) + 50< 
 								Math.sqrt(Math.pow(x1History - x2History, 2) + Math.pow(y1History - y2History, 2))){
 							//send pinch in command
+							multi_type = 0;
 						}
 						//check for vertical scroll down
 						else if(y1pos > y1History + 20 && y2pos > y2History + 20){
 							//send vertical scroll down command
+							multi_type = 3;
 						}
 						//check for vertical scroll up
 						else if(y1pos < y1History + 20 && y2pos < y2History + 20){
 							//send vertical scroll up command
+							multi_type = 2;
 						}
 						//check for horizontal scroll right
 						else if(x1pos > x1History + 20 && x2pos > x2History + 20){
 							//send horizontal scroll right
+							multi_type = 5;
 						}
 						//check for horizontal scroll left
 						else if(x1pos < x1History + 20 && x2pos < x2History + 20){
 							//send horizontal scroll left command
+							multi_type = 4;
 						}
+						
+						if(multi_type >=0)
+							this.sendMultitouchEvent(multi_type);
 						
 					}
 					
@@ -350,7 +356,7 @@ public class PadActivity extends Activity {
 		
 		lastPointerCount = pointerCount;
 		
-		//0 is a left click, 1 is a right click, 2 is a move
+		//0 is a left click, 1 is a release, 2 is a move, 3 is a right click
 		if(type >= 0 ){
 			this.sendMouseEvent(type, xMove, yMove);
 		}
@@ -358,15 +364,48 @@ public class PadActivity extends Activity {
 		
 	}
 	
+	private void sendMultitouchEvent(int type){
+		mConnector.SendControlMessage(
+				new MultitouchMessage(
+						type,
+						ControlMessage.CONTROL_DOWN,
+						0, 0));
+		
+	}
+	
 	private void sendMouseEvent(int type, float x, float y) {
 		float xDir = x == 0 ? 1 : x / Math.abs(x);
 		float yDir = y == 0 ? 1 : y / Math.abs(y);
 		
-		mConnector.SendControlMessage( 
-			new MouseMessage( 
-				MouseMessage.TOUCH_1, 
-				ControlMessage.CONTROL_MOVE, 
-				(int)xDir, (int)yDir ) );
+		if(type == 0){
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.LEFT_BUTTON,
+							ControlMessage.CONTROL_DOWN,
+							(int)xDir, (int)yDir));
+		}
+		else if(type == 1){
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.LEFT_BUTTON,
+							ControlMessage.CONTROL_UP,
+							(int)xDir, (int)yDir));
+		}
+		else if(type == 2){
+			mConnector.SendControlMessage( 
+				new MouseMessage( 
+					MouseMessage.TOUCH_1, 
+					ControlMessage.CONTROL_MOVE, 
+					(int)xDir, (int)yDir ) );
+		}
+		else if(type ==3){
+			mConnector.SendControlMessage( 
+				new MouseMessage( 
+					MouseMessage.RIGHT_BUTTON, 
+					ControlMessage.CONTROL_DOWN, 
+					(int)xDir, (int)yDir ) );
+		}
+		
 	}
 	
 	//keyboard zone
@@ -404,30 +443,20 @@ public class PadActivity extends Activity {
 	}
 	
 	private void sendKey(int keycode){
-		try{
-			//scoping brackets
-			{
-				Object[] args = new Object[3];
-				args[0] = 0; //key down
-				args[1] = keycode;
-				args[2] = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
-				OSCMessage msg = new OSCMessage("/keyboard", args);
-				
-				this.sender.send(msg);
-			}
-			{
-				Object[] args = new Object[3];
-				args[0] = 1; //key up
-				args[1] = keycode;
-				args[2] = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
-				OSCMessage msg = new OSCMessage("/keyboard", args);
-				
-				this.sender.send(msg);
-			}
-		}
-		catch(Exception ex){
-			Log.d(TAG, ex.toString());
-		}
+		String meta = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
+		int meta1 = (int)meta.charAt(0);
+			
+		mConnector.SendControlMessage(
+				new KeyboardMessage(
+						keycode,
+						ControlMessage.CONTROL_DOWN,
+						meta1, 0) );
+		mConnector.SendControlMessage(
+				new KeyboardMessage(
+						keycode, 
+						ControlMessage.CONTROL_UP,
+						meta1, 0));
+
 	}
 	
 	private void sendKeys(String keys){
@@ -486,68 +515,46 @@ public class PadActivity extends Activity {
 							break;
 						}
 			
-			
-			try{
-				if(isCtrl){
-					Object[] args = new Object[3];
-					args[0] = 0; //key down
-					args[1] = 57;
-					args[2] = new Character ((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-					
-					this.sender.send(msg);
-				}
-				if(isShift){
-					Object[] args = new Object[3];
-					args[0] = 0; //key down
-					args[1] = 59;
-					args[2] = new Character ((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-					
-					this.sender.send(msg);
-				}
-				{
-					Object[] args = new Object[3];
-					args[0] = 0; //key down
-					args[1] = key+68;
-					args[2] = c_c;
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-					
-					this.sender.send(msg);
-				}
-				{
-					Object[] args = new Object[3];
-					args[0] = 1; /* key up */
-					args[1] = key+68;// (int)c;
-					args[2] = c_c;
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-	
-					this.sender.send(msg);
-				}
-
-				if(isShift){
-					Object[] args = new Object[3];
-					args[0] = 1; /* key up */
-					args[1] = 59;// (int)c;
-					args[2] = new Character((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-
-					this.sender.send(msg);
-				}
+			if(isCtrl || isShift){
+				String meta = new Character ((char)0).toString();
 				
 				if(isCtrl){
-					Object[] args = new Object[3];
-					args[0] = 1; /* key up */
-					args[1] = 57;// (int)c;
-					args[2] = new Character((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-
-					this.sender.send(msg);
+				mConnector.SendControlMessage(
+				new KeyboardMessage(
+					57,
+					ControlMessage.CONTROL_DOWN,
+					(int)meta.charAt(0), 0));
+				mConnector.SendControlMessage(
+						new KeyboardMessage(
+							57,
+							ControlMessage.CONTROL_UP,
+							(int)meta.charAt(0), 0));
+				}
+				if(isShift){
+					mConnector.SendControlMessage(
+							new KeyboardMessage(
+								59,
+								ControlMessage.CONTROL_DOWN,
+								(int)meta.charAt(0), 0));
+					mConnector.SendControlMessage(
+							new KeyboardMessage(
+								59,
+								ControlMessage.CONTROL_UP,
+								(int)meta.charAt(0), 0));
 				}
 			}
-			catch(Exception ex){
-				Log.d(TAG, ex.toString());
-			}
+			
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							key+68,
+							ControlMessage.CONTROL_DOWN,
+							(int)c_c, 0));
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							key+68,
+							ControlMessage.CONTROL_UP,
+							(int)c_c, 0));
+			
 		}
 	}
 	

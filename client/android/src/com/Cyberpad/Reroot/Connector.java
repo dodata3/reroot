@@ -5,6 +5,7 @@ import java.net.SocketException;
 import java.util.Date;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,28 +16,33 @@ public class Connector {
 	private OSCPortOut mSender;
 	private OSCPortIn mReceiver;
 	private Crypto mCrypto;
+	Context mContext;
+	
+	private static final int REROOT_SERVER_PORT = 57110;
+	private static final int REROOT_CLIENT_PORT = 57220;
+	
+	public static final String AUTH_INTENT = "com.Cyberpad.Reroot.AUTHENTICATED";
 	
 	static private Connector mInstance;
 	
 	public static synchronized Connector getInstance( Context c )
 	{
 		if( mInstance == null )
-		{
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( c );
-			mInstance = new Connector( preferences );
-		}
+			mInstance = new Connector( c );
 		return mInstance;
 	}
 	
 	// Constructor
-	private Connector( SharedPreferences preferences )
+	private Connector( Context c )
 	{	
 		// Upon initialization, we have not authenticated yet
+		mContext = c;
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( c );
 		mCrypto = new Crypto( preferences );
 		
 		// Create a listener port which will listen for a server handshake
 		try {
-			mReceiver = new OSCPortIn( OSCPort.defaultSCOSCPort() );
+			mReceiver = new OSCPortIn( REROOT_CLIENT_PORT );
 		} catch ( SocketException e ) {
 			e.printStackTrace();
 		}
@@ -52,7 +58,7 @@ public class Connector {
 		// Close the connection to any previous server and open a new server port
 		if( mSender != null ) mSender.close();
 		try {
-			mSender = new OSCPortOut( address );
+			mSender = new OSCPortOut( address, REROOT_SERVER_PORT );
 		} catch( SocketException e ) {
 			Log.d( "Connector", "Unable to create outward OSC port. Exception: " + e.getMessage() );
 		}
@@ -60,10 +66,10 @@ public class Connector {
 		// Send a handshake message to the server
 		// Consider converting these to hex strings
 		Object[] args = new Object[5];
-		args[0] = mCrypto.GetPublicEncryptionKey().getModulus().toString();
-		args[1] = mCrypto.GetPublicEncryptionKey().getPublicExponent().toString();
-		args[2] = mCrypto.GetPublicSigningKey().getModulus().toString();
-		args[3] = mCrypto.GetPublicSigningKey().getPublicExponent().toString();
+		args[0] = Utility.ByteArrayToHexString( mCrypto.GetPublicEncryptionKey().getModulus().toByteArray() );
+		args[1] = Utility.ByteArrayToHexString( mCrypto.GetPublicEncryptionKey().getPublicExponent().toByteArray() );
+		args[2] = Utility.ByteArrayToHexString( mCrypto.GetPublicSigningKey().getModulus().toByteArray() );
+		args[3] = Utility.ByteArrayToHexString( mCrypto.GetPublicSigningKey().getPublicExponent().toByteArray() );
 		args[4] = connectionKey;
 		OSCMessage msg = new OSCMessage( "/handshake_client", args );
 		SendMessage( msg );
@@ -72,15 +78,16 @@ public class Connector {
 	public void SendControlMessage( ControlMessage message )
 	{
 		// Encrypt and sign the control message
-		String cipherText = message.FormatMessage();
-		String signature = mCrypto.Encrypt( cipherText );
+		EncryptedMessage emsg = mCrypto.Encrypt( message.FormatMessage() );
 		
-		if( signature != "" )
+		if( emsg.mSignature != "" )
 		{
 			// Send the control message
 			Object[] args = new Object[2];
-			args[0] = cipherText;
-			args[1] = signature;
+			args[0] = emsg.mCipherText;
+			args[1] = emsg.mSignature;
+			Log.d( "Connector", "Cipher = " + emsg.mCipherText );
+			Log.d( "Connector", "Signature = " + emsg.mSignature );
 			OSCMessage msg = new OSCMessage( "/control", args );
 			SendMessage( msg );
 		}
@@ -90,7 +97,13 @@ public class Connector {
 	
 	private void Authenticate( String publicEncKeyMod, String publicEncKeyExp, String publicSignKeyMod, String publicSignKeyExp )
 	{
+		// Set the remote public keys
 		mCrypto.SetRemoteKeys( publicEncKeyMod, publicEncKeyExp, publicSignKeyMod, publicSignKeyExp );
+		
+		// Create a new "authenticated intent" which should be broadcast to the system
+		Intent i = new Intent();
+		i.setAction( AUTH_INTENT );
+		mContext.sendBroadcast(i);
 	}
 	
 	// Simple handshake listener class which shouldn't be needed outside of connector
@@ -104,8 +117,16 @@ public class Connector {
 		public void acceptMessage( Date time, OSCMessage message ) 
 		{
 			// Parse message, pull keys, call *authenticate* method
-			String[] args = ( String[] ) message.getArguments();
-			mConnector.Authenticate( args[0], args[1], args[2], args[3] );
+			Object[] args = message.getArguments();
+			if( args.length == 4 )
+			{
+				String encMod = ( String )args[0];
+				String encExp = ( String )args[1];
+				String signMod = ( String )args[2];
+				String signExp = ( String )args[3];
+				mConnector.Authenticate( encMod, encExp, signMod, signExp );
+				Log.d( "Connector", "Recieved server handshake, keys exchanged." );
+			}
 		}
 	}
 	
