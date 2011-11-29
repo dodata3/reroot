@@ -200,12 +200,8 @@ public class PadActivity extends Activity {
 		float yMove = 0f;
 		
 		int pointerCount = 1;
-		if (multiEnabled){
+		if (multiEnabled)
 			pointerCount = WrappedMotionEvent.getPointerCount(ev);
-			/*if(pointerCount ==2)
-				Toast.makeText(PadActivity.this,
-					"Pointer count is" + pointerCount, Toast.LENGTH_SHORT).show();*/
-		}
 		
 		switch(ev.getAction()){
 			case MotionEvent.ACTION_DOWN:			
@@ -350,7 +346,7 @@ public class PadActivity extends Activity {
 		
 		lastPointerCount = pointerCount;
 		
-		//0 is a left click, 1 is a right click, 2 is a move
+		//0 is a left click, 1 is a release, 2 is a move, 3 is a right click
 		if(type >= 0 ){
 			this.sendMouseEvent(type, xMove, yMove);
 		}
@@ -362,11 +358,35 @@ public class PadActivity extends Activity {
 		float xDir = x == 0 ? 1 : x / Math.abs(x);
 		float yDir = y == 0 ? 1 : y / Math.abs(y);
 		
-		mConnector.SendControlMessage( 
-			new MouseMessage( 
-				MouseMessage.TOUCH_1, 
-				ControlMessage.CONTROL_MOVE, 
-				(int)xDir, (int)yDir ) );
+		if(type == 0){
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.LEFT_BUTTON,
+							ControlMessage.CONTROL_DOWN,
+							(int)xDir, (int)yDir));
+		}
+		else if(type == 1){
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.LEFT_BUTTON,
+							ControlMessage.CONTROL_UP,
+							(int)xDir, (int)yDir));
+		}
+		else if(type == 2){
+			mConnector.SendControlMessage( 
+				new MouseMessage( 
+					MouseMessage.TOUCH_1, 
+					ControlMessage.CONTROL_MOVE, 
+					(int)xDir, (int)yDir ) );
+		}
+		else if(type ==3){
+			mConnector.SendControlMessage( 
+				new MouseMessage( 
+					MouseMessage.RIGHT_BUTTON, 
+					ControlMessage.CONTROL_DOWN, 
+					(int)xDir, (int)yDir ) );
+		}
+		
 	}
 	
 	//keyboard zone
