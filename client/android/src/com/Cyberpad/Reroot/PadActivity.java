@@ -404,30 +404,20 @@ public class PadActivity extends Activity {
 	}
 	
 	private void sendKey(int keycode){
-		try{
-			//scoping brackets
-			{
-				Object[] args = new Object[3];
-				args[0] = 0; //key down
-				args[1] = keycode;
-				args[2] = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
-				OSCMessage msg = new OSCMessage("/keyboard", args);
-				
-				this.sender.send(msg);
-			}
-			{
-				Object[] args = new Object[3];
-				args[0] = 1; //key up
-				args[1] = keycode;
-				args[2] = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
-				OSCMessage msg = new OSCMessage("/keyboard", args);
-				
-				this.sender.send(msg);
-			}
-		}
-		catch(Exception ex){
-			Log.d(TAG, ex.toString());
-		}
+		String meta = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
+		int meta1 = (int)meta.charAt(0);
+			
+		mConnector.SendControlMessage(
+				new KeyboardMessage(
+						keycode,
+						ControlMessage.CONTROL_DOWN,
+						meta1, 0) );
+		mConnector.SendControlMessage(
+				new KeyboardMessage(
+						keycode, 
+						ControlMessage.CONTROL_UP,
+						meta1, 0));
+
 	}
 	
 	private void sendKeys(String keys){
@@ -486,68 +476,46 @@ public class PadActivity extends Activity {
 							break;
 						}
 			
-			
-			try{
-				if(isCtrl){
-					Object[] args = new Object[3];
-					args[0] = 0; //key down
-					args[1] = 57;
-					args[2] = new Character ((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-					
-					this.sender.send(msg);
-				}
-				if(isShift){
-					Object[] args = new Object[3];
-					args[0] = 0; //key down
-					args[1] = 59;
-					args[2] = new Character ((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-					
-					this.sender.send(msg);
-				}
-				{
-					Object[] args = new Object[3];
-					args[0] = 0; //key down
-					args[1] = key+68;
-					args[2] = c_c;
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-					
-					this.sender.send(msg);
-				}
-				{
-					Object[] args = new Object[3];
-					args[0] = 1; /* key up */
-					args[1] = key+68;// (int)c;
-					args[2] = c_c;
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-	
-					this.sender.send(msg);
-				}
-
-				if(isShift){
-					Object[] args = new Object[3];
-					args[0] = 1; /* key up */
-					args[1] = 59;// (int)c;
-					args[2] = new Character((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-
-					this.sender.send(msg);
-				}
+			if(isCtrl || isShift){
+				String meta = new Character ((char)0).toString();
 				
 				if(isCtrl){
-					Object[] args = new Object[3];
-					args[0] = 1; /* key up */
-					args[1] = 57;// (int)c;
-					args[2] = new Character((char)0).toString();
-					OSCMessage msg = new OSCMessage("/keyboard", args);
-
-					this.sender.send(msg);
+				mConnector.SendControlMessage(
+				new KeyboardMessage(
+					57,
+					ControlMessage.CONTROL_DOWN,
+					(int)meta.charAt(0), 0));
+				mConnector.SendControlMessage(
+						new KeyboardMessage(
+							57,
+							ControlMessage.CONTROL_UP,
+							(int)meta.charAt(0), 0));
+				}
+				if(isShift){
+					mConnector.SendControlMessage(
+							new KeyboardMessage(
+								59,
+								ControlMessage.CONTROL_DOWN,
+								(int)meta.charAt(0), 0));
+					mConnector.SendControlMessage(
+							new KeyboardMessage(
+								59,
+								ControlMessage.CONTROL_UP,
+								(int)meta.charAt(0), 0));
 				}
 			}
-			catch(Exception ex){
-				Log.d(TAG, ex.toString());
-			}
+			
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							key+68,
+							ControlMessage.CONTROL_DOWN,
+							(int)c_c, 0));
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							key+68,
+							ControlMessage.CONTROL_UP,
+							(int)c_c, 0));
+			
 		}
 	}
 	

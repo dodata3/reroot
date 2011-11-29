@@ -27,7 +27,7 @@ import android.widget.LinearLayout;
 
 
 public class dualstickActivity extends Activity{
-	private OSCPortOut sender;
+	private Connector mConnector;
 	//private Handler handler = new Handler();
 	
 	//private FrameLayout left_carriage;
@@ -51,11 +51,22 @@ public class dualstickActivity extends Activity{
 		
 		multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 		
+		mConnector = Connector.getInstance(this);
+		
 		//assume that we will have access to OSC connection and initialize buttons	
 		initBackground();
 		//initLeftCarriage();
 		//initRightCarriage();
 		//initCosmetic();
+		
+	}
+	
+	private void sendJoystickMessage(int type, float x, float y, int which){
+		mConnector.SendControlMessage(
+				new JoystickMessage(
+						which,
+						type,
+						(int)x, (int)y));
 		
 	}
 	
@@ -87,7 +98,6 @@ public class dualstickActivity extends Activity{
 			float touchx = WrappedMotionEvent.getX(ev, i);
 			float touchy = WrappedMotionEvent.getY(ev, i);
 			
-			//rects don't seem to be working
 			Rect left_rect = new Rect();
 			left_carriage.getHitRect(left_rect);
 			Rect right_rect = new Rect();
@@ -95,16 +105,13 @@ public class dualstickActivity extends Activity{
 			//Toast.makeText(dualstickActivity.this,
 			//		"rect"+left_rect.left + " " + left_rect.bottom, Toast.LENGTH_SHORT).show();
 			
-			
-			
-			
 			//check to see if we're registering a touch in the left zone and handle it
 			if(left_rect.contains((int)touchx, (int)touchy)){
-				handle_event(ev, touchx, touchy, left_carriage);			
+				handle_event(ev, touchx, touchy, left_carriage, 0);			
 			}
 			//check to see if we're registering a touch in the right zone and handle it
 			if(right_rect.contains((int)touchx, (int)touchy)){
-				handle_event(ev, touchx-right_rect.left, touchy, right_carriage);
+				handle_event(ev, touchx-right_rect.left, touchy, right_carriage, 1);
 			}		
 		}
 
@@ -114,13 +121,12 @@ public class dualstickActivity extends Activity{
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void handle_event(MotionEvent ev, float ev_x, float ev_y, AbsoluteLayout carriage){
+	private void handle_event(MotionEvent ev, float ev_x, float ev_y, AbsoluteLayout carriage, int which){
 		int type = -1;
 		float xMove = 0f;
 		float yMove = 0f;
 		int cosX = 0;
 		int cosY = 0;
-		
 		
 		carriage.removeAllViews();
 		
@@ -189,321 +195,8 @@ public class dualstickActivity extends Activity{
 				
 		//0 is a touch down, 1 is a release, 2 is a move
 		//send message here	
-		 
+		this.sendJoystickMessage(type, xMove, yMove, which);
 		
 	}
 	
 }
-/*
-
-		
-		cosX = (int)xMove + offsetx;
-		cosY = (int)yMove + offsety;
-		
-		//make sure that we are within bounds
-		double offset = Math.sqrt(Math.pow(xMove,2)+Math.pow(yMove,2));
-		//bound cosmetic joy stick
-		if(offset > centerx - head_width/2){
-			double angle = Math.atan2(yMove, xMove);
-			double cos_drawback = (centerx - (3*head_width/4))/offset;
-			cosX = (int)(Math.cos(angle)*offset*cos_drawback) + offsetx;
-			cosY = (int)(Math.sin(angle)*offset*cos_drawback) + offsety;
-			//now do xMove and yMove if we need to
-			if(offset > centerx){
-				double drawback = centerx/offset;
-				int new_x = (int)(Math.cos(angle)*offset*drawback);
-				int new_y = (int)(Math.sin(angle)*offset*drawback);
-				xMove = new_x;
-				yMove = new_y;
-			}
-		}
-		
-		left_carriage.addView(left,
-				new AbsoluteLayout.LayoutParams(left_head.getWidth(), left_head.getHeight(), 
-						cosX, cosY));
-		
-		//0 is a touch down, 1 is a release, 2 is a move
-		//send message here
-		
-		
-		return true;
-	}*/
-
-
-/*public class dualstickActivity extends Activity {
-	
-	private OSCPortOut sender;
-	//private Handler handler = new Handler();
-	
-	//private FrameLayout left_carriage;
-	//private FrameLayout right_carriage;
-	
-	SharedPreferences preferences;
-	private static final String TAG = "Reroot";
-	
-	
-	private boolean multiEnabled;
-	
-	//let's do animations
-	
-	
-	/** Called when the activity is first created. */
-	/*@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dualstick_layout);
-		
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//force the screen to always be landscape
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		multiEnabled = WrappedMotionEvent.isMultitouchCapable();
-		
-		//assume that we will have access to OSC connection and initialize buttons	
-		initLeftCarriage();
-		initRightCarriage();
-		initCosmetic();
-		
-	}
-	
-	//initializations
-	//we will also be initializing our variables in this for use in later functions
-	@SuppressWarnings("deprecation")
-	private void initLeftCarriage(){
-		AbsoluteLayout left_carriage = (AbsoluteLayout)this.findViewById(R.id.left_carriage);
-		
-		left_carriage.setOnTouchListener(new View.OnTouchListener(){
-			public boolean onTouch(View v, MotionEvent ev){
-				return onLeftMove( ev );
-        	}
-        });
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void initRightCarriage(){
-		AbsoluteLayout right_carriage = (AbsoluteLayout)this.findViewById(R.id.right_carriage);
-		
-		right_carriage.setOnTouchListener(new View.OnTouchListener(){
-			public boolean onTouch(View v, MotionEvent ev){
-				return onRightMove( ev );
-			}
-		});
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void initCosmetic(){
-
-		AbsoluteLayout left_carriage = (AbsoluteLayout)this.findViewById(R.id.left_carriage);
-		AbsoluteLayout right_carriage = (AbsoluteLayout)this.findViewById(R.id.right_carriage);	
-		left_carriage.removeAllViews();
-		
-		//load the bitmap
-		Bitmap left_head = BitmapFactory.decodeResource(getResources(), R.drawable.dualstick_head);
-		Bitmap right_head = BitmapFactory.decodeResource(getResources(), R.drawable.dualstick_head);
-		
-		
-		//make a drawble from the bitmap
-		BitmapDrawable left_bmd = new BitmapDrawable(left_head);
-		BitmapDrawable right_bmd = new BitmapDrawable(right_head);
-		ImageView left = new ImageView(this);
-		ImageView right = new ImageView(this);
-		left.setImageDrawable(left_bmd);
-		right.setImageDrawable(right_bmd);
-		
-		//do calculation for the center of the carriage 'n' such
-		int head_width = left.getDrawable().getIntrinsicWidth();
-		int head_height = left.getDrawable().getIntrinsicHeight();
-		int centerx = left_carriage.getWidth()/2;
-		int centery = left_carriage.getHeight()/2;
-		
-		int offsetx = (centerx - head_width)/4;
-		int offsety = (centery - head_height)/4;
-		
-		left_carriage.addView(left,
-				new AbsoluteLayout.LayoutParams(left_head.getWidth(), left_head.getHeight(), 
-						offsetx, offsety));
-		right_carriage.addView(right,
-				new AbsoluteLayout.LayoutParams(right_head.getWidth(), right_head.getHeight(), 
-						offsetx, offsety));
-	
-	}
-	
-	//handles movement in the left carriage
-	@SuppressWarnings("deprecation")
-	private boolean onLeftMove( MotionEvent ev ){
-		//Toast.makeText(dualstickActivity.this,
-		//		"Left stick", Toast.LENGTH_SHORT).show();
-		
-		int type = -1;
-		float xMove = 0f;
-		float yMove = 0f;
-		int cosX = 0;
-		int cosY = 0;
-		//ImageView left = (ImageView)this.findViewById(R.id.left_head);
-		AbsoluteLayout left_carriage = (AbsoluteLayout)this.findViewById(R.id.left_carriage);
-		left_carriage.removeAllViews();
-			
-		//load the bitmap
-		Bitmap left_head = BitmapFactory.decodeResource(getResources(), R.drawable.dualstick_head);
-		
-		//make a drawble from the bitmap
-		BitmapDrawable bmd = new BitmapDrawable(left_head);
-		ImageView left = new ImageView(this);
-		left.setImageDrawable(bmd);
-		
-		//do calculation for the center of the carriage 'n' such
-		int head_width = left.getDrawable().getIntrinsicWidth();
-		int head_height = left.getDrawable().getIntrinsicHeight();
-		int centerx = left_carriage.getWidth()/2;
-		int centery = left_carriage.getHeight()/2;
-		
-		int offsetx = (left_carriage.getWidth() - head_width)/4;
-		int offsety = (left_carriage.getHeight() - head_height)/4;
-		
-		switch(ev.getAction()){
-			//finger down
-			case MotionEvent.ACTION_DOWN:
-				xMove = ev.getX()-centerx;
-				yMove = ev.getY()-centery;
-				type = 0;
-				
-				break;
-			//finger up
-			case MotionEvent.ACTION_UP:
-				type = 1;
-				xMove = 0;
-				yMove = 0;	
-				
-				break;
-			//finger moved
-			case MotionEvent.ACTION_MOVE:
-				type = 2;
-				xMove = ev.getX() - centerx;
-				yMove = ev.getY() - centery;
-				
-				break;	
-		}
-		
-		cosX = (int)xMove + offsetx;
-		cosY = (int)yMove + offsety;
-		
-		//make sure that we are within bounds
-		double offset = Math.sqrt(Math.pow(xMove,2)+Math.pow(yMove,2));
-		//bound cosmetic joy stick
-		if(offset > centerx - head_width/2){
-			double angle = Math.atan2(yMove, xMove);
-			double cos_drawback = (centerx - (3*head_width/4))/offset;
-			cosX = (int)(Math.cos(angle)*offset*cos_drawback) + offsetx;
-			cosY = (int)(Math.sin(angle)*offset*cos_drawback) + offsety;
-			//now do xMove and yMove if we need to
-			if(offset > centerx){
-				double drawback = centerx/offset;
-				int new_x = (int)(Math.cos(angle)*offset*drawback);
-				int new_y = (int)(Math.sin(angle)*offset*drawback);
-				xMove = new_x;
-				yMove = new_y;
-			}
-		}
-		
-		left_carriage.addView(left,
-				new AbsoluteLayout.LayoutParams(left_head.getWidth(), left_head.getHeight(), 
-						cosX, cosY));
-		
-		//0 is a touch down, 1 is a release, 2 is a move
-		//send message here
-		
-		
-		return true;
-	}
-	
-	//handles movement in the right carriage
-	@SuppressWarnings("deprecation")
-	private boolean onRightMove( MotionEvent ev ){
-		//Toast.makeText(dualstickActivity.this,
-		//		"Right stick", Toast.LENGTH_SHORT).show();
-		
-		int type = -1;
-		float xMove = 0f;
-		float yMove = 0f;
-		int cosX = 0;
-		int cosY = 0;
-		//ImageView left = (ImageView)this.findViewById(R.id.left_head);
-		AbsoluteLayout right_carriage = (AbsoluteLayout)this.findViewById(R.id.right_carriage);
-		right_carriage.removeAllViews();
-			
-		//load the bitmap
-		Bitmap right_head = BitmapFactory.decodeResource(getResources(), R.drawable.dualstick_head);
-		
-		//make a drawble from the bitmap
-		BitmapDrawable bmd = new BitmapDrawable(right_head);
-		ImageView right = new ImageView(this);
-		right.setImageDrawable(bmd);
-		
-		//do calculation for the center of the carriage 'n' such
-		int head_width = right.getDrawable().getIntrinsicWidth();
-		int head_height = right.getDrawable().getIntrinsicHeight();
-		int centerx = right_carriage.getWidth()/2;
-		int centery = right_carriage.getHeight()/2;
-		
-		int offsetx = (right_carriage.getWidth() - head_width)/4;
-		int offsety = (right_carriage.getHeight() - head_height)/4;
-		
-		switch(ev.getAction()){
-			//finger down
-			case MotionEvent.ACTION_DOWN:
-				xMove = ev.getX()-centerx;
-				yMove = ev.getY()-centery;
-				type = 0;
-				
-				break;
-			//finger up
-			case MotionEvent.ACTION_UP:
-				type = 1;
-				xMove = 0;
-				yMove = 0;	
-				
-				break;
-			//finger moved
-			case MotionEvent.ACTION_MOVE:
-				type = 2;
-				xMove = ev.getX() - centerx;
-				yMove = ev.getY() - centery;
-				
-				break;	
-		}
-		
-		cosX = (int)xMove + offsetx;
-		cosY = (int)yMove + offsety;
-		
-		//make sure that we are within bounds
-		double offset = Math.sqrt(Math.pow(xMove,2)+Math.pow(yMove,2));
-		//bound cosmetic joy stick
-		if(offset > centerx - head_width/2){
-			double angle = Math.atan2(yMove, xMove);
-			double cos_drawback = (centerx - (3*head_width/4))/offset;
-			cosX = (int)(Math.cos(angle)*offset*cos_drawback) + offsetx;
-			cosY = (int)(Math.sin(angle)*offset*cos_drawback) + offsety;
-			//now do xMove and yMove if we need to
-			if(offset > centerx){
-				double drawback = centerx/offset;
-				int new_x = (int)(Math.cos(angle)*offset*drawback);
-				int new_y = (int)(Math.sin(angle)*offset*drawback);
-				xMove = new_x;
-				yMove = new_y;
-			}
-		}
-		
-		right_carriage.addView(right,
-				new AbsoluteLayout.LayoutParams(right_head.getWidth(), right_head.getHeight(), 
-						cosX, cosY));
-		
-		//0 is a touch down, 1 is a release, 2 is a move
-		//send message here
-		
-		
-		return true;
-				
-	}
-}*/
