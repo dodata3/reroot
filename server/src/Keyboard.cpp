@@ -56,11 +56,19 @@ void Keyboard::Deinit()
 	ModifierUp(ModMetaR);
 	ModifierUp(ModMeta);
 
+	/*
 	for (Keycode i = 0; i < std::numeric_limits<Keycode>::max(); ++i)
 	{
 		Up(i);
 	}
 	Up(std::numeric_limits<Keycode>::max());
+	*/
+	// Just unpress ASCII printing characters
+	for (Keycode i = 32; i < 127; ++i)
+	{
+		Up(i);
+	}
+
 }
 
 #ifdef OS_WINDOWS
