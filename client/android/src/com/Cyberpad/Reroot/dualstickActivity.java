@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 @SuppressWarnings("deprecation")
@@ -206,14 +207,21 @@ public class dualstickActivity extends Activity{
 			//only send messages when things are getting changed
 		
 			//w
-			if(yMove < -carriage.getHeight()/4){
-				if(keypress[0]==false)
+			if(yMove < -carriage.getHeight()/4 +head_width/2){
+				if(keypress[0]==false){
 					this.dualSendKey((int)'w', 0);
+					Toast.makeText(dualstickActivity.this,
+							"w registered", Toast.LENGTH_SHORT).show();
+				}
 				keypress[0] = true;
+
 			}
 			else{
-				if(keypress[0] == true)
+				if(keypress[0] == true){
 					this.dualSendKey((int)'w', 1);
+					Toast.makeText(dualstickActivity.this,
+							"w released", Toast.LENGTH_SHORT).show();
+				}
 				keypress[0] = false;
 			}
 			//a
