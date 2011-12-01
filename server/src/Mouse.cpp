@@ -12,6 +12,12 @@ Mouse& Mouse::Get()
     return *sInstance;
 }
 
+void Mouse::Clear()
+{
+	delete sInstance;
+	sInstance = NULL;
+}
+
 Mouse::Mouse()
 {
     Init();
@@ -37,6 +43,12 @@ void Mouse::Init()
 
 void Mouse::Deinit()
 {
+	qDebug() << "Killing mouse\n";
+	// Release all mouse buttons
+	for (unsigned int i = 0; i < 5; ++i)
+	{
+		Up(i);
+	}
     #ifdef OS_LINUX
         XCloseDisplay(mDisplay);
     #endif

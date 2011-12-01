@@ -2,9 +2,8 @@
 // Description: Emulates keyboard input in a cross platform manner
 // (C) Cyberpad Technologies 2011
 #include <cstddef>
+#include <limits>
 #include "Keyboard.h"
-
-#include <cstdio>
 
 Keyboard* Keyboard::sInstance = NULL;
 
@@ -15,6 +14,12 @@ Keyboard& Keyboard::Get()
         sInstance = new Keyboard();
     }
     return *sInstance;
+}
+
+void Keyboard::Clear()
+{
+	delete sInstance;
+	sInstance = NULL;
 }
 
 Keyboard::Keyboard()
@@ -36,7 +41,26 @@ void Keyboard::Init()
 
 void Keyboard::Deinit()
 {
+	qDebug() << "Killing keyboard\n";
+	// Release all keys
+	ModifierUp(ModCtrlL);
+	ModifierUp(ModCtrlR);
+	ModifierUp(ModCtrl);
+	ModifierUp(ModAltL);
+	ModifierUp(ModAltR);
+	ModifierUp(ModAlt);
+	ModifierUp(ModShiftL);
+	ModifierUp(ModShiftR);
+	ModifierUp(ModShift);
+	ModifierUp(ModMetaL);
+	ModifierUp(ModMetaR);
+	ModifierUp(ModMeta);
 
+	for (Keycode i = 0; i < std::numeric_limits<Keycode>::max(); ++i)
+	{
+		Up(i);
+	}
+	Up(std::numeric_limits<Keycode>::max());
 }
 
 #ifdef OS_WINDOWS
@@ -182,4 +206,8 @@ void Keyboard::Up(Keycode key)
     #ifdef OS_WINDOWS
         WindowsKey(key, true);
     #endif
+	
+	#ifdef OS_LINUX
+		LinuxKey(key, true);
+	#endif
 }

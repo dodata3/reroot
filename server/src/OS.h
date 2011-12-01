@@ -21,6 +21,7 @@
 #endif
 
 #ifdef OS_WINDOWS
+	#define NOMINMAX
     #include <Windows.h>
     #include <Psapi.h>
 	#include <QDebug>
