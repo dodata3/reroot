@@ -236,13 +236,17 @@ void MainWindow::connectNew()
     }
     // For testing purposes
     #ifdef OS_WINDOWS
-        Sleep(2000);
+        Keyboard::Get().ModifierDown(Keyboard::ModAlt);
+        Keyboard::Get().Down(0x0009); // Tab
+        Keyboard::Get().Up(0x0009); // Tab
+        Keyboard::Get().ModifierUp(Keyboard::ModAlt);
     #endif
     Context::Get().Title();
     Context::Get().ProcessID();
     Context::Get().Executable();
     */
 	// Spawn a new window which can be used to connect, give information to the connector
+
 	mConnectDialog.ConnectNewDevice();
 
 }

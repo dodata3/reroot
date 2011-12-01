@@ -29,6 +29,7 @@ private:
 
 public:
     static Mouse& Get();
+	static void Clear();
 
     static const unsigned int sLeft = 0;
     static const unsigned int sRight = 1;
@@ -39,12 +40,22 @@ public:
     // non-static
 private:
     #ifdef OS_LINUX
-        Display* mDisplay;
+    Display* mDisplay;
     #endif
 
     Mouse();
     ~Mouse();
     void Init();
+    void Deinit();
+
+    #ifdef OS_WINDOWS
+    void WindowsButton(unsigned int button, bool up);
+
+    #endif //OSWINDOWS
+
+    #ifdef OS_LINUX
+    void LinuxButton(unsigned int button, bool up);
+    #endif //OS_LINUX
 
 public:
     // Position

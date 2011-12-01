@@ -1,6 +1,9 @@
 #include <QtGui>
 #include "MainWindow.h"
 
+#include "Mouse.h"
+#include "Keyboard.h"
+
 int main( int argc, char *argv[] )
 {
 	Q_INIT_RESOURCE( RerootResources );
@@ -13,6 +16,9 @@ int main( int argc, char *argv[] )
 		return 1;
 	}
 	QApplication::setQuitOnLastWindowClosed( false );
+
+	atexit(Mouse::Clear);
+	atexit(Keyboard::Clear);
 
 	MainWindow w;
 	return a.exec();
