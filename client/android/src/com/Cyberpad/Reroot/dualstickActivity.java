@@ -1,16 +1,13 @@
 package com.Cyberpad.Reroot;
 
-import java.net.InetAddress;
+
 //import java.util.Timer;
 //import java.util.TimerTask;
 import java.lang.Math;
 
-import com.illposed.osc.OSCMessage;
-import com.illposed.osc.OSCPort;
-import com.illposed.osc.OSCPortOut;
+
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -26,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 
+@SuppressWarnings("deprecation")
 public class dualstickActivity extends Activity{
 	private Connector mConnector;
 	//private Handler handler = new Handler();
@@ -34,7 +32,7 @@ public class dualstickActivity extends Activity{
 	//private FrameLayout right_carriage;
 	
 	SharedPreferences preferences;
-	private static final String TAG = "dualstickActivity";
+	//private static final String TAG = "dualstickActivity";
 	
 	
 	private boolean multiEnabled;
@@ -83,7 +81,6 @@ public class dualstickActivity extends Activity{
 	
 	private boolean backgroundTouch(MotionEvent ev){
 		int pointerCount = 1;
-		@SuppressWarnings("deprecation")
 		AbsoluteLayout left_carriage = (AbsoluteLayout)this.findViewById(R.id.left_carriage_padded);
 		AbsoluteLayout right_carriage = (AbsoluteLayout)this.findViewById(R.id.right_carriage_padded);
 		
@@ -120,7 +117,6 @@ public class dualstickActivity extends Activity{
 		
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void handle_event(MotionEvent ev, float ev_x, float ev_y, AbsoluteLayout carriage, int which){
 		int type = -1;
 		float xMove = 0f;
