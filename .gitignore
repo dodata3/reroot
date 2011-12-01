@@ -9,7 +9,7 @@ client/android/tests/gen/
 server/CMakeCache.txt
 server/CMakeFiles/
 server/_CPack_Packages/
-server/install_manifest.txt
+server/install_*
 server/cmake_install.cmake
 server/CPackConfig.cmake
 server/CPackSourceConfig.cmake
@@ -31,3 +31,4 @@ server/Release
 *.user
 *.ncb
 *.dir
+*.exe
