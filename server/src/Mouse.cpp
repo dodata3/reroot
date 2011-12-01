@@ -1,5 +1,6 @@
 #include "Mouse.h"
 #include <cstring>
+#include <iostream>
 
 Mouse* Mouse::sInstance = NULL;
 
@@ -70,6 +71,8 @@ void Mouse::Down(unsigned int button)
         input.mi.dwFlags = 0;
         input.mi.time = 0;
         input.mi.dwExtraInfo = (ULONG_PTR)NULL;
+
+		std::cout << "Testing button..." << button << "\n";
 
         switch(button)
         {

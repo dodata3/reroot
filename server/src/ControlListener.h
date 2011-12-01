@@ -31,8 +31,8 @@ public:
         DeviceEnum Device;
         int Control;
         ActionEnum Action;
-        int Data1;
-        int Data2;
+        float Data1;
+        float Data2;
     };
 
 private:

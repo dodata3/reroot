@@ -232,17 +232,19 @@ public class PadActivity extends Activity {
 					long now = System.currentTimeMillis();
 					long elapsed = now - this.last_tap;
 					
+					int new_type = -1;
+					
 					if(elapsed <= 200){
 						//Toast.makeText(PadActivity.this,
 						//		"Pointer count is " + pointerCount, Toast.LENGTH_SHORT).show();
 	
 						//register the tap and send a click
 						if(lastPointerCount  == 1)
-							type = 0;
+							new_type = 0;
 						else if(lastPointerCount == 2){
 							Toast.makeText(PadActivity.this,
 									"Double tap successful", Toast.LENGTH_SHORT).show();
-							type = 3;	
+							new_type = 3;	
 						}
 					}
 					else{
@@ -251,23 +253,11 @@ public class PadActivity extends Activity {
 					}
 					this.tapstate = "no_tap";
 					
+					if(new_type >= 0){
+						this.sendMouseEvent(new_type, xMove, yMove);
+					}
+					
 				}
-				/*else if(this.tapstate == "double_tap"){
-					long now = System.currentTimeMillis();
-					long elapsed = now - this.last_tap;
-					
-					
-					if(elapsed <= 200){
-						Toast.makeText(PadActivity.this,
-								"Double tap successful", Toast.LENGTH_SHORT).show();
-						type = 3;	
-					}
-					else{
-						//too much time passed to be a tap
-						this.last_tap = 0;
-					}
-					this.tapstate = "no_tap";
-				}*/
 				
 				
 				break;
@@ -361,8 +351,12 @@ public class PadActivity extends Activity {
 	}
 	
 	private void sendMouseEvent(int type, float x, float y) {
-		float xDir = x == 0 ? 1 : x / Math.abs(x);
-		float yDir = y == 0 ? 1 : y / Math.abs(y);
+		//float xDir = x == 0 ? 1 : x / Math.abs(x);
+		//float yDir = y == 0 ? 1 : y / Math.abs(y);
+		
+		//scale the value up for more precision, scale back down on server
+		float xDir = x * 65000;
+		float yDir = y * 65000;
 		
 		if(type == 0){
 			mConnector.SendControlMessage(

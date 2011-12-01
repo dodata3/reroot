@@ -65,6 +65,13 @@ Requirements:
 	
 	First Time:
 	1) CD To the server directory in a command prompt/terminal
+-- CryptoPP Additional Steps --	
+	a)
+
+
+-- End CryptoPP --
+
+
 	2) Run cmake, and look at the list of compilers it can generate for.
 	3) Select one of those compilers and run CMake with the -G parameter
 		Example: cmake -G "Visual Studio 2008"

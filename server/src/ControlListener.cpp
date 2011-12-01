@@ -7,6 +7,7 @@
 #include "ControlListener.h"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include <iostream>
 
 using namespace std;
 
@@ -77,7 +78,9 @@ ControlListener::Instruction ControlListener::ParseMessage( QString& inMessage )
     ret.Device = DeviceEnum( inMessage.section( ',', 0, 0 ).toInt() );
     ret.Control = inMessage.section( ',', 1, 1 ).toInt();
     ret.Action = ActionEnum( inMessage.section( ',', 2, 2 ).toInt() );
-    ret.Data1 = inMessage.section( ',', 3, 3 ).toInt();
-    ret.Data2 = inMessage.section( ',', 4, 4 ).toInt();
-    return ret;
+    ret.Data1 = ((float)inMessage.section( ',', 3, 3 ).toInt())/32000;
+    ret.Data2 = ((float)inMessage.section( ',', 4, 4 ).toInt())/32000;
+    
+	
+	return ret;
 }

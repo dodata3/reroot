@@ -34,6 +34,8 @@ public class dualstickActivity extends Activity{
 	SharedPreferences preferences;
 	//private static final String TAG = "dualstickActivity";
 	
+	public boolean keypress[];
+	
 	
 	private boolean multiEnabled;
 	
@@ -50,6 +52,11 @@ public class dualstickActivity extends Activity{
 		multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 		
 		mConnector = Connector.getInstance(this);
+		
+		keypress[0] = false;
+		keypress[1] = false;
+		keypress[2] = false;
+		keypress[3] = false;
 		
 		//assume that we will have access to OSC connection and initialize buttons	
 		initBackground();
@@ -191,8 +198,137 @@ public class dualstickActivity extends Activity{
 				
 		//0 is a touch down, 1 is a release, 2 is a move
 		//send message here	
-		this.sendJoystickMessage(type, xMove, yMove, which);
+		//this.sendJoystickMessage(type, xMove, yMove, which);
+		
+		//left carriage 
+		if(which==0){
+			//only send messages when things are getting changed
+			
+			//w
+			if(yMove < -carriage.getHeight()/4){
+				if(keypress[0]==false)
+					this.dualSendKey((int)'w', 0);
+				keypress[0] = true;
+			}
+			else{
+				if(keypress[0] == true)
+					this.dualSendKey((int)'w', 1);
+				keypress[0] = false;
+			}
+			//a
+			if(xMove < -carriage.getWidth()/4){
+				if(keypress[1] == false)
+					this.dualSendKey((int)'a', 0);
+				keypress[1] = true;
+			}
+			else{
+				if(keypress[1] == true)
+					this.dualSendKey((int)'a', 1);
+				keypress[1] = false;
+			}
+			//s
+			if(yMove > carriage.getHeight()/4 ){
+				if(keypress[2] == false)
+					this.dualSendKey((int)'s', 0);
+				keypress[2] = true;
+			}
+			else{
+				if(keypress[2])
+					this.dualSendKey((int)'s', 1);
+				keypress[2] = false;
+			}
+			//d
+			if(xMove > carriage.getWidth()/4){
+				if(!keypress[3])
+					this.dualSendKey((int)'d', 0);
+				keypress[3] = true;
+			}
+			else{
+				if(keypress[3])
+					this.dualSendKey((int)'d', 1);
+				keypress[3] = false;
+			}
+			
+		}
+		//right carriage -- send mouse message
+		else
+			this.dualSendMouse(2, xMove, yMove);
+			
 		
 	}
 	
+	private void dualSendMouse(int type, float x, float y) {
+		//float xDir = x == 0 ? 1 : x / Math.abs(x);
+		//float yDir = y == 0 ? 1 : y / Math.abs(y);
+		
+		//scale the value up for more precision, scale back down on server
+		float xDir = x * 65000;
+		float yDir = y * 65000;
+		
+		if(type == 0){
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.LEFT_BUTTON,
+							ControlMessage.CONTROL_DOWN,
+							(int)xDir, (int)yDir));
+		}
+		else if(type == 1){
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.LEFT_BUTTON,
+							ControlMessage.CONTROL_UP,
+							(int)xDir, (int)yDir));
+		}
+		else if(type == 2){
+			mConnector.SendControlMessage( 
+				new MouseMessage( 
+					MouseMessage.TOUCH_1, 
+					ControlMessage.CONTROL_MOVE, 
+					(int)xDir, (int)yDir ) );
+		}
+		else if(type ==3){
+			mConnector.SendControlMessage( 
+				new MouseMessage( 
+					MouseMessage.RIGHT_BUTTON, 
+					ControlMessage.CONTROL_DOWN, 
+					(int)xDir, (int)yDir ) );
+		}
+		
+	}
+	
+	private void dualSendKey(int keycode, int type){
+		
+		String c = Character.toString((char)keycode);
+		int meta1 = 0;
+		
+		/*
+		for(int z = 0; z<1024; z++){
+			if(PadActivity.charmap.isPrintingKey(z))
+				if(new Character(Character.toChars
+						(PadActivity.charmap.get(z, 0))[0]).toString().equals(c)){
+					meta1 = z;
+					break;
+				}
+			
+			
+		}*/
+		
+			
+		if(type == 0){
+			mConnector.SendControlMessage(
+				new KeyboardMessage(
+						keycode,
+						ControlMessage.CONTROL_DOWN,
+						keycode, 0) );
+		}
+		else if(type == 1){
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+						keycode,
+						ControlMessage.CONTROL_UP,
+						keycode, 0) );
+			
+		}
+
+	}
 }

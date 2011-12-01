@@ -12,7 +12,7 @@ public class MultitouchMessage extends ControlMessage {
 	
 	// Define the device ID
 	@Override
-	int Device() { return 0; }
+	int Device() { return 3; }
 	
 	// Boiler plate
 	public MultitouchMessage( int control, int action, int meta1, int meta2 ) {
