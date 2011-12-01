@@ -59,7 +59,7 @@ void Mouse::Deinit()
 #ifdef OS_WINDOWS
 void Mouse::WindowsButton(unsigned int button, bool up)
 {
-    // Create INPUT struct, most feilds can be set as 0
+    // Create INPUT struct, most fields can be set as 0
     INPUT input;
     input.type = INPUT_MOUSE;
     input.mi.dx = 0;
@@ -210,7 +210,7 @@ void Mouse::Scroll(signed int horizontal, signed int vertical)
             input[0].mi.mouseData = horizontal * WHEEL_DELTA;
             input[0].mi.dwFlags = MOUSEEVENTF_HWHEEL;
         #else
-            // Do nothing if not supported
+            // Do nothing if horizontal scrolling not supported
             input[0].mi.mouseData = 0;
             input[0].mi.dwFlags = 0;
         #endif
