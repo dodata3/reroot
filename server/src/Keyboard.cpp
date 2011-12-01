@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <limits>
 #include "Keyboard.h"
+#include <QDebug>
 
 Keyboard* Keyboard::sInstance = NULL;
 
@@ -214,7 +215,7 @@ void Keyboard::Up(Keycode key)
     #ifdef OS_WINDOWS
         WindowsKey(key, true);
     #endif
-	
+
 	#ifdef OS_LINUX
 		LinuxKey(key, true);
 	#endif
