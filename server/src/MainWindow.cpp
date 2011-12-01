@@ -245,8 +245,8 @@ void MainWindow::connectNew()
     Context::Get().ProcessID();
     Context::Get().Executable();
     */
-	// Spawn a new window which can be used to connect, give information to the connector
 
+	// Spawn a new window which can be used to connect, give information to the connector
 	mConnectDialog.ConnectNewDevice();
 
 }
