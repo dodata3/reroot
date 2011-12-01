@@ -9,4 +9,6 @@ body
 img.link
 {
 	padding: 1em;
+	border-style: none;
 }
+
