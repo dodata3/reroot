@@ -14,6 +14,7 @@ private:
 
 public:
     static Keyboard& Get();
+	static void Clear();
 
     // Look into Qt's localization functionality
     // to see if it can translate letter to keycode

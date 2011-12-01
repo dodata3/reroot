@@ -29,6 +29,7 @@ private:
 
 public:
     static Mouse& Get();
+	static void Clear();
 
     static const unsigned int sLeft = 0;
     static const unsigned int sRight = 1;
