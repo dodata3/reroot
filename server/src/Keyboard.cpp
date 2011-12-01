@@ -40,7 +40,7 @@ void Keyboard::Deinit()
 }
 
 #ifdef OS_WINDOWS
-void Keyboard::WindowsModifierKey(ModifierKey key, bool up)
+void Keyboard::WindowsModifierKey(ModifierKeycode key, bool up)
 {
     WORD wkey;
     switch(key)

@@ -48,7 +48,7 @@ private:
     void Deinit();
 
     #ifdef OS_WINDOWS
-    void WindowsButton(unisgned int button, bool up);
+    void WindowsButton(unsigned int button, bool up);
 
     #endif //OSWINDOWS
 

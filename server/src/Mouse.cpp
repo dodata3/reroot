@@ -135,7 +135,7 @@ void Mouse::LinuxButton(unsigned int button, bool up)
     }
     XFlush(mDisplay);
 }
-
+#endif // OS_LINUX
 
 
 QPoint Mouse::Position() const

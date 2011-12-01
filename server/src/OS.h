@@ -23,6 +23,7 @@
 #ifdef OS_WINDOWS
     #include <Windows.h>
     #include <Psapi.h>
+	#include <QDebug>
 
     inline void WindowsError(const LPTSTR lpszFunction)
     {
@@ -45,7 +46,8 @@
             (LPTSTR) &lpMsgBuf,
             0, NULL );
 
-        qDebug << "ERROR: " << lpszFunction << "(): " lpMsgBuf << '\n';
+        qDebug() << "ERROR: " << lpszFunction << "(): " << (LPTSTR) &lpMsgBuf << '\n';
+
         LocalFree(lpMsgBuf);
         //ExitProcess(dw);
     }
