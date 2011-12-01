@@ -353,7 +353,8 @@ void Keyboard::WindowsModifierKey(ModifierKeycode key, bool up)
 
 void Keyboard::WindowsKey(Keycode key, bool up)
 {
-	Keycode convertedkey = WindowsDIConvert(key);
+	//Keycode convertedkey = WindowsDIConvert(key);
+	Keycode convertedkey = key;
     INPUT input;
     input.type = INPUT_KEYBOARD;
     input.ki.wVk = 0;
