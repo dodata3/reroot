@@ -21,6 +21,7 @@
 #endif
 
 #ifdef OS_WINDOWS
+	// Windows will define min and max macros that mess everything up if we let it
 	#define NOMINMAX
     #include <Windows.h>
     #include <Psapi.h>

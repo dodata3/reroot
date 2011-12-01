@@ -52,7 +52,7 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
         {
         case Down:
             Keyboard::Get().Down( i.Control );
-            qDebug() << "Key down message: keycode " << i.Control << " character " << i.Data1;
+            qDebug() << "Key down message: keycode " << i.Control << " character";
             break;
         case Up:
             Keyboard::Get().Up( i.Control );

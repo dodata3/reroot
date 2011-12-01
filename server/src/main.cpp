@@ -17,6 +17,7 @@ int main( int argc, char *argv[] )
 	}
 	QApplication::setQuitOnLastWindowClosed( false );
 
+	// Make sure all buttons and keys are released before closing
 	atexit(Mouse::Clear);
 	atexit(Keyboard::Clear);
 

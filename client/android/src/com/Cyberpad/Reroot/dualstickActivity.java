@@ -207,11 +207,9 @@ public class dualstickActivity extends Activity{
 			//only send messages when things are getting changed
 		
 			//w
-			if(yMove < -carriage.getHeight()/4 +head_width/2){
+			if(yMove < -carriage.getHeight()/4 +head_height/2){
 				if(keypress[0]==false){
 					this.dualSendKey((int)'w', 0);
-					Toast.makeText(dualstickActivity.this,
-							"w registered", Toast.LENGTH_SHORT).show();
 				}
 				keypress[0] = true;
 
@@ -219,13 +217,11 @@ public class dualstickActivity extends Activity{
 			else{
 				if(keypress[0] == true){
 					this.dualSendKey((int)'w', 1);
-					Toast.makeText(dualstickActivity.this,
-							"w released", Toast.LENGTH_SHORT).show();
 				}
 				keypress[0] = false;
 			}
 			//a
-			if(xMove < -carriage.getWidth()/4){
+			if(xMove < -carriage.getWidth()/4 + head_width/2){
 				if(keypress[1] == false)
 					this.dualSendKey((int)'a', 0);
 				keypress[1] = true;
@@ -236,7 +232,7 @@ public class dualstickActivity extends Activity{
 				keypress[1] = false;
 			}
 			//s
-			if(yMove > carriage.getHeight()/4 ){
+			if(yMove > carriage.getHeight()/4 - head_height/2){
 				if(keypress[2] == false)
 					this.dualSendKey((int)'s', 0);
 				keypress[2] = true;
@@ -247,7 +243,7 @@ public class dualstickActivity extends Activity{
 				keypress[2] = false;
 			}
 			//d
-			if(xMove > carriage.getWidth()/4){
+			if(xMove > carriage.getWidth()/4 - head_width/2){
 				if(!keypress[3])
 					this.dualSendKey((int)'d', 0);
 				keypress[3] = true;
