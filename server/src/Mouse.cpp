@@ -1,6 +1,7 @@
 #include "Mouse.h"
 #include <cstring>
 #include <iostream>
+#include <QDebug>
 
 Mouse* Mouse::sInstance = NULL;
 

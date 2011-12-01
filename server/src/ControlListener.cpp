@@ -56,7 +56,7 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
             break;
         case Up:
             Keyboard::Get().Up( i.Control );
-            qDebug() << "Key up message: keycode " << i.Control << " character";
+            qDebug() << "Key up message: keycode " << i.Control << " character " << i.Data2;
             break;
         default:
             // unknown action
