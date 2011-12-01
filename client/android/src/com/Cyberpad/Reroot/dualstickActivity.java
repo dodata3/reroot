@@ -53,6 +53,7 @@ public class dualstickActivity extends Activity{
 		
 		mConnector = Connector.getInstance(this);
 		
+		keypress = new boolean[4];
 		keypress[0] = false;
 		keypress[1] = false;
 		keypress[2] = false;
@@ -203,7 +204,7 @@ public class dualstickActivity extends Activity{
 		//left carriage 
 		if(which==0){
 			//only send messages when things are getting changed
-			
+		
 			//w
 			if(yMove < -carriage.getHeight()/4){
 				if(keypress[0]==false)
@@ -262,8 +263,8 @@ public class dualstickActivity extends Activity{
 		//float yDir = y == 0 ? 1 : y / Math.abs(y);
 		
 		//scale the value up for more precision, scale back down on server
-		float xDir = x * 65000;
-		float yDir = y * 65000;
+		float xDir = x * 12000;
+		float yDir = y * 12000;
 		
 		if(type == 0){
 			mConnector.SendControlMessage(
