@@ -64,6 +64,9 @@ QHostAddress ConnectDialog::AcquireServerIP()
     // It just so happens that on linux, wired connections are typically named "eth#"
     // and wireless connections are "wlan#"  As such, we can lazily just pull the first
     // interface and be done with it.
+	for( QMap< QString, QHostAddress>::iterator itr = addressmap.begin(); itr != addressmap.end(); ++itr )
+		if( itr.value().toString() != "127.0.0.1" )
+			return itr.value();
     return addressmap.begin().value();
 }
 
