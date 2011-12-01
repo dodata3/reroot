@@ -46,7 +46,20 @@ public:
     // non-static
 private:
     Keyboard();
+    ~Keyboard();
+
     void Init();
+    void Deinit();
+
+    #ifdef OS_WINDOWS
+    void WindowsModifierKey(ModifierKeycode key, bool up);
+    void WindowsKey(Keycode key, bool up);
+    #endif //OS_WINDOWS
+
+    #ifdef OS_LINUX
+    void LinuxModifierKey(ModifierKeycode key, bool up);
+    void LinuxKey(Keycode key, bool up);
+    #endif // OS_LINUX
 
 public:
     void ModifierDown(ModifierKeycode key);

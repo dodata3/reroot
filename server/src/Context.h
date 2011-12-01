@@ -27,6 +27,8 @@ public:
     QString Title();
     QString Executable();
     int ProcessID();
+	
+	void SwitchContext();
 };
 
 #endif // CONTEXT_H_

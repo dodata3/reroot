@@ -2,6 +2,8 @@
 
 #include <cstdio>
 
+#include "Keyboard.h"
+
 Context* Context::sInstance = NULL;
 
 Context& Context::Get()
@@ -100,4 +102,14 @@ int Context::ProcessID()
         printf("pid: %i\n", int(pid));
         return int(pid);
     #endif
+}
+
+void Context::SwitchContext()
+{
+	#ifdef OS_WINDOWS
+		Keyboard::Get().ModifierDown(Keyboard::ModAlt);
+		Keyboard::Get().Down(Keyboard::Keycode('\t'));
+		Keyboard::Get().Up(Keyboard::Keycode('\t'));
+		Keyboard::Get().ModifierUp(Keyboard::ModAlt);
+	#endif // OS_WINDOWS
 }

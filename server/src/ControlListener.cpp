@@ -41,6 +41,7 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
             break;
         default:
             // unknown action
+			qDebug() << "Unknown mouse action " << i.Action << ".\n";
             break;
         }
         break;
@@ -58,6 +59,7 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
             break;
         default:
             // unknown action
+			qDebug() << "Unknown keyboard action " << i.Action << ".\n";
             break;
         }
         break;
