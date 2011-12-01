@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<control_messages>
+
+	<device name = "mouse">
+		<control name = "cursor_x" type = "axis"/>
+		<control name = "cursor_y" type = "axis"/>
+		<control name = "left_button"/>
+		<control name = "right_button"/>
+		<control name = "middle_button"/>
+		<control name = "button_4"/>
+		<control name = "button_5"/>
+		<control name = "scroll_up" type = "momentary"/>
+		<control name = "scroll_down" type = "momentary"/>
+	</device>
+	
+	<device name = "keyboard">
+		<control name = "up"/>
+		<control name = "down"/>
+		<control name = "left"/>
+		<control name = "right"/>
+		<control name = "a"/>
+		<control name = "b"/>
+		<control name = "c"/>
+		<control name = "d"/>
+		<control name = "e"/>
+		<control name = "f"/>
+		<control name = "g"/>
+		<control name = "h"/>
+		<control name = "i"/>
+		<control name = "j"/>
+		<control name = "k"/>
+		<control name = "l"/>
+		<control name = "m"/>
+		<control name = "n"/>
+		<control name = "o"/>
+		<control name = "p"/>
+		<control name = "q"/>
+		<control name = "r"/>
+		<control name = "s"/>
+		<control name = "t"/>
+		<control name = "u"/>
+		<control name = "v"/>
+		<control name = "w"/>
+		<control name = "x"/>
+		<control name = "y"/>
+		<control name = "z"/>
+		<control name = "1"/>
+		<control name = "2"/>
+		<control name = "3"/>
+		<control name = "4"/>
+		<control name = "5"/>
+		<control name = "6"/>
+		<control name = "7"/>
+		<control name = "8"/>
+		<control name = "9"/>
+		<control name = "0"/>
+		<control name = "f1"/>
+		<control name = "f2"/>
+		<control name = "f3"/>
+		<control name = "f4"/>
+		<control name = "f5"/>
+		<control name = "f6"/>
+		<control name = "f7"/>
+		<control name = "f8"/>
+		<control name = "f9"/>
+		<control name = "f10"/>
+		<control name = "f11"/>
+		<control name = "f12"/>
+		<control name = "hyphen"/>
+		<control name = "equals"/>
+		<control name = "bracket_left"/>
+		<control name = "bracket_right"/>
+		<control name = "back_slash"/>
+		<control name = "semicolon"/>
+		<control name = "apostrophe"/>
+		<control name = "comma"/>
+		<control name = "period"/>
+		<control name = "forward_slash"/>
+		<control name = "grave"/>
+		<control name = "esc"/>
+		<control name = "spacebar"/>
+		<control name = "enter"/>
+		<control name = "backspace"/>
+		<control name = "delete"/>
+		<control name = "ctrl_l"/>
+		<control name = "ctrl_r"/>
+		<control name = "ctrl"/>
+		<control name = "alt_l"/>
+		<control name = "alt_r"/>
+		<control name = "alt"/>
+		<control name = "shift_l"/>
+		<control name = "shift_r"/>
+		<control name = "shift"/>
+		<control name = "meta_l"/>
+		<control name = "meta_r"/>
+		<control name = "meta"/>
+		<control name = "alt_gr"/>
+		<control name = "tab"/>
+		<control name = "home"/>
+		<control name = "end"/>
+		<control name = "page_up"/>
+		<control name = "page_down"/>
+		<control name = "insert"/>
+		<control name = "caps_lock" type = "momentary"/>
+		<control name = "scroll_lock" type = "momentary"/>
+		<control name = "num_lock" type = "momemtary"/>
+<!-- Reroot does not currently support the numpad
+		<control name = "num_0"/>
+		<control name = "num_1"/>
+		<control name = "num_2"/>
+		<control name = "num_3"/>
+		<control name = "num_4"/>
+		<control name = "num_5"/>
+		<control name = "num_6"/>
+		<control name = "num_7"/>
+		<control name = "num_8"/>
+		<control name = "num_9"/>
+		<control name = "num_add"/>
+		<control name = "num_decimal"/>
+		<control name = "num_subtract"/>
+		<control name = "num_multiply"/>
+		<control name = "num_divide"/>
+		<control name = "num_enter"/>
+-->
+	</device>
+	
+<!-- Extended devices are not guaranteed by the server -->
+	<device name = "gamepad" type = "extended">
+	</device>
+	
+	<device name = "multitouch" type = "extended">
+	</device>
+	
+</control_messages>
