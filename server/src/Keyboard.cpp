@@ -355,15 +355,16 @@ void Keyboard::WindowsModifierKey(ModifierKeycode key, bool up)
 
 void Keyboard::WindowsKey(Keycode key, bool up)
 {
-	//Keycode convertedkey = WindowsDIConvert(key);
-	Keycode convertedkey = key;
+	Keycode convertedkey = WindowsDIConvert(key);
+	qDebug() << "Converted keycode " << key << " to DI keycode " << convertedkey << ".\n";
+	//Keycode convertedkey = key;
     INPUT input;
     input.type = INPUT_KEYBOARD;
     input.ki.wVk = 0;
     //input.ki.wScan = key;
 	input.ki.wScan = convertedkey;
-    input.ki.dwFlags = KEYEVENTF_UNICODE | (up ? KEYEVENTF_KEYUP : 0);
-	//input.ki.dwFlags = (up ? KEYEVENTF_KEYUP : 0);
+    //input.ki.dwFlags = KEYEVENTF_UNICODE | (up ? KEYEVENTF_KEYUP : 0);
+	input.ki.dwFlags = (up ? KEYEVENTF_KEYUP : 0);
     input.ki.time = 0;
     input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 
