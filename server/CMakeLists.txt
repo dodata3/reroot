@@ -133,7 +133,7 @@ ENDIF(APPLE)
 IF(WIN32)
   SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/Reroot.exe")
   # Set NSIS specific install variable which creates a start-menu shortcut.
-  SET( CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'")
+  SET( CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\bin\\\\${PROJECT_NAME}.exe'")
   SET( CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${PROJECT_NAME}.exe" )
 ENDIF(WIN32)
 
