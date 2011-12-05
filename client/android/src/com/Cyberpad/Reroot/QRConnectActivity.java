@@ -236,9 +236,10 @@ public final class QRConnectActivity extends Activity implements SurfaceHolder.C
       @Override
       public void onReceive(Context context, Intent intent) {
           // TODO Auto-generated method stub
-          Log.d( "QRConnectActivity", "We've authenticated.  Launching PadActivity!" );
-          Intent padIntent = new Intent( QRConnectActivity.this, MainMenuActivity.class);
-          startActivity( padIntent );
+          Log.d( "QRConnectActivity", "We've authenticated.  Launching main menu." );
+          Intent menuIntent = new Intent( QRConnectActivity.this, MainMenuActivity.class);
+          startActivity( menuIntent );
+          finish();
       }
   };
 
