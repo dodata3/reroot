@@ -34,12 +34,9 @@ Connector::Connector() :
 
 Connector::~Connector()
 {
-	mIncomingPort->stopListening();
-	mIncomingPort->close();
-	mIncomingPort->terminate();
-	if( !mIncomingPort->wait() )
-        qWarning( "Incoming port thread termination timeout." );
+	CloseOSCPort( mIncomingPort );
 	delete mIncomingPort;
+	RemoveAllDevices();
 	mIncomingPort = NULL;
 	RemoveAllDevices();
 }
@@ -52,10 +49,11 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 	dev.encKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inEncExp.data() ), inEncExp.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetModulus( Integer( reinterpret_cast< byte* >( inSignMod.data() ), inSignMod.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inSignExp.data() ), inSignExp.size(), Integer::UNSIGNED ) );
+	dev.name = inRemote.toString();
 	mLock.lock();
-	mDeviceMap[ inRemote.toString() ] = dev;
+	mDeviceMap[ dev.name ] = dev;
 	mLock.unlock();
-	SendHandshake( inRemote.toString() );
+	SendHandshake( dev.name );
 	qDebug() << "Added new device: " << inRemote.toString() << " to list of allowed devices";
 	emit HandshakeSuccessful( inRemote.toString() );
 }
@@ -94,21 +92,19 @@ quint32 Connector::GetConnectKey()
     return key;
 }
 
-void Connector::RemoveDevice( QHostAddress& inRemote )
+void Connector::RemoveDevice( QString& name )
 {
 	mLock.lock();
-	delete mDeviceMap[ inRemote.toString() ].port;
-	mDeviceMap.remove( inRemote.toString() );
+	CloseOSCPort( mDeviceMap[ name ].port );
+	delete mDeviceMap[ name ].port;
+	mDeviceMap.remove( name );
 	mLock.unlock();
 }
 
 void Connector::RemoveAllDevices()
 {
-	mLock.lock();
-	for( DeviceMap::iterator itr = mDeviceMap.begin(); itr != mDeviceMap.end(); ++itr )
-		delete itr->port;
-	mDeviceMap.clear();
-	mLock.unlock();
+	while( !mDeviceMap.empty() )
+		RemoveDevice( mDeviceMap.begin()->name );
 }
 
 RSA::PublicKey Connector::GetClientEncKey( QHostAddress& address )
@@ -153,4 +149,13 @@ QString Connector::IntegerToHexString( Integer integer )
         new HexEncoder( new StringSink( s ) ) );
 
     return QString::fromStdString( s );
+}
+
+void Connector::CloseOSCPort( OSCPort* port )
+{
+	port->stopListening();
+	port->close();
+	port->terminate();
+	if( !port->wait() )
+        qWarning( "Incoming port thread termination timeout." );
 }
