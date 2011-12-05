@@ -109,7 +109,7 @@ void MainWindow::createIconGroupBox()
 
 	iconComboBox = new QComboBox;
 	iconComboBox->addItem(QIcon(":/images/bad.svg"), tr("Bad"));
-	iconComboBox->addItem(QIcon(":/images/heart.svg"), tr("Heart"));
+	iconComboBox->addItem(QIcon(":/images/heart.png"), tr("Reroot"));
 	iconComboBox->addItem(QIcon(":/images/trash.svg"), tr("Trash"));
 
 	showIconCheckBox = new QCheckBox(tr("Show icon"));
@@ -201,7 +201,7 @@ void MainWindow::createTrayIcon()
 	trayIconMenu = new QMenu(this);
 	trayIconMenu->addAction(connectAction);
 	//trayIconMenu->addAction(advancedAction);
-	trayIconMenu->addAction(disconnectAllAction);
+	//trayIconMenu->addAction(disconnectAllAction);
 	trayIconMenu->addSeparator();
 	trayIconMenu->addAction(exitAction);
 
