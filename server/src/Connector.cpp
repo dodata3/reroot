@@ -24,20 +24,19 @@ Connector::Connector() :
     // Generate keys
     Cipher::GenerateKeypair( mPublicEncKey, mPrivateEncKey );
     Cipher::GenerateKeypair( mPublicSignKey, mPrivateSignKey );
-	mIncomingPort = new OSCPort( mListenerAddress, REROOT_SERVER_PORT );
+	mpIncomingPort = new OSCPort( mListenerAddress, REROOT_SERVER_PORT );
 	QString controlAddress = QString( "/control" );
-	mIncomingPort->addListener( controlAddress, mControl );
+	mpIncomingPort->addListener( controlAddress, mControl );
 	QString handshakeAddress = QString( "/handshake_client" );
-	mIncomingPort->addListener( handshakeAddress, mHandshake );
-	mIncomingPort->startListening();
+	mpIncomingPort->addListener( handshakeAddress, mHandshake );
+	mpIncomingPort->startListening(); // Problem here
 }
 
 Connector::~Connector()
 {
-	CloseOSCPort( mIncomingPort );
-	delete mIncomingPort;
-	RemoveAllDevices();
-	mIncomingPort = NULL;
+	CloseOSCPort( mpIncomingPort );
+	delete mpIncomingPort;
+	mpIncomingPort = NULL;
 	RemoveAllDevices();
 }
 
@@ -154,8 +153,8 @@ QString Connector::IntegerToHexString( Integer integer )
 void Connector::CloseOSCPort( OSCPort* port )
 {
 	port->stopListening();
-	port->close();
 	port->terminate();
 	if( !port->wait() )
         qWarning( "Incoming port thread termination timeout." );
+	port->close();
 }

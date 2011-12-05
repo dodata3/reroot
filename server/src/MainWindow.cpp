@@ -200,7 +200,7 @@ void MainWindow::createTrayIcon()
 {
 	trayIconMenu = new QMenu(this);
 	trayIconMenu->addAction(connectAction);
-	trayIconMenu->addAction(advancedAction);
+	//trayIconMenu->addAction(advancedAction);
 	trayIconMenu->addAction(disconnectAllAction);
 	trayIconMenu->addSeparator();
 	trayIconMenu->addAction(exitAction);

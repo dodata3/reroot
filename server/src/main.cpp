@@ -4,8 +4,17 @@
 #include "Mouse.h"
 #include "Keyboard.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#define argc __argc
+#define argv __argv
+int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
+{
+#else // _WIN32
 int main( int argc, char *argv[] )
 {
+#endif // _WIN32
+
 	Q_INIT_RESOURCE( RerootResources );
 
 	QApplication a(argc, argv);

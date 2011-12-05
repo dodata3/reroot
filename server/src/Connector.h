@@ -58,7 +58,7 @@ private:
 
 	QMutex mLock;
 	QHostAddress mListenerAddress;
-	OSCPort* mIncomingPort;
+	OSCPort* mpIncomingPort;
 	ControlListener mControl;
 	HandshakeListener mHandshake;
 	DeviceMap mDeviceMap;
