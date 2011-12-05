@@ -242,8 +242,6 @@ public class PadActivity extends Activity {
 						if(lastPointerCount  == 1)
 							new_type = 0;
 						else if(lastPointerCount == 2){
-							Toast.makeText(PadActivity.this,
-									"Double tap successful", Toast.LENGTH_SHORT).show();
 							new_type = 3;	
 						}
 					}
@@ -364,13 +362,14 @@ public class PadActivity extends Activity {
 							MouseMessage.LEFT_BUTTON,
 							ControlMessage.CONTROL_DOWN,
 							(int)xDir, (int)yDir));
-		}
-		else if(type == 1){
 			mConnector.SendControlMessage(
 					new MouseMessage(
 							MouseMessage.LEFT_BUTTON,
 							ControlMessage.CONTROL_UP,
 							(int)xDir, (int)yDir));
+		}
+		else if(type == 1){
+			
 		}
 		else if(type == 2){
 			mConnector.SendControlMessage( 
@@ -385,6 +384,11 @@ public class PadActivity extends Activity {
 					MouseMessage.RIGHT_BUTTON, 
 					ControlMessage.CONTROL_DOWN, 
 					(int)xDir, (int)yDir ) );
+			mConnector.SendControlMessage( 
+					new MouseMessage( 
+						MouseMessage.RIGHT_BUTTON, 
+						ControlMessage.CONTROL_UP, 
+						(int)xDir, (int)yDir ) );
 		}
 		
 	}
