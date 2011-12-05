@@ -17,6 +17,7 @@ server/Makefile
 server/Reroot
 server/Debug
 server/Release
+server/cryptopp-5.6.1
 
 *.cbp
 *.sh
