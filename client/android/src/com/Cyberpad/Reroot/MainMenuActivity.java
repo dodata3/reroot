@@ -38,7 +38,6 @@ public class MainMenuActivity extends Activity{
 		try{
 			Intent i = new Intent(this, PadActivity.class);
 			this.startActivity(i);
-			this.finish();
 		}
 		catch(Exception ex){
 			Toast.makeText(this, "Failure", Toast.LENGTH_LONG).show(); Log.d(TAG, ex.toString());
@@ -49,7 +48,6 @@ public class MainMenuActivity extends Activity{
 		try{
 			Intent i = new Intent(this, dualstickActivity.class);
 			this.startActivity(i);
-			this.finish();
 		}
 		catch(Exception ex){
 			Toast.makeText(this, "Failure", Toast.LENGTH_LONG).show(); Log.d(TAG, ex.toString());
