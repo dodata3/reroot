@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <limits>
 #include "Keyboard.h"
-#include "DirectInput.h"
 #include <QDebug>
 
 Keyboard* Keyboard::sInstance = NULL;
@@ -44,8 +43,7 @@ void Keyboard::Init()
 void Keyboard::Deinit()
 {
 	qDebug() << "Killing keyboard\n";
-
-	// Release all modifier keys
+	// Release all keys
 	ModifierUp(ModCtrlL);
 	ModifierUp(ModCtrlR);
 	ModifierUp(ModCtrl);
@@ -75,227 +73,8 @@ void Keyboard::Deinit()
 }
 
 #ifdef OS_WINDOWS
-Keyboard::Keycode Keyboard::WindowsDIConvert(Keycode key)
-{
-	// Convert to DirectInput compatible keycodes
-	switch (key)
-	{
-	
-		return DIKEYBOARD_ESCAPE;
-	case '1':
-		return DIKEYBOARD_1;
-	case '2':
-		return DIKEYBOARD_2;
-	case '3':
-		return DIKEYBOARD_3;
-	case '4':
-		return DIKEYBOARD_4;
-	case '5':
-		return DIKEYBOARD_5;
-	case '6':
-		return DIKEYBOARD_6;
-	case '7':
-		return DIKEYBOARD_7;
-	case '8':
-		return DIKEYBOARD_8;
-	case '9':
-		return DIKEYBOARD_9;
-	case '0':
-		return DIKEYBOARD_0;
-	case '-':
-		return DIKEYBOARD_MINUS;
-	case '=':
-		return DIKEYBOARD_EQUALS;
-	
-		return DIKEYBOARD_BACK;
-	
-		return DIKEYBOARD_TAB;
-	case 'q':
-		return DIKEYBOARD_Q;
-	case 'w':
-		return DIKEYBOARD_W;
-	case 'e':
-		return DIKEYBOARD_E;
-	case 'r':
-		return DIKEYBOARD_R;
-	case 't':
-		return DIKEYBOARD_T;
-	case 'y':
-		return DIKEYBOARD_Y;
-	case 'u':
-		return DIKEYBOARD_U;
-	case 'i':
-		return DIKEYBOARD_I;
-	case 'o':
-		return DIKEYBOARD_O;
-	case 'p':
-		return DIKEYBOARD_P;
-	
-		return DIKEYBOARD_LBRACKET;
-	
-		return DIKEYBOARD_RBRACKET;
-	
-		return DIKEYBOARD_RETURN;
-	
-		return DIKEYBOARD_LCONTROL;
-	case 'a':
-		return DIKEYBOARD_A;
-	case 's':
-		return DIKEYBOARD_S;
-	case 'd':
-		return DIKEYBOARD_D;
-	case 'f':
-		return DIKEYBOARD_F;
-	case 'g':
-		return DIKEYBOARD_G;
-	case 'h':
-		return DIKEYBOARD_H;
-	case 'j':
-		return DIKEYBOARD_J;
-	case 'k':
-		return DIKEYBOARD_K;
-	case 'l':
-		return DIKEYBOARD_L;
-	case ';':
-		return DIKEYBOARD_SEMICOLON;
-	case '\'':
-		return DIKEYBOARD_APOSTROPHE;
-	case '`':
-		return DIKEYBOARD_GRAVE;
-	
-		return DIKEYBOARD_LSHIFT;
-	case '\\':
-		return DIKEYBOARD_BACKSLASH;
-	case 'z':
-		return DIKEYBOARD_Z;
-	case 'x':
-		return DIKEYBOARD_X;
-	case 'c':
-		return DIKEYBOARD_C;
-	case 'v':
-		return DIKEYBOARD_V;
-	case 'b':
-		return DIKEYBOARD_B;
-	case 'n':
-		return DIKEYBOARD_N;
-	case 'm':
-		return DIKEYBOARD_M;
-	case ',':
-		return DIKEYBOARD_COMMA;
-	case '.':
-		return DIKEYBOARD_PERIOD;
-	case '/':
-		return DIKEYBOARD_SLASH;
-	
-		return DIKEYBOARD_RSHIFT;
-	case '*':
-		return DIKEYBOARD_MULTIPLY;
-	
-		return DIKEYBOARD_LMENU;
-	case ' ':
-		return DIKEYBOARD_SPACE;
-	
-		return DIKEYBOARD_CAPITAL;
-	
-		return DIKEYBOARD_F1;
-		return DIKEYBOARD_F2;
-		return DIKEYBOARD_F3;
-		return DIKEYBOARD_F4;
-		return DIKEYBOARD_F5;
-		return DIKEYBOARD_F6;
-		return DIKEYBOARD_F7;
-		return DIKEYBOARD_F8;
-		return DIKEYBOARD_F9;
-		return DIKEYBOARD_F10;
-		return DIKEYBOARD_NUMLOCK;
-		return DIKEYBOARD_SCROLL;
-		return DIKEYBOARD_NUMPAD7;
-		return DIKEYBOARD_NUMPAD8;
-		return DIKEYBOARD_NUMPAD9;
-		return DIKEYBOARD_SUBTRACT;
-		return DIKEYBOARD_NUMPAD4;
-		return DIKEYBOARD_NUMPAD5;
-		return DIKEYBOARD_NUMPAD6;
-	case '+':
-		return DIKEYBOARD_ADD;
-		return DIKEYBOARD_NUMPAD1;
-		return DIKEYBOARD_NUMPAD2;
-		return DIKEYBOARD_NUMPAD3;
-		return DIKEYBOARD_NUMPAD0;
-		return DIKEYBOARD_DECIMAL;
-		return DIKEYBOARD_OEM_102;
-		return DIKEYBOARD_F11;
-		return DIKEYBOARD_F12;
-		return DIKEYBOARD_F13;
-		return DIKEYBOARD_F14;
-		return DIKEYBOARD_F15;
-		return DIKEYBOARD_KANA;
-		return DIKEYBOARD_ABNT_C1;
-		return DIKEYBOARD_CONVERT;
-		return DIKEYBOARD_NOCONVERT;
-		return DIKEYBOARD_YEN;
-		return DIKEYBOARD_ABNT_C2;
-		return DIKEYBOARD_NUMPADEQUALS;
-		return DIKEYBOARD_PREVTRACK;
-	case '@':
-		return DIKEYBOARD_AT;
-	case ':':
-		return DIKEYBOARD_COLON;
-	case '_':
-		return DIKEYBOARD_UNDERLINE;
-		return DIKEYBOARD_KANJI;
-		return DIKEYBOARD_STOP;
-		return DIKEYBOARD_AX;
-		return DIKEYBOARD_UNLABELED;
-		return DIKEYBOARD_NEXTTRACK;
-		return DIKEYBOARD_NUMPADENTER;
-		return DIKEYBOARD_RCONTROL;
-		return DIKEYBOARD_MUTE;
-		return DIKEYBOARD_CALCULATOR;
-		return DIKEYBOARD_PLAYPAUSE;
-		return DIKEYBOARD_MEDIASTOP;
-		return DIKEYBOARD_VOLUMEDOWN;
-		return DIKEYBOARD_VOLUMEUP;
-		return DIKEYBOARD_WEBHOME;
-		return DIKEYBOARD_NUMPADCOMMA;
-		return DIKEYBOARD_DIVIDE;
-		return DIKEYBOARD_SYSRQ;
-		return DIKEYBOARD_RMENU;
-		return DIKEYBOARD_PAUSE;
-		return DIKEYBOARD_HOME;
-		return DIKEYBOARD_UP;
-		return DIKEYBOARD_PRIOR;
-		return DIKEYBOARD_LEFT;
-		return DIKEYBOARD_RIGHT;
-		return DIKEYBOARD_END;
-		return DIKEYBOARD_DOWN;
-		return DIKEYBOARD_NEXT;
-		return DIKEYBOARD_INSERT;
-		return DIKEYBOARD_DELETE;
-		return DIKEYBOARD_LWIN;
-		return DIKEYBOARD_RWIN;
-		return DIKEYBOARD_APPS;
-		return DIKEYBOARD_POWER;
-		return DIKEYBOARD_SLEEP;
-		return DIKEYBOARD_WAKE;
-		return DIKEYBOARD_WEBSEARCH;
-		return DIKEYBOARD_WEBFAVORITES;
-		return DIKEYBOARD_WEBREFRESH;
-		return DIKEYBOARD_WEBSTOP;
-		return DIKEYBOARD_WEBFORWARD;
-		return DIKEYBOARD_WEBBACK;
-		return DIKEYBOARD_MYCOMPUTER;
-		return DIKEYBOARD_MAIL;
-		return DIKEYBOARD_MEDIASELECT;
-	default:
-		qDebug() << "Unknown DI keycode " << key << "!\n";
-		return 0;
-	}
-}
-
 void Keyboard::WindowsModifierKey(ModifierKeycode key, bool up)
 {
-	// Convert modifier keycode to Windows
     WORD wkey;
     switch(key)
     {
@@ -355,16 +134,11 @@ void Keyboard::WindowsModifierKey(ModifierKeycode key, bool up)
 
 void Keyboard::WindowsKey(Keycode key, bool up)
 {
-	//Keycode convertedkey = WindowsDIConvert(key);
-	//qDebug() << "Converted keycode " << key << " to DI keycode " << convertedkey << ".\n";
-	Keycode convertedkey = key;
     INPUT input;
     input.type = INPUT_KEYBOARD;
     input.ki.wVk = 0;
-    //input.ki.wScan = key;
-	input.ki.wScan = convertedkey;
+    input.ki.wScan = key;
     input.ki.dwFlags = KEYEVENTF_UNICODE | (up ? KEYEVENTF_KEYUP : 0);
-	//input.ki.dwFlags = (up ? KEYEVENTF_KEYUP : 0);
     input.ki.time = 0;
     input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 

@@ -17,7 +17,6 @@
 struct Device
 {
 	OSCPort* port;
-	QString name;
 	CryptoPP::RSA::PublicKey encKey;
 	CryptoPP::RSA::PublicKey signKey;
 };
@@ -34,7 +33,7 @@ public:
 
 	void AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp,
                     QByteArray inSignMod, QByteArray inSignExp );
-	void RemoveDevice( QString& inRemote );
+	void RemoveDevice( QHostAddress& inRemote );
 	void RemoveAllDevices();
 	void SetConnectKey( qint32 key = 0 );
 	void SendHandshake( QString inDeviceName );
@@ -54,11 +53,10 @@ signals:
 
 private:
     QString IntegerToHexString( CryptoPP::Integer integer );
-	void CloseOSCPort( OSCPort* port );
 
 	QMutex mLock;
 	QHostAddress mListenerAddress;
-	OSCPort* mpIncomingPort;
+	OSCPort* mIncomingPort;
 	ControlListener mControl;
 	HandshakeListener mHandshake;
 	DeviceMap mDeviceMap;

@@ -47,7 +47,6 @@ OSCPort::~OSCPort()
     delete iConverter;
 }
 
-// This is incorrect.  We need to use signals/slots here.
 void OSCPort::run()
 {
     QByteArray datagram(1536,0);
