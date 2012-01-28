@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" android:weightSum="1" android:orientation="vertical">
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout1" android:orientation="vertical">
+        <RelativeLayout android:layout_height="wrap_content" android:id="@+id/presen_laser" android:layout_width="wrap_content" android:background="@drawable/presen_laser" android:layout_gravity="center_horizontal"></RelativeLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout3">
+        <RelativeLayout android:layout_height="102dp" android:layout_gravity="left" android:id="@+id/presen_left" android:layout_width="149dp" android:background="@drawable/presen_left"></RelativeLayout>
+        <RelativeLayout android:layout_gravity="right" android:id="@+id/presen_right" android:background="@drawable/presen_right" android:layout_height="match_parent" android:layout_width="match_parent"></RelativeLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout2" android:baselineAligned="false">
+    </LinearLayout>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout4" android:orientation="vertical">
+        <RelativeLayout android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/presen_click" android:layout_width="wrap_content" android:background="@drawable/presen_click"></RelativeLayout>
+    </LinearLayout>
+
+   
+</LinearLayout>
