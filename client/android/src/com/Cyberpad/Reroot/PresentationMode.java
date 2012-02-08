@@ -80,7 +80,19 @@ private void initLaser(){
 
 //button implementations
 void buttonClicked(String id){
-	
+	if(id=="click")
+		mConnector.SendControlMessage(
+				new MouseMessage(
+						MouseMessage.LEFT_BUTTON,
+						ControlMessage.CONTROL_DOWN,
+						0, 0)
+				);
+	else if(id=="right")
+		;
+	else if(id=="left")
+		;
+	else if(id=="laser")
+		;
 	
 }
 	
