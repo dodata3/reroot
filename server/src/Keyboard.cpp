@@ -138,7 +138,7 @@ void Keyboard::WindowsKey(Keycode key, bool up)
     input.type = INPUT_KEYBOARD;
     input.ki.wVk = 0;
     input.ki.wScan = key;
-    input.ki.dwFlags = KEYEVENTF_UNICODE | (up ? KEYEVENTF_KEYUP : 0);
+	input.ki.dwFlags = KEYEVENTF_SCANCODE | ( up ? KEYEVENTF_KEYUP : 0 );
     input.ki.time = 0;
     input.ki.dwExtraInfo = (ULONG_PTR)NULL;
 
