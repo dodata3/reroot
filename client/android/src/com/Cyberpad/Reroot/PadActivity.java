@@ -460,6 +460,7 @@ public class PadActivity extends Activity {
 			
 			int key = 0;
 			
+			
 			//conversion zone
 			if(c.equals(" ")) key = 62;
 			if(c.equals("\n")) key = 66;
