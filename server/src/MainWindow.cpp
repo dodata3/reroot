@@ -8,6 +8,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Context.h"
+#include "Presenter.h"
 
 using namespace std;
 
@@ -213,6 +214,7 @@ void MainWindow::disconnectAll()
 {
 	// Tell the connector to disconnect all devices
 	mConnector.RemoveAllDevices();
+	Presenter::Get().Start();
 }
 
 void MainWindow::connectNew()
