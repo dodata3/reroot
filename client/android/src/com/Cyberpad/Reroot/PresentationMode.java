@@ -71,7 +71,7 @@ public void onAccuracyChanged(Sensor sensor, int accuracy){
 
 @Override
 public void onSensorChanged(SensorEvent event){
-	TextView txt = (TextView)findViewById(R.id.test_text);
+	TextView txt = (TextView)findViewById(R.id.acctext);
 	
 	float x = event.values[0];
 	float y = event.values[1];
@@ -100,7 +100,6 @@ public void onSensorChanged(SensorEvent event){
 		mLastZ = z;
 		
 		txt.setText("X: " + Float.toString(deltaX) + ", Y:" + Float.toString(deltaY) + ", Z:" + Float.toString(deltaZ));
-		
 	}
 }
 
