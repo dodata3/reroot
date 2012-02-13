@@ -20,6 +20,7 @@ public class MainMenuActivity extends Activity{
 		setContentView(R.layout.main_menu);
 		Button hybrid_mode = (Button)findViewById(R.id.hybrid_mode);
 		Button dualstick_mode = (Button)findViewById(R.id.dualstick_mode);
+		Button acc_test = (Button)findViewById(R.id.acc_test);
 	
 		 hybrid_mode.setOnClickListener(new OnClickListener() {
 	        	public void onClick(View v){
@@ -32,6 +33,22 @@ public class MainMenuActivity extends Activity{
 				 onDualClick();
 			 }
 		 });
+		 
+		 acc_test.setOnClickListener(new OnClickListener(){
+			 public void onClick(View v){
+				 onAccClick();
+			 }
+		 });
+	}
+	
+	public void onAccClick(){
+		try{
+			Intent i = new Intent(this, PresentationMode.class);
+			this.startActivity(i);
+		}
+		catch(Exception ex){
+			Toast.makeText(this, "Failure", Toast.LENGTH_LONG).show();
+		}		
 	}
 	
 	public void onHybridClick(){

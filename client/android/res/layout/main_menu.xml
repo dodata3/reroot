@@ -3,4 +3,6 @@
         <Button android:text="Hybrid Mode" android:layout_width="wrap_content" android:id="@+id/hybrid_mode" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_marginLeft="34dp" android:layout_marginTop="33dp"></Button>
         <Button android:text="Dualstick Mode" android:layout_width="wrap_content" android:id="@+id/dualstick_mode" android:layout_height="wrap_content" android:layout_below="@+id/hybrid_mode" android:layout_alignLeft="@+id/hybrid_mode" android:layout_marginTop="52dp" android:layout_alignRight="@+id/hybrid_mode"></Button>
         <FrameLayout android:layout_height="wrap_content" android:id="@+id/background_img" android:layout_width="wrap_content" android:background="@drawable/reroot_background" android:layout_below="@+id/hybrid_mode" android:layout_alignParentRight="true" android:layout_marginTop="20dp"></FrameLayout>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/acc_test" android:text="Accel. Testing" android:layout_centerVertical="true" android:layout_alignLeft="@+id/dualstick_mode"></Button>
+       
     </RelativeLayout>

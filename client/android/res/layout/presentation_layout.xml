@@ -14,6 +14,8 @@
     </LinearLayout>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout4" android:orientation="vertical">
         <RelativeLayout android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/presen_click" android:layout_width="wrap_content" android:background="@drawable/presen_click"></RelativeLayout>
+        <TextView android:layout_height="52dp" android:id="@+id/TextView01" android:layout_width="match_parent"></TextView>
+        <TextView android:id="@+id/test_text" android:layout_height="52dp" android:layout_width="92dp"></TextView>
     </LinearLayout>
 
    
