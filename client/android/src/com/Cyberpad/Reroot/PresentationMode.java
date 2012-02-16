@@ -5,94 +5,43 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-/*
-public class PresentationMode extends Activity implements SensorEventListener {
-	
-	private float mLastX, mLastY, mLastZ;
-	private boolean mInitialized;
-	private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private final float NOISE = (float) 2.0;
-	 
-    // Called when the activity is first created.
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        mInitialized = false;
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_GAME);
-    }
 
-    protected void onResume() {
-        super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    protected void onPause() {
-        super.onPause();
-        mSensorManager.unregisterListener(this);
-    }
-
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// can be safely ignored for this demo
-	}
-
-	public void onSensorChanged(SensorEvent event) {
-		TextView tvX= (TextView)findViewById(R.id.x_axis);
-		TextView tvY= (TextView)findViewById(R.id.y_axis);
-		TextView tvZ= (TextView)findViewById(R.id.z_axis);
-		float x = event.values[0];
-		float y = event.values[1];
-		float z = event.values[2];
-		if (!mInitialized) {
-			mLastX = x;
-			mLastY = y;
-			mLastZ = z;
-			tvX.setText("0.0");
-			tvY.setText("0.0");
-			tvZ.setText("0.0");
-			mInitialized = true;
-		} else {
-			float deltaX = Math.abs(mLastX - x);
-			float deltaY = Math.abs(mLastY - y);
-			float deltaZ = Math.abs(mLastZ - z);
-			if (deltaX < NOISE) deltaX = (float)0.0;
-			if (deltaY < NOISE) deltaY = (float)0.0;
-			if (deltaZ < NOISE) deltaZ = (float)0.0;
-			mLastX = x;
-			mLastY = y;
-			mLastZ = z;
-			tvX.setText(Float.toString(x));
-			tvY.setText(Float.toString(y));
-			tvZ.setText(Float.toString(z));
-		}
-	}
-}
-*/
-
-
-
-public class PresentationMode extends Activity implements SensorEventListener {
+public class PresentationMode extends Activity {
 
 private Handler handler = new Handler();
 private static final String TAG = "Reroot";
 private Connector mConnector;
 //accelerometer stuff
-private boolean mInitialized;
-private float mLastX, mLastY, mLastZ;
+private boolean sensorOn = false;
+private float cur_acc[] = {0, 0, 0};
+private float last_acc[] = {0, 0, 0};
+
 private SensorManager mSensorManager;
+private final SensorEventListener mSensorListener = new SensorEventListener(){
+	public void onSensorChanged(SensorEvent se){
+		//record last values
+		last_acc = cur_acc;
+		//read current values
+		for(int i=0; i<3; i++)
+			cur_acc[i] = se.values[i];
+		
+		//for now, we care about x and z
+		send_offset(cur_acc[0] - last_acc[0], cur_acc[2] - last_acc[2]);
+		
+	}
+	public void onAccuracyChanged(Sensor sensor, int accuracy){}
+};
+
 private Sensor mAccelerometer;
 private final float NOISE = (float) 2.0;
 	
@@ -103,10 +52,9 @@ public void onCreate(Bundle savedInstanceState){
 	//set display to our presentation layout
 	setContentView(R.layout.presentation_layout);
 	//accelerometer stuff
-	mInitialized = false;
 	mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-	mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+	//mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 	
 	
 	mConnector = Connector.getInstance(this);
@@ -127,59 +75,21 @@ public void onCreate(Bundle savedInstanceState){
 
 protected void onResume(){
 	super.onResume();
-	mSensorManager.unregisterListener(this);
+	//mSensorManager.unregisterListener(mSensorListener);
 }
 
 protected void onPause(){
 	super.onPause();
-	mSensorManager.unregisterListener(this);
+	mSensorManager.unregisterListener(mSensorListener);
 }
 	
-@Override
-public void onAccuracyChanged(Sensor sensor, int accuracy){
-	// IGNORRRRRRE ME!
-}
-
-@Override
-public void onSensorChanged(SensorEvent event){
-	//TextView txt = (TextView)findViewById(R.id.acctext);
-	
-	float x = event.values[0];
-	float y = event.values[1];
-	float z = event.values[2];
-	
-	if(!mInitialized){
-		mLastX = x;
-		mLastY = y;
-		mLastZ = z;
-		
-		//txt.setText("X: 0, Y: 0, Z: 0");
-		
-		mInitialized = true;
-	}
-	else{
-		float deltaX = Math.abs(mLastX - x);
-		float deltaY = Math.abs(mLastY - y);
-		float deltaZ = Math.abs(mLastZ - z);
-		
-		if(deltaX < NOISE) deltaX = (float)0.0;
-		if(deltaY < NOISE) deltaY = (float)0.0;
-		if(deltaZ < NOISE) deltaZ = (float)0.0;
-		
-		mLastX = x;
-		mLastY = y;
-		mLastZ = z;
-		
-		//txt.setText("X: " + Float.toString(deltaX) + ", Y:" + Float.toString(deltaY) + ", Z:" + Float.toString(deltaZ));
-	}
-}
 
 private void initClick(){
 	RelativeLayout clickBtn = (RelativeLayout)this.findViewById(R.id.presen_click);
 	
 	clickBtn.setOnClickListener(new View.OnClickListener(){
 		public void onClick(View v){
-			buttonClicked("click");
+			click();
 		}
 	});
 }
@@ -189,7 +99,7 @@ private void initLeft(){
 	
 	leftBtn.setOnClickListener(new View.OnClickListener(){
 		public void onClick(View v){
-			buttonClicked("left");
+			left_or_right("left");
 		}
 	});
 }
@@ -199,7 +109,7 @@ private void initRight(){
 	
 	rightBtn.setOnClickListener(new View.OnClickListener(){
 		public void onClick(View v){
-			buttonClicked("right");
+			left_or_right("right");
 		}
 	});
 	
@@ -208,13 +118,72 @@ private void initRight(){
 private void initLaser(){
 	RelativeLayout laserBtn = (RelativeLayout)this.findViewById(R.id.presen_laser);
 	
-	laserBtn.setOnClickListener(new View.OnClickListener(){
-		public void onClick(View v){
-			buttonClicked("laser");
+	
+	laserBtn.setOnTouchListener(new View.OnTouchListener(){
+		public boolean onTouch(View v, MotionEvent ev){
+			return laser(ev);
 		}
 	});
 }
 
+
+//not quite sure how this button will behave yet
+//for now, send click down and immediate click up
+void click(){
+	mConnector.SendControlMessage(
+			new MouseMessage(
+					MouseMessage.LEFT_BUTTON,
+					ControlMessage.CONTROL_DOWN,
+					0, 0)
+			);
+	mConnector.SendControlMessage(
+			new MouseMessage(
+					MouseMessage.LEFT_BUTTON,
+					ControlMessage.CONTROL_UP,
+					0, 0)
+			);
+}
+
+void left_or_right(String id){
+	//send advance back
+	if(id == "left")
+		;
+	//send advance forward
+	else if(id == "right")
+		;
+	
+}
+
+void send_offset(float x, float z){
+	//scale up for accuracy
+	x = x*65000;
+	z = z*65000;
+	
+	mConnector.SendControlMessage(
+			new MouseMessage(
+					MouseMessage.TOUCH_1,
+					ControlMessage.CONTROL_MOVE,
+					(int)x, (int)z)
+			);
+	
+	
+}
+
+
+boolean laser(MotionEvent ev){
+	//turn on accelerometer, initiate laser
+	if(ev.getAction() == MotionEvent.ACTION_DOWN){
+		mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+		//send laser on here
+	}
+	//turn off accelerometer and laser
+	else if(ev.getAction() == MotionEvent.ACTION_UP){
+		mSensorManager.unregisterListener(mSensorListener);
+		//send laser off here
+	}
+	
+	return true;
+}
 
 //button implementations
 void buttonClicked(String id){
