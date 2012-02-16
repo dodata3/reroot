@@ -30,11 +30,14 @@ private SensorManager mSensorManager;
 private final SensorEventListener mSensorListener = new SensorEventListener(){
 	public void onSensorChanged(SensorEvent se){
 		//record last values
-		last_acc = cur_acc;
+		for(int i=0; i<3; i++)
+			last_acc[i] = cur_acc[i];
+		Log.i("Reroot", "old:" + last_acc[0] +", " + last_acc[1] +", " + last_acc[2]);
 		//read current values
 		for(int i=0; i<3; i++)
 			cur_acc[i] = se.values[i];
 		
+		Log.i("Reroot", se.values[0] + ", " + se.values[1] + ", " + se.values[2]);
 		//for now, we care about x and z
 		send_offset(cur_acc[0] - last_acc[0], cur_acc[2] - last_acc[2]);
 		
@@ -159,6 +162,8 @@ void send_offset(float x, float z){
 	x = x*65000;
 	z = z*65000;
 	
+	Log.i("Reroot", "Sending " + x + " and " + z);
+	
 	mConnector.SendControlMessage(
 			new MouseMessage(
 					MouseMessage.TOUCH_1,
@@ -175,11 +180,14 @@ boolean laser(MotionEvent ev){
 	if(ev.getAction() == MotionEvent.ACTION_DOWN){
 		mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 		//send laser on here
+		Log.i("Reroot", "turning on accelerometer");
 	}
 	//turn off accelerometer and laser
 	else if(ev.getAction() == MotionEvent.ACTION_UP){
 		mSensorManager.unregisterListener(mSensorListener);
 		//send laser off here
+		Log.i("Reroot", "turning off accelerometer");
+		
 	}
 	
 	return true;
