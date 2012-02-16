@@ -4,7 +4,6 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent" android:weightSum="1" android:orientation="vertical">
     <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout1" android:orientation="vertical">
-        <TextView android:id="@+id/acctext" android:layout_width="match_parent" android:layout_height="40dp"></TextView>
         <RelativeLayout android:layout_height="wrap_content" android:id="@+id/presen_laser" android:layout_width="wrap_content" android:background="@drawable/presen_laser" android:layout_gravity="center_horizontal"></RelativeLayout>
     </LinearLayout>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout3">
