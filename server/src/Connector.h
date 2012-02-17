@@ -34,7 +34,7 @@ public:
 
 	void AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp,
                     QByteArray inSignMod, QByteArray inSignExp );
-	void RemoveDevice( QString& inRemote );
+	void RemoveDevice( QString& name );
 	//*void RemoveDevice( QHostAddress& inRemote );
 	void RemoveAllDevices();
 	void SetConnectKey( qint32 key = 0 );
@@ -49,7 +49,7 @@ public:
 	CryptoPP::RSA::PrivateKey PrivateEncKey() { return mPrivateEncKey; }
 	CryptoPP::RSA::PublicKey PublicSignKey() { return mPublicSignKey; }
 	CryptoPP::RSA::PrivateKey PrivateSignKey() { return mPrivateSignKey; }
-
+//
 signals:
 	void HandshakeSuccessful( QString deviceName );
 

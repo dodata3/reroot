@@ -110,7 +110,7 @@ void MainWindow::createIconGroupBox()
 
 	iconComboBox = new QComboBox;
 	iconComboBox->addItem(QIcon(":/images/bad.svg"), tr("Bad"));
-	iconComboBox->addItem(QIcon(":/images/heart.svg"), tr("Heart"));
+	iconComboBox->addItem(QIcon(":/images/heart.svg"), tr("Reroot"));
 	iconComboBox->addItem(QIcon(":/images/trash.svg"), tr("Trash"));
 
 	showIconCheckBox = new QCheckBox(tr("Show icon"));

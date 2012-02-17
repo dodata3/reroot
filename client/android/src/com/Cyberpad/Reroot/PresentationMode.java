@@ -159,8 +159,8 @@ void left_or_right(String id){
 
 void send_offset(float x, float z){
 	//scale up for accuracy
-	x = x*65000;
-	z = z*65000;
+	x = x*65000*5;
+	z = z*65000*5;
 	
 	Log.i("Reroot", "Sending " + x + " and " + z);
 	

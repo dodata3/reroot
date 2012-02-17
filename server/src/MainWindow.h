@@ -19,7 +19,7 @@ class QMenu;
 class QPushButton;
 class QSpinBox;
 class QTextEdit;
-
+//
 class MainWindow : public QDialog
 {
 	Q_OBJECT

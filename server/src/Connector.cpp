@@ -24,23 +24,23 @@ Connector::Connector() :
     // Generate keys
     Cipher::GenerateKeypair( mPublicEncKey, mPrivateEncKey );
     Cipher::GenerateKeypair( mPublicSignKey, mPrivateSignKey );
-	mIncomingPort = new OSCPort( mListenerAddress, REROOT_SERVER_PORT );
+	mpIncomingPort = new OSCPort( mListenerAddress, REROOT_SERVER_PORT );
 	QString controlAddress = QString( "/control" );
-	mIncomingPort->addListener( controlAddress, mControl );
+	mpIncomingPort->addListener( controlAddress, mControl );
 	QString handshakeAddress = QString( "/handshake_client" );
-	mIncomingPort->addListener( handshakeAddress, mHandshake );
-	mIncomingPort->startListening();
+	mpIncomingPort->addListener( handshakeAddress, mHandshake );
+	mpIncomingPort->startListening();
 }
 
 Connector::~Connector()
 {
-	mIncomingPort->stopListening();
-	mIncomingPort->close();
-	mIncomingPort->terminate();
-	if( !mIncomingPort->wait() )
+	mpIncomingPort->stopListening();
+	mpIncomingPort->close();
+	mpIncomingPort->terminate();
+	if( !mpIncomingPort->wait() )
         qWarning( "Incoming port thread termination timeout." );
-	delete mIncomingPort;
-	mIncomingPort = NULL;
+	delete mpIncomingPort;
+	mpIncomingPort = NULL;
 	RemoveAllDevices();
 }
 
@@ -94,12 +94,22 @@ quint32 Connector::GetConnectKey()
     return key;
 }
 
-void Connector::RemoveDevice( QHostAddress& inRemote )
+void Connector::RemoveDevice( QString& name )
 {
 	mLock.lock();
-	delete mDeviceMap[ inRemote.toString() ].port;
-	mDeviceMap.remove( inRemote.toString() );
+	CloseOSCPort( mDeviceMap[ name ].port );
+	delete mDeviceMap[ name ].port;
+	mDeviceMap.remove( name );
 	mLock.unlock();
+}
+
+void Connector::CloseOSCPort( OSCPort* port )
+{
+  port->stopListening();
+  port->terminate();
+  if( !port->wait() )
+        qWarning( "Incoming port thread termination timeout." );
+  port->close();
 }
 
 void Connector::RemoveAllDevices()
