@@ -213,8 +213,8 @@ public class PadActivity extends Activity {
 						
 						this.last_tap = System.currentTimeMillis();
 						this.tapstate = "double_tap";
-						Toast.makeText(PadActivity.this,
-								"Started double tap...", Toast.LENGTH_SHORT).show();
+						/*Toast.makeText(PadActivity.this,
+								"Started double tap...", Toast.LENGTH_SHORT).show();*/
 					}
 					
 					//return without sending anything
@@ -430,6 +430,7 @@ public class PadActivity extends Activity {
 	private void sendKey(int keycode){
 		String meta = new Character(Character.toChars(PadActivity.charmap.get(keycode,  0))[0]).toString();
 		int meta1 = (int)meta.charAt(0);
+		Log.i("Reroot", "single: sending key " + meta );
 			
 		mConnector.SendControlMessage(
 				new KeyboardMessage(
@@ -501,43 +502,52 @@ public class PadActivity extends Activity {
 							break;
 						}
 			
+			//here just sending a heads up that the next character would have held down shift or control to achieve
+			//real character gets reverted back to whatever
 			if(isCtrl || isShift){
 				String meta = new Character ((char)0).toString();
+				
+				Log.i("Reroot", "isctrl: sending key " + meta );
 				
 				if(isCtrl){
 				mConnector.SendControlMessage(
 				new KeyboardMessage(
-					57,
+					(int)c_c,
 					ControlMessage.CONTROL_DOWN,
 					(int)meta.charAt(0), 0));
 				mConnector.SendControlMessage(
 						new KeyboardMessage(
-							57,
+							(int)c_c,
 							ControlMessage.CONTROL_UP,
 							(int)meta.charAt(0), 0));
 				}
 				if(isShift){
+					
+					Log.i("Reroot", "shift: sending key " + meta);
+					
 					mConnector.SendControlMessage(
 							new KeyboardMessage(
-								59,
+								(int)c_c,
 								ControlMessage.CONTROL_DOWN,
 								(int)meta.charAt(0), 0));
 					mConnector.SendControlMessage(
 							new KeyboardMessage(
-								59,
+								(int)c_c,
 								ControlMessage.CONTROL_UP,
 								(int)meta.charAt(0), 0));
 				}
 			}
 			
+			Log.i("Reroot", "c_c: sending key " + c_c );
+			
 			mConnector.SendControlMessage(
 					new KeyboardMessage(
-							key+68,
+							(int)c_c,//key+68,
 							ControlMessage.CONTROL_DOWN,
 							(int)c_c, 0));
 			mConnector.SendControlMessage(
 					new KeyboardMessage(
-							key+68,
+							(int)c_c,//key+68,
 							ControlMessage.CONTROL_UP,
 							(int)c_c, 0));
 			

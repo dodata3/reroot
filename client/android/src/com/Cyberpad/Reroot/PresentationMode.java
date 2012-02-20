@@ -21,12 +21,13 @@ public class PresentationMode extends Activity {
 private Handler handler = new Handler();
 private static final String TAG = "Reroot";
 private Connector mConnector;
-//accelerometer stuff
-private boolean sensorOn = false;
+//accelerometer stuff (--using orientation instead at the moment)
 private float cur_acc[] = {0, 0, 0};
 private float last_acc[] = {0, 0, 0};
+//click button stuff
+private long tap_time = 0;
 
-//orientation stuff
+//orientation stuff (red button)
 private float last_or[] = {0, 0, 0};
 private float cur_or[] = {0, 0, 0};
 
@@ -75,9 +76,7 @@ public void onCreate(Bundle savedInstanceState){
 	//accelerometer stuff
 	mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-	mOrientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-	//mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-	
+	mOrientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);	
 	
 	mConnector = Connector.getInstance(this);
 	
@@ -109,9 +108,9 @@ protected void onPause(){
 private void initClick(){
 	RelativeLayout clickBtn = (RelativeLayout)this.findViewById(R.id.presen_click);
 	
-	clickBtn.setOnClickListener(new View.OnClickListener(){
-		public void onClick(View v){
-			click();
+	clickBtn.setOnTouchListener(new View.OnTouchListener(){
+		public boolean onTouch(View v, MotionEvent ev){
+			return click(ev);
 		}
 	});
 }
@@ -149,10 +148,21 @@ private void initLaser(){
 }
 
 
-//not quite sure how this button will behave yet
-//for now, send click down and immediate click up
-void click(){
-	mConnector.SendControlMessage(
+boolean click(MotionEvent ev){
+	//record time that the finger went down, turn on orientator
+	if(ev.getAction() == MotionEvent.ACTION_DOWN){
+		this.tap_time = System.currentTimeMillis();
+		mSensorManager.registerListener(mSensorListener, mOrientation, SensorManager.SENSOR_DELAY_GAME);
+		Log.i("Reroot", "turning on orientator");
+	}
+	//turn off accelerometer and laser
+	else if(ev.getAction() == MotionEvent.ACTION_UP){
+		mSensorManager.unregisterListener(mSensorListener);
+		Log.i("Reroot", "turning off orientator");
+		//if they are within click threshold, send a click
+		long now = System.currentTimeMillis();
+		if(now - this.tap_time < 200){
+				mConnector.SendControlMessage(
 			new MouseMessage(
 					MouseMessage.LEFT_BUTTON,
 					ControlMessage.CONTROL_DOWN,
@@ -164,6 +174,11 @@ void click(){
 					ControlMessage.CONTROL_UP,
 					0, 0)
 			);
+			
+		}
+	}
+	
+	return true;
 }
 
 void left_or_right(String id){
@@ -232,24 +247,6 @@ boolean laser(MotionEvent ev){
 	}
 	
 	return true;
-}
-
-//button implementations
-void buttonClicked(String id){
-	if(id=="click")
-		mConnector.SendControlMessage(
-				new MouseMessage(
-						MouseMessage.LEFT_BUTTON,
-						ControlMessage.CONTROL_DOWN,
-						0, 0)
-				);
-	else if(id=="right")
-		;
-	else if(id=="left")
-		;
-	else if(id=="laser")
-		;
-	
 }
 	
 
