@@ -1,30 +1,31 @@
 #include "Presenter.h"
 
 #include <QApplication>
-#include <QEvent>
 
 PresenterPoint::PresenterPoint(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
 
 }
 
-bool PresenterFilter::eventFilter(QObject* obj, QEvent* ev)
+bool PresenterPoint::event(QEvent* ev)
 {
-	//QKeyEvent* pKeyEvent = qobject_cast<QKeyEvent*>(ev);
-    //QMouseEvent* pMouseEvent = qobject_cast<QMouseEvent*>(ev);
-	//QKeyEvent* pKeyEvent = static_cast<QKeyEvent*>(ev);
-	//QMouseEvent* pMouseEvent = static_cast<QMouseEvent*>(ev);
-
+	/*
 	switch (ev->type())
 	{
-	case QEvent::MouseButtonDblClick:
+	case QEvent::KeyPress:
+	case QEvent::KeyRelease:
 	case QEvent::MouseButtonPress:
 	case QEvent::MouseButtonRelease:
-		//QDebug() << "Filter happens\n";
-		return true;
+	case QEvent::MouseButtonDblClick:
+		
+		return false;
 	default:
-		return QObject::eventFilter(obj, ev);
+		ev->accept();
+		//ev->ignore();
+		return true;
 	}
+	return true;*/
+	return QLabel::event(ev);
 }
 
 Presenter* Presenter::sInstance = NULL;
@@ -69,7 +70,6 @@ void Presenter::Init()
 	mWindow.setStyleSheet("background:transparent;");
 	mWindow.setAttribute(Qt::WA_TranslucentBackground);
 	mWindow.setAttribute(Qt::WA_TransparentForMouseEvents);
-	mWindow.installEventFilter(&mFilter);
 	mWindow.setFocusPolicy(Qt::NoFocus);
 	mWindow.setPixmap(*sPointImage);
 	Point(QPoint(640, 640));

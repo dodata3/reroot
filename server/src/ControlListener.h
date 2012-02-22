@@ -16,8 +16,7 @@ public:
     {
         Mouse = 0,
         Keyboard,
-        Gamepad,
-		Presenter
+        Gamepad
     } DeviceEnum;
 
     typedef enum ActionEnum

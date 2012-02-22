@@ -107,7 +107,7 @@ Keyboard::Keycode Keyboard::WindowsDIConvert(Keycode key)
 		return DIKEYBOARD_EQUALS;
 	
 		return DIKEYBOARD_BACK;
-	case '\t':
+	
 		return DIKEYBOARD_TAB;
 	case 'q':
 		return DIKEYBOARD_Q;
@@ -129,11 +129,11 @@ Keyboard::Keycode Keyboard::WindowsDIConvert(Keycode key)
 		return DIKEYBOARD_O;
 	case 'p':
 		return DIKEYBOARD_P;
-	case '[':
+	
 		return DIKEYBOARD_LBRACKET;
-	case ']':
+	
 		return DIKEYBOARD_RBRACKET;
-	case '\n':
+	
 		return DIKEYBOARD_RETURN;
 	
 		return DIKEYBOARD_LCONTROL;
@@ -211,7 +211,6 @@ Keyboard::Keycode Keyboard::WindowsDIConvert(Keycode key)
 		return DIKEYBOARD_NUMPAD7;
 		return DIKEYBOARD_NUMPAD8;
 		return DIKEYBOARD_NUMPAD9;
-//	case '-':
 		return DIKEYBOARD_SUBTRACT;
 		return DIKEYBOARD_NUMPAD4;
 		return DIKEYBOARD_NUMPAD5;

@@ -10,21 +10,14 @@
 
 class PresenterPoint : public QLabel
 {
-	//Q_OBJECT
 public:
 	PresenterPoint(QWidget* parent = 0, Qt::WindowFlags f = 0);
-};
-
-class PresenterFilter : public QObject
-{
-	//Q_OBJECT
-protected:
-	bool eventFilter(QObject* obj, QEvent* ev);
+	bool event(QEvent* ev);
 };
 
 class Presenter
 {
-	// static
+	//static
 private:
 	static Presenter* sInstance;
 
@@ -43,7 +36,6 @@ private:
 	
 	//QCursor mCursor;
 	PresenterPoint mWindow;
-	PresenterFilter mFilter;
 	bool mActive;
 
     Presenter();

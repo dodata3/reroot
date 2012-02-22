@@ -7,7 +7,6 @@
 #include "ControlListener.h"
 #include "Mouse.h"
 #include "Keyboard.h"
-#include "Presenter.h"
 #include <iostream>
 
 using namespace std;
@@ -68,23 +67,6 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
 
     case Gamepad:
         break;
-
-	case Presenter:
-		switch (i.Action)
-		{
-		case Down:
-			Presenter::Get().Start();
-			break;
-		case Up:
-			Presenter::Get().Stop();
-			break;
-		case Move:
-			Presenter::Get().Point(QPoint(i.Data1, i.Data2));
-			break;
-		default:
-			qDebug() << "Unknown presenter action " << i.Action << ".\n";
-			break;
-		}
 
     default:
         qDebug() << "Unknown Device Command: idx = " << i.Device;
