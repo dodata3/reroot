@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:weightSum="1"
+  android:background="@drawable/generic_background">
+    <RelativeLayout android:layout_height="88dp" android:background="@drawable/y_btn" android:layout_width="88dp" android:id="@+id/y_btn" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/b_btn"></RelativeLayout>
+    <RelativeLayout android:layout_height="88dp" android:background="@drawable/b_btn" android:layout_width="88dp" android:id="@+id/b_btn" android:layout_above="@+id/t_btn" android:layout_alignParentRight="true" android:layout_marginBottom="22dp"></RelativeLayout>
+    <RelativeLayout android:layout_height="88dp" android:background="@drawable/x_btn" android:layout_width="88dp" android:id="@+id/x_btn" android:layout_alignTop="@+id/b_btn" android:layout_toLeftOf="@+id/y_btn"></RelativeLayout>
+    <RelativeLayout android:layout_height="88dp" android:background="@drawable/a_btn" android:layout_width="88dp" android:id="@+id/a_btn" android:layout_alignParentBottom="true" android:layout_toRightOf="@+id/x_btn" android:layout_marginBottom="41dp"></RelativeLayout>
+    <RelativeLayout android:layout_height="88dp" android:background="@drawable/t_btn" android:layout_width="88dp" android:id="@+id/t_btn" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"></RelativeLayout>
+    <Button android:text="Select" android:layout_width="80dp" android:layout_height="wrap_content" android:id="@+id/select_btn" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:layout_marginLeft="17dp"></Button>
+    <AbsoluteLayout android:background="@drawable/dualstick_carriage" android:layout_height="wrap_content" android:id="@+id/analog_stick" android:layout_width="200dp" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/t_btn">
+        <ImageView android:background="@drawable/dualstick_head" android:layout_y="34dp" android:layout_height="wrap_content" android:layout_x="35dp" android:layout_width="wrap_content"></ImageView>
+    </AbsoluteLayout>
+    <Button android:text="Start" android:layout_width="80dp" android:layout_height="wrap_content" android:id="@+id/start_btn" android:layout_alignParentBottom="true" android:layout_toRightOf="@+id/select_btn" android:layout_marginLeft="15dp"></Button>
+    
+</RelativeLayout>
