@@ -53,6 +53,7 @@ private:
     void Deinit();
 
     #ifdef OS_WINDOWS
+
 	Keycode WindowsDIConvert(Keycode key);
     void WindowsModifierKey(ModifierKeycode key, bool up);
     void WindowsKey(Keycode key, bool up);

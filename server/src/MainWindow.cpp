@@ -214,7 +214,6 @@ void MainWindow::disconnectAll()
 {
 	// Tell the connector to disconnect all devices
 	mConnector.RemoveAllDevices();
-	Presenter::Get().Start();
 }
 
 void MainWindow::connectNew()
