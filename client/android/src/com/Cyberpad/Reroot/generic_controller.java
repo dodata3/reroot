@@ -1,12 +1,20 @@
 package com.Cyberpad.Reroot;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,9 +23,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+
+
 public class generic_controller extends Activity{
 	private Connector mConnector;
 	private boolean multiEnabled;
+	private static final String TAG = "Reroot";
 	
 	//buttons
 	private AbsoluteLayout carriage;
@@ -28,6 +39,21 @@ public class generic_controller extends Activity{
 	
 	private boolean keypress[];
 	
+	//orientation stuff (red button)
+	private float cur_or[] = {0, 0, 0};
+
+	private SensorManager mSensorManager;
+	private final SensorEventListener mSensorListener = new SensorEventListener(){
+		public void onSensorChanged(SensorEvent se){
+			if(se.sensor.getType() == Sensor.TYPE_ORIENTATION)
+				send_orientation(se.values[2], se.values[1]);
+		}
+		//don't need to do anything for this one
+		public void onAccuracyChanged(Sensor sensor, int accuracy){}
+	};
+
+	private Sensor mOrientation;
+	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.generic);
@@ -37,15 +63,36 @@ public class generic_controller extends Activity{
 		multiEnabled = WrappedMotionEvent.isMultitouchCapable();
 		mConnector = Connector.getInstance(this);
 		
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		mOrientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+		mConnector = Connector.getInstance(this);
+		mSensorManager.registerListener(mSensorListener, mOrientation, SensorManager.SENSOR_DELAY_GAME);
+		
 		//initialize carriage array
 		keypress = new boolean[4];
 		for(int i=0; i<4; i++)
 			keypress[i] = false;
 		
 		//initialize the background listener
-		this.init_btns();
-		this.init_background();
+		try{
+			this.init_btns();
+			this.init_background();
+		}
+		catch(Exception e){
+			Log.d(TAG, "Could not create the OSCPort");
+	    	Log.d(TAG, e.toString());
+		}
 		
+	}
+	
+	protected void onResume(){
+		super.onResume();
+		mSensorManager.registerListener(mSensorListener, mOrientation, SensorManager.SENSOR_DELAY_GAME);
+	}
+
+	protected void onPause(){
+		super.onPause();
+		mSensorManager.unregisterListener(mSensorListener);
 	}
 	
 	private void init_btns(){
@@ -101,6 +148,22 @@ public class generic_controller extends Activity{
 		
 	}
 	
+	//orientation
+	void send_orientation(float yaw, float pitch){
+		yaw = -yaw/8;
+		pitch = pitch/8;
+		
+		yaw = yaw * 65000;
+		pitch = pitch * 65000;
+		
+		mConnector.SendControlMessage(
+				new MouseMessage(
+						MouseMessage.TOUCH_1,
+						ControlMessage.CONTROL_MOVE,
+						(int) yaw, (int) pitch
+				));
+		
+	}
 
 	//have to do it this way due to multitouch
 	@SuppressWarnings("deprecation")
@@ -302,23 +365,40 @@ public class generic_controller extends Activity{
 			break;
 		//select
 		case 2:
+			//press i (for minecraft inventory) {for now}
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							(int)'i',
+							ControlMessage.CONTROL_DOWN,
+							(int)'i', 0));
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							(int)'i',
+							ControlMessage.CONTROL_UP,
+							(int)'i', 0));
 			break;
 		//y
 		case 3:
+			//switch weapon (mouse scroll wheel?)
+			mConnector.SendControlMessage(
+					new MouseMessage(
+							MouseMessage.MIDDLE_BUTTON,
+							ControlMessage.CONTROL_MOVE,
+							1, 0));
 			break;
 		//x
 		case 4:
-			//send reload (r)
+			//send use (e)
 			mConnector.SendControlMessage(
 					new KeyboardMessage(
-							(int)'r',
+							(int)'e',
 							ControlMessage.CONTROL_DOWN,
-							(int)' ', 0));
+							(int)'e', 0));
 			mConnector.SendControlMessage(
 					new KeyboardMessage(
-							(int)' ',
+							(int)'e',
 							ControlMessage.CONTROL_UP,
-							(int)'r', 0));
+							(int)'e', 0));
 			break;
 		//a
 		case 5:
@@ -336,9 +416,32 @@ public class generic_controller extends Activity{
 			break;
 		//b
 		case 6:
+			//send reload (r)
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							(int)'r',
+							ControlMessage.CONTROL_DOWN,
+							(int)'r', 0));
+			mConnector.SendControlMessage(
+					new KeyboardMessage(
+							(int)'r',
+							ControlMessage.CONTROL_UP,
+							(int)'r', 0));
 			break;
 		//t
 		case 7:
+			if(ev.getAction() == MotionEvent.ACTION_DOWN)
+				mConnector.SendControlMessage(
+						new MouseMessage(
+								MouseMessage.RIGHT_BUTTON,
+								ControlMessage.CONTROL_DOWN,
+								0, 0));
+			else if(ev.getAction() == MotionEvent.ACTION_UP)
+				mConnector.SendControlMessage(
+						new MouseMessage(
+								MouseMessage.RIGHT_BUTTON,
+								ControlMessage.CONTROL_UP,
+								0, 0));
 			break;
 		}
 		
