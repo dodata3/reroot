@@ -21,6 +21,7 @@ public class MainMenuActivity extends Activity{
 		Button hybrid_mode = (Button)findViewById(R.id.hybrid_mode);
 		Button dualstick_mode = (Button)findViewById(R.id.dualstick_mode);
 		Button acc_test = (Button)findViewById(R.id.acc_test);
+		Button generic = (Button)findViewById(R.id.generic);
 	
 		 hybrid_mode.setOnClickListener(new OnClickListener() {
 	        	public void onClick(View v){
@@ -39,6 +40,22 @@ public class MainMenuActivity extends Activity{
 				 onAccClick();
 			 }
 		 });
+		 
+		 generic.setOnClickListener(new OnClickListener(){
+			 public void onClick(View v){
+				 onGenClick();
+			 }
+		 });
+	}
+	
+	public void onGenClick(){
+		try{
+			Intent i = new Intent(this, generic_controller.class);
+			this.startActivity(i);
+		}
+		catch(Exception ex){
+			Toast.makeText(this, "Failure", Toast.LENGTH_LONG).show();
+		}		
 	}
 	
 	public void onAccClick(){

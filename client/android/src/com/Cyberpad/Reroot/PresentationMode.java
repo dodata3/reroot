@@ -33,7 +33,7 @@ private float cur_or[] = {0, 0, 0};
 
 private SensorManager mSensorManager;
 private final SensorEventListener mSensorListener = new SensorEventListener(){
-	public void onSensorChanged(SensorEvent se){
+	public void onSensorChanged(SensorEvent se){		
 		if(se.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
 			//record last values
 			for(int i=0; i<3; i++)

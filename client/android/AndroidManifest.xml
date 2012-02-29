@@ -35,6 +35,8 @@
         <activity android:name="MainMenuActivity"></activity>
         <activity android:name="dualstickActivity"></activity>
         <activity android:name="PresentationMode" android:screenOrientation="portrait"></activity>
+        <activity android:name="generic_controller"></activity>
+        <activity android:name="RerootKeyboard"></activity>
 
 
     </application>
