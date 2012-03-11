@@ -150,4 +150,139 @@
 #define DIKEYBOARD_MAIL 0x04EC // (* Mail *)
 #define DIKEYBOARD_MEDIASELECT 0x04ED // (* Media Select *)
 
+enum DIkey
+{
+	dikey_na					= 0,
+
+	dikey_escape				= DIKEYBOARD_ESCAPE,
+	dikey_1						= DIKEYBOARD_1,
+	dikey_2						= DIKEYBOARD_2,
+	dikey_3						= DIKEYBOARD_3,
+	dikey_4						= DIKEYBOARD_4,
+	dikey_5						= DIKEYBOARD_5,
+	dikey_6						= DIKEYBOARD_6,
+	dikey_7						= DIKEYBOARD_7,
+	dikey_8						= DIKEYBOARD_8,
+	dikey_9						= DIKEYBOARD_9,
+	dikey_0						= DIKEYBOARD_0,
+
+	dikey_minus					= DIKEYBOARD_MINUS,
+	dikey_equals				= DIKEYBOARD_EQUALS,
+	dikey_backspace				= DIKEYBOARD_BACK,
+	dikey_tab					= DIKEYBOARD_TAB,
+
+	dikey_q						= DIKEYBOARD_Q,
+	dikey_w						= DIKEYBOARD_W,
+	dikey_e						= DIKEYBOARD_E,
+	dikey_r						= DIKEYBOARD_R,
+	dikey_t						= DIKEYBOARD_T,
+	dikey_y						= DIKEYBOARD_Y,
+	dikey_u						= DIKEYBOARD_U,
+	dikey_i						= DIKEYBOARD_I,
+	dikey_o						= DIKEYBOARD_O,
+	dikey_p						= DIKEYBOARD_P,
+
+	dikey_lbracket				= DIKEYBOARD_LBRACKET,
+	dikey_rbracket				= DIKEYBOARD_RBRACKET,
+	dikey_return				= DIKEYBOARD_RETURN,
+	dikey_ctrl_l				= DIKEYBOARD_LCONTROL,
+
+	dikey_a						= DIKEYBOARD_P,
+	dikey_s						= DIKEYBOARD_P,
+	dikey_d						= DIKEYBOARD_P,
+	dikey_f						= DIKEYBOARD_P,
+	dikey_g						= DIKEYBOARD_P,
+	dikey_h						= DIKEYBOARD_P,
+	dikey_j						= DIKEYBOARD_P,
+	dikey_k						= DIKEYBOARD_P,
+	dikey_l						= DIKEYBOARD_P,
+
+	dikey_semicolon				= DIKEYBOARD_SEMICOLON,
+	dikey_apostrophe			= DIKEYBOARD_APOSTROPHE,
+	dikey_grave					= DIKEYBOARD_GRAVE,
+	dikey_shift_l				= DIKEYBOARD_LSHIFT,
+	dikey_backslash				= DIKEYBOARD_BACKSLASH,
+
+	dikey_z						= DIKEYBOARD_Z,
+	dikey_x						= DIKEYBOARD_X,
+	dikey_c						= DIKEYBOARD_C,
+	dikey_v						= DIKEYBOARD_V,
+	dikey_b						= DIKEYBOARD_B,
+	dikey_n						= DIKEYBOARD_N,
+	dikey_m						= DIKEYBOARD_M,
+	
+	dikey_comma					= DIKEYBOARD_COMMA,
+	dikey_period				= DIKEYBOARD_PERIOD,
+	dikey_slash					= DIKEYBOARD_SLASH,
+	dikey_shift_r				= DIKEYBOARD_RSHIFT,
+	dikey_multiply				= DIKEYBOARD_MULTIPLY,
+	dikey_alt_l					= DIKEYBOARD_LMENU,
+	dikey_space					= DIKEYBOARD_SPACE,
+	dikey_capslock				= DIKEYBOARD_CAPITAL,
+
+	dikey_f1					= DIKEYBOARD_F1,
+	dikey_f2					= DIKEYBOARD_F2,
+	dikey_f3					= DIKEYBOARD_F3,
+	dikey_f4					= DIKEYBOARD_F4,
+	dikey_f5					= DIKEYBOARD_F5,
+	dikey_f6					= DIKEYBOARD_F6,
+	dikey_f7					= DIKEYBOARD_F7,
+	dikey_f8					= DIKEYBOARD_F8,
+	dikey_f9					= DIKEYBOARD_F9,
+	dikey_f10					= DIKEYBOARD_F10,
+
+	dikey_numlock					= DIKEYBOARD_NUMLOCK,
+	dikey_scrolllock				= DIKEYBOARD_SCROLL,
+	dikey_num7						= DIKEYBOARD_NUMPAD7,
+	dikey_num8						= DIKEYBOARD_NUMPAD8,
+	dikey_num9						= DIKEYBOARD_NUMPAD9,
+	dikey_subtract					= DIKEYBOARD_SUBTRACT,
+	dikey_num4						= DIKEYBOARD_NUMPAD4,
+	dikey_num5						= DIKEYBOARD_NUMPAD5,
+	dikey_num6						= DIKEYBOARD_NUMPAD6,
+	dikey_add						= DIKEYBOARD_ADD,
+	dikey_num1						= DIKEYBOARD_NUMPAD1,
+	dikey_num2						= DIKEYBOARD_NUMPAD2,
+	dikey_num3						= DIKEYBOARD_NUMPAD3,
+	dikey_num0						= DIKEYBOARD_NUMPAD0,
+	dikey_decimal					= DIKEYBOARD_DECIMAL,
+	dikey_oem_102					= DIKEYBOARD_OEM_102, // backslash?
+
+	dikey_f11						= DIKEYBOARD_F11,
+	dikey_f12						= DIKEYBOARD_F12,
+	dikey_f13						= DIKEYBOARD_F13,
+	dikey_f14						= DIKEYBOARD_F14,
+	dikey_f15						= DIKEYBOARD_F15,
+
+	//stuff
+
+	dikey_ctrl_r					= DIKEYBOARD_RCONTROL,
+
+	//stuff
+
+	dikey_alt_r						= DIKEYBOARD_RMENU,
+
+	dikey_pause						= DIKEYBOARD_PAUSE,
+	dikey_home						= DIKEYBOARD_HOME,
+	dikey_up						= DIKEYBOARD_UP,
+	dikey_pgup						= DIKEYBOARD_PRIOR,
+	dikey_left						= DIKEYBOARD_LEFT,
+	dikey_right						= DIKEYBOARD_RIGHT,
+	dikey_end						= DIKEYBOARD_END,
+	dikey_down						= DIKEYBOARD_DOWN,
+	dikey_pgdn						= DIKEYBOARD_NEXT,
+	dikey_insert					= DIKEYBOARD_INSERT,
+	dikey_delete					= DIKEYBOARD_DELETE,
+
+	dikey_meta_l					= DIKEYBOARD_LWIN,
+	dikey_meta_r					= DIKEYBOARD_RWIN,
+	dikey_apps						= DIKEYBOARD_APPS,
+
+	dikey_power						= DIKEYBOARD_POWER,
+	dikey_sleep						= DIKEYBOARD_SLEEP,
+	dikey_wake						= DIKEYBOARD_WAKE,
+
+	//stuff
+};
+
 #endif // DIRECTINPUT_H_

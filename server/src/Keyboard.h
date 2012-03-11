@@ -5,6 +5,8 @@
 #define KEYBOARD_H_
 
 #include "OS.h"
+#include "DirectInput.h"
+#include "Unicode.h"
 
 class Keyboard
 {
@@ -19,7 +21,9 @@ public:
     // Look into Qt's localization functionality
     // to see if it can translate letter to keycode
     // across different keyboard layouts, etc.
-    typedef unsigned int Keycode;
+    
+	/*
+	typedef unsigned int Keycode;
 
     enum ModifierKeycode
     {
@@ -43,6 +47,7 @@ public:
 
         ModAltGr    = 0x0100
     };
+	*/
 
     // non-static
 private:
@@ -54,9 +59,9 @@ private:
 
     #ifdef OS_WINDOWS
 
-	Keycode WindowsDIConvert(Keycode key);
-    void WindowsModifierKey(ModifierKeycode key, bool up);
-    void WindowsKey(Keycode key, bool up);
+	DIkey WindowsDIConvert(Ukey key);
+    //void WindowsModifierKey(ModifierKeycode key, bool up);
+    void WindowsKey(Ukey key, bool up);
     #endif //OS_WINDOWS
 
     #ifdef OS_LINUX
@@ -65,11 +70,11 @@ private:
     #endif // OS_LINUX
 
 public:
-    void ModifierDown(ModifierKeycode key);
-    void ModifierUp(ModifierKeycode key);
+    //void ModifierDown(ModifierKeycode key);
+    //void ModifierUp(ModifierKeycode key);
 
-    void Down(Keycode key);
-    void Up(Keycode key);
+    void Down(Ukey key);
+    void Up(Ukey key);
 
 
 };

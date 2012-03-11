@@ -107,9 +107,11 @@ int Context::ProcessID()
 void Context::SwitchContext()
 {
 	#ifdef OS_WINDOWS
-		Keyboard::Get().ModifierDown(Keyboard::ModAlt);
-		Keyboard::Get().Down(Keyboard::Keycode('\t'));
-		Keyboard::Get().Up(Keyboard::Keycode('\t'));
-		Keyboard::Get().ModifierUp(Keyboard::ModAlt);
+		//Keyboard::Get().ModifierDown(Keyboard::ModAlt);
+		Keyboard::Get().Down(ukey_alt_l);
+		Keyboard::Get().Down(Ukey('\t'));
+		Keyboard::Get().Up(Ukey('\t'));
+		Keyboard::Get().Up(ukey_alt_l);
+		//Keyboard::Get().ModifierUp(Keyboard::ModAlt);
 	#endif // OS_WINDOWS
 }
