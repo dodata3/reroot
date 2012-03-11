@@ -24,6 +24,9 @@ class MainWindow : public QDialog
 {
 	Q_OBJECT
 
+public: // Need a better way to access the main window
+	static MainWindow* sMainWindow;
+
 public:
 	MainWindow();
 
@@ -38,6 +41,8 @@ private slots:
 	void showMessage();
 	void messageClicked();
 	void connectNew();
+	void connectionSuccess(QString name);
+	void disconnectDevice(QString& id);
 	void disconnectAll();
 
 private:
@@ -68,8 +73,14 @@ private:
 	QAction *disconnectAllAction;
 	QAction *exitAction;
 
+	QMap<QString, QAction*> disconnectDeviceActions;
+	//QList<QAction*> disconnectDeviceActions;
+
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
+
+	// Submenu of trayIconMenu
+	QMenu *deviceMenu;
 
 	Connector mConnector;
 	ConnectDialog mConnectDialog;

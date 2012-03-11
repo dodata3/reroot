@@ -52,11 +52,11 @@ void ControlListener::acceptDecipheredMessage( QHostAddress& address, QDateTime&
         switch( i.Action )
         {
         case Down:
-            Keyboard::Get().Down( i.Control );
+            Keyboard::Get().Down( Ukey(i.Control) );
             qDebug() << "Key down message: keycode " << i.Control << " character";
             break;
         case Up:
-            Keyboard::Get().Up( i.Control );
+            Keyboard::Get().Up( Ukey(i.Control) );
             qDebug() << "Key up message: keycode " << i.Control << " character " << i.Data2;
             break;
         default:

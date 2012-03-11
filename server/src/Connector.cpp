@@ -58,6 +58,7 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 	SendHandshake( inRemote.toString() );
 	qDebug() << "Added new device: " << inRemote.toString() << " to list of allowed devices";
 	emit HandshakeSuccessful( inRemote.toString() );
+
 }
 
 void Connector::SendHandshake( QString inDeviceName )

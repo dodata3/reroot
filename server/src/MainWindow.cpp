@@ -12,6 +12,8 @@
 
 using namespace std;
 
+MainWindow* MainWindow::sMainWindow = NULL;
+
 MainWindow::MainWindow() :
     mConnectDialog( &mConnector )
 {
@@ -31,6 +33,8 @@ MainWindow::MainWindow() :
 		this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     connect( &mConnector, SIGNAL( HandshakeSuccessful( QString ) ),
         &mConnectDialog, SLOT( ConnectionSuccess( QString ) ) );
+	//connect( &mConnector, SIGNAL( HandshakeSuccessful( QString ) ),
+	//	this, SLOT( ConnectionSuccess( QString ) ) );
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(iconGroupBox);
@@ -202,6 +206,8 @@ void MainWindow::createTrayIcon()
 	trayIconMenu = new QMenu(this);
 	trayIconMenu->addAction(connectAction);
 	trayIconMenu->addAction(advancedAction);
+	//deviceMenu = new QMenu(trayIconMenu);
+	//trayIconMenu->addMenu(deviceMenu);
 	trayIconMenu->addAction(disconnectAllAction);
 	trayIconMenu->addSeparator();
 	trayIconMenu->addAction(exitAction);
@@ -210,42 +216,48 @@ void MainWindow::createTrayIcon()
 	trayIcon->setContextMenu(trayIconMenu);
 }
 
+void MainWindow::disconnectDevice(QString& id)
+{
+	//disconnect(disconnectDeviceActions[id]);
+	//disconnectDeviceActions.erase(id);
+	
+	mConnector.RemoveDevice(id);
+
+	//QMap<QString, QAction*>::iterator i = disconnectDeviceActions.find(id);
+	//deviceMenu->removeAction((i->second));
+	//delete i->second;
+	//disconnectDeviceActions.erase(i);
+	for (QList<QAction*>::const_iterator i = deviceMenu->actions().begin(); i != deviceMenu->actions().end(); ++i) {
+		if (id == (*i)->objectName()) {
+			deviceMenu->removeAction(*i);
+		}
+	}
+}
+
 void MainWindow::disconnectAll()
 {
 	// Tell the connector to disconnect all devices
+	//for (QMap<QString, QAction*>::iterator i = disconnectDeviceActions.begin(); i != disconnectDeviceActions.end(); ++i)
+	//{
+	//	delete i->second;
+	//}
+
 	mConnector.RemoveAllDevices();
+
+	//deviceMenu->clear();
+}
+
+void MainWindow::connectionSuccess(QString name)
+{
+	//QAction *disconnectDeviceAction = new QAction(name, deviceMenu);
+	//disconnectDeviceActions[id] = disconnectDeviceAction;
 }
 
 void MainWindow::connectNew()
-{
-    /*
-    for (unsigned int i = 0; i < 10000; ++i)
-    {
-        //printf("%u", i);
-        printf("");
-    }
-    for (unsigned int k = 32; k < 1024; ++k)
-    {
-        for (unsigned int i = 0; i < 10; ++i)
-        {
-            //printf("%u", i);
-            printf("", i);
-        }
-        //Keyboard::Get().Down(k);
-        //Keyboard::Get().Up(k);
-        //printf("\n%u\n", k);
-    }
-    // For testing purposes
-    #ifdef OS_WINDOWS
-        Keyboard::Get().ModifierDown(Keyboard::ModAlt);
-        Keyboard::Get().Down(0x0009); // Tab
-        Keyboard::Get().Up(0x0009); // Tab
-        Keyboard::Get().ModifierUp(Keyboard::ModAlt);
-    #endif
-    Context::Get().Title();
-    Context::Get().ProcessID();
-    Context::Get().Executable();
-    */
+{   
+	//connect(disconnectDeviceAction, SIGNAL(triggered()), this, SLOT(disconnectDevice(QString&)));
+	//disconnectDeviceActions.push_back(disconnectDeviceAction);
+
 	// Spawn a new window which can be used to connect, give information to the connector
 
 	mConnectDialog.ConnectNewDevice();

@@ -22,5 +22,6 @@ int main( int argc, char *argv[] )
 	atexit(Keyboard::Clear);
 
 	MainWindow w;
+	MainWindow::sMainWindow = &w;
 	return a.exec();
 }
