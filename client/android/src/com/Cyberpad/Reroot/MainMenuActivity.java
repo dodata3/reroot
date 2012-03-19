@@ -22,6 +22,7 @@ public class MainMenuActivity extends Activity{
 		Button dualstick_mode = (Button)findViewById(R.id.dualstick_mode);
 		Button acc_test = (Button)findViewById(R.id.acc_test);
 		Button generic = (Button)findViewById(R.id.generic);
+		Button keyboard_test = (Button)findViewById(R.id.keyboard_test);
 	
 		 hybrid_mode.setOnClickListener(new OnClickListener() {
 	        	public void onClick(View v){
@@ -46,6 +47,23 @@ public class MainMenuActivity extends Activity{
 				 onGenClick();
 			 }
 		 });
+		 keyboard_test.setOnClickListener(new OnClickListener(){
+			 public void onClick(View v){
+			 	onKeyClick();
+			 }
+		 });
+		 
+	}
+	
+	public void onKeyClick(){
+		try{
+			Intent i = new Intent(this, RerootKeyboard.class);
+			this.startActivity(i);
+		}
+		catch(Exception ex){
+			Toast.makeText(this, "Failure", Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 	
 	public void onGenClick(){
