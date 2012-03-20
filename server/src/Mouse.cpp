@@ -39,6 +39,7 @@ void Mouse::Init()
         if ((mDisplay = XOpenDisplay(NULL)) == NULL) // Open Display according to environment variable
         {
             // error
+			qDebug() << "Could not access X display\n";
         }
     #endif //OS_LINUX
 }
@@ -143,8 +144,13 @@ void Mouse::LinuxButton(unsigned int button, bool up)
                       &event.xbutton.state);
     }
     event.type = ButtonPress;
-    if (XSendEvent(mDisplay, PointerWindow, True, up ? ButtonReleaseMask : ButtonPressMask, &event))
+
+    if (!XSendEvent(mDisplay, PointerWindow, True, up ? ButtonReleaseMask : ButtonPressMask, &event))
     {
+		const size_t buffer_size = 1024;
+		char error_text[buffer_size];
+		XGetErrorText(mDisplay, , error_text, buffer_size);
+		QDebug() << "XSendEvent failure\n";
         // error
     }
     XFlush(mDisplay);
