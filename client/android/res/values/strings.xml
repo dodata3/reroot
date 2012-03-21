@@ -2,6 +2,7 @@
 <resources>
     <string name="hello">Hello World, RerootActivity!</string>
     <string name="app_name">Reroot</string>
+    <string name="service_name">RerootService</string>
     <string name="my_ip_address">IP Address</string>
     <string name="myClickHandler">myClickHandler</string>
     <string name="enterBtn">Enter</string>
