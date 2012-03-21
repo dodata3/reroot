@@ -25,7 +25,7 @@ public class ConnectPickerActivity extends Activity {
 		@Override
 		public void onServiceConnected( ComponentName className, IBinder binder) {
 			mBinder = ( RerootBinder )binder;
-			Toast.makeText( ConnectPickerActivity.this, "Connected to Service!", Toast.LENGTH_SHORT ).show();
+			Toast.makeText( ConnectPickerActivity.this, "Connected to Service!", Toast.LENGTH_LONG ).show();
 		}
 
 		@Override
@@ -45,16 +45,22 @@ public class ConnectPickerActivity extends Activity {
 		
 		Button qr_button = ( Button )findViewById( R.id.qr_button );
 		qr_button.setOnClickListener(new OnClickListener() {
-			public void onClick(View v){
+			public void onClick( View v ){
 				try{
 					Intent i = new Intent( ConnectPickerActivity.this, QRConnectActivity.class );
 					ConnectPickerActivity.this.startActivity(i);
 				}
-				catch(Exception ex){
+				catch( Exception ex ){
 					Log.e( "Reroot", "Could not start the QRConnectActivity" );
 				}
 			}
-		});
+		} );
+	}
+	
+	@Override
+	public void onDestroy() {
+		unbindService( mConnection );
+		super.onDestroy();
 	}
 
 }
