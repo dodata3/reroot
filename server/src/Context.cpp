@@ -31,7 +31,18 @@ void Context::Init()
 
     #endif
     #ifdef OS_LINUX
+        if ((mDisplay = XOpenDisplay(NULL)) == NULL) // Open Display according to environment variable
+        {
+            // error
+			qDebug() << "Could not access X display\n";
+        }
+    #endif //OS_LINUX
+}
 
+void Context::Deinit()
+{
+	#ifdef OS_LINUX
+        XCloseDisplay(mDisplay);
     #endif
 }
 
@@ -55,7 +66,7 @@ QString Context::Title()
     #endif
 }
 
-QString Context::Executable() // Not yet implemented
+QString Context::Executable()
 {
     #ifdef OS_WINDOWS
         HWND window = GetForegroundWindow();
@@ -85,6 +96,23 @@ QString Context::Executable() // Not yet implemented
 
         return QString(cname);
     #endif
+	#ifdef OS_LINUX
+		Window* window;
+		int revert;
+
+		XGetInputFocus(mDisplay, window, revert);
+
+		Atom property = XInternAtom(mDisplay, "WM_NAME", False), type;
+		int form;
+		unsigned long remaining, length;
+		unsigned char *list;
+
+		if (XGetWindowProperty(mDisplay, window, property, 0, 1024, False, XA_STRING, &type, &form, &length, &remaining, &list) != Success)
+		{
+			//error
+		}
+		return QString((char*) list);
+	#endif
 }
 
 int Context::ProcessID()
@@ -102,6 +130,22 @@ int Context::ProcessID()
         printf("pid: %i\n", int(pid));
         return int(pid);
     #endif
+
+	
+
+	#ifdef OS_LINUX
+		Window* window;
+		int revert;
+		XWindowAttributes attr;
+
+		XGetInputFocus(mDisplay, window, revert);
+		//if (!XGetWindowProperty(mDisplay,
+
+		XGetWindowAttributes(mDisplay, window, &attr);
+
+		//return attr.
+		return 0;
+	#endif
 }
 
 void Context::SwitchContext()

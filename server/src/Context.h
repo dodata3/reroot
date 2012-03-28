@@ -19,9 +19,14 @@ public:
 
     // non-static
 private:
+	#ifdef OS_LINUX
+    Display* mDisplay;
+    #endif
+
     Context();
     ~Context();
     void Init();
+	void Deinit();
 
 public:
     QString Title();
