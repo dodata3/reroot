@@ -13,7 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class ConnectPickerActivity extends Activity {
@@ -43,7 +43,7 @@ public class ConnectPickerActivity extends Activity {
 		// TODO: This may move around.
 		bindService( new Intent( this, RerootService.class ), mConnection, Context.BIND_AUTO_CREATE );
 		
-		Button qr_button = ( Button )findViewById( R.id.qr_button );
+		ImageButton qr_button = ( ImageButton )findViewById( R.id.qr_button );
 		qr_button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v){
 				try{
@@ -53,6 +53,20 @@ public class ConnectPickerActivity extends Activity {
 				catch(Exception ex){
 					Log.e( "Reroot", "Could not start the QRConnectActivity" );
 				}
+			}
+		});
+		
+		ImageButton bluetooth_button = (ImageButton)findViewById( R.id.bluetooth_button);
+		bluetooth_button.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				Log.i( "Reroot", "Start the Bluetooth Activity!");
+			}
+		});
+		
+		ImageButton ip_button = (ImageButton)findViewById( R.id.ip_button);
+		ip_button.setOnClickListener(new OnClickListener() {
+			public void onClick(View v){
+				Log.i( "Reroot", "Start the IP Activity!");
 			}
 		});
 	}
