@@ -34,6 +34,7 @@
         <activity android:name="MainMenuActivity"></activity>
         
         <activity android:name="PadActivity"></activity>
+        <activity android:name="IPConnectActivity"></activity>
         <activity android:name="dualstickActivity"></activity>
         <activity android:name="PresentationMode" android:screenOrientation="portrait"></activity>
         
