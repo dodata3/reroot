@@ -260,6 +260,8 @@ void MainWindow::connectNew()
 
 	// Spawn a new window which can be used to connect, give information to the connector
 
+	qDebug() << Context::Get().Title() << '\n';
+
 	mConnectDialog.ConnectNewDevice();
 
 }
