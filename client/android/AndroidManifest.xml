@@ -34,7 +34,12 @@
         <activity android:name="MainMenuActivity"></activity>
         
         <activity android:name="PadActivity"></activity>
-        <activity android:name="IPConnectActivity"></activity>
+        <activity android:name="IPConnectActivity">
+            <intent-filter>
+                <action android:name="com.Cyberpad.Reroot.AUTHENTICATED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name="dualstickActivity"></activity>
         <activity android:name="PresentationMode" android:screenOrientation="portrait"></activity>
         

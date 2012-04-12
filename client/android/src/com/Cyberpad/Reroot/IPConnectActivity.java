@@ -1,14 +1,22 @@
 package com.Cyberpad.Reroot;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Button;
@@ -16,20 +24,29 @@ import android.widget.Toast;
 
 
 public class IPConnectActivity extends Activity {
-
+	
+	  private BroadcastReceiver mAuthReceiver = new BroadcastReceiver() {
+	      @Override
+	      public void onReceive(Context context, Intent intent) {
+	          // TODO Auto-generated method stub
+	    	  Log.d( "QRConnectActivity", "We've authenticated.  Launching main menu." );
+	          Intent menuIntent = new Intent( IPConnectActivity.this, MainMenuActivity.class);
+	          startActivity( menuIntent );
+	          finish();
+	      }
+	  };
 	@Override
 	public void onCreate( Bundle icicle ) {
 		super.onCreate( icicle );
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView( R.layout.connect_ip_layout );
 		
 		Button connect = (Button)findViewById( R.id.connect_button );
 		connect.setOnClickListener(new OnClickListener() {
 			public void onClick(View v){
-				String ip = getIP();
 				String security = getSecurity();
-				Log.i("Reroot", ip);
 				Log.i("Reroot", security);
-				Toast.makeText(IPConnectActivity.this, "IP: " + ip + "\nSecurity: " + security, Toast.LENGTH_LONG).show();
+				connectIP(security);
 			}
 		});
 		
@@ -39,42 +56,38 @@ public class IPConnectActivity extends Activity {
 				IPConnectActivity.this.finish();
 			}
 		});
-	}
-	
-	private String getIP() {
-		EditText ip_edit_1 = (EditText)findViewById( R.id.ip_edit_1 );
-		EditText ip_edit_2 = (EditText)findViewById( R.id.ip_edit_2 );
-		EditText ip_edit_3 = (EditText)findViewById( R.id.ip_edit_3 );
-		EditText ip_edit_4 = (EditText)findViewById( R.id.ip_edit_4 );
 		
-		String address = "";
-		if (ip_edit_1.getText().toString().equals(""))
-			address = address.concat(ip_edit_1.getHint().toString().trim());
-		else
-			address = address.concat(ip_edit_1.getText().toString());
-		address = address.concat(".");
-		if (ip_edit_2.getText().toString().equals(""))
-			address = address.concat(ip_edit_2.getHint().toString().trim());
-		else
-			address = address.concat(ip_edit_2.getText().toString());
-		address = address.concat(".");
-		if (ip_edit_3.getText().toString().equals(""))
-			address = address.concat(ip_edit_3.getHint().toString().trim());
-		else
-			address = address.concat(ip_edit_3.getText().toString());
-		address = address.concat(".");
-		if (ip_edit_4.getText().toString().equals(""))
-			address = address.concat(ip_edit_4.getHint().toString().trim());
-		else
-			address = address.concat(ip_edit_4.getText().toString());
+		super.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-		return address;
+	    // Register the authentication broadcast receiver 
+	    IntentFilter filter = new IntentFilter();
+	    filter.addAction( Connector.AUTH_INTENT );
+	    registerReceiver( mAuthReceiver, filter );
 	}
-	
+		
 	private String getSecurity() {
 		EditText ip_security = (EditText)findViewById( R.id.security_edit );
 		if (ip_security.getText().toString().equals(""))
 			return ip_security.getHint().toString();
 		return ip_security.getText().toString();
+	}
+	
+	private void connectIP(String key)
+	{
+		try	{
+			
+			String address = key.substring(0,8);
+			String security_key = key.substring(8);
+			
+			int secret_key = Utility.HexStringToInteger(security_key);
+//			Log.d("Reroot", Integer.toString(secret_key));
+			InetAddress serverAddress = InetAddress.getByAddress(Utility.HexStringToByteArray(address));
+			
+			Connector c = Connector.getInstance(this);
+			c.ConnectToServer(serverAddress, secret_key);
+		}
+		catch (UnknownHostException uhe) {
+			uhe.printStackTrace();
+		}
 	}
 }

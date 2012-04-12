@@ -8,11 +8,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -38,6 +41,9 @@ public class ConnectPickerActivity extends Activity {
 	@Override
 	public void onCreate( Bundle icicle ) {
 		super.onCreate( icicle );
+		
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView( R.layout.connect_picker_layout );
 		
 		// TODO: This may move around.
@@ -66,9 +72,17 @@ public class ConnectPickerActivity extends Activity {
 		ImageButton ip_button = (ImageButton)findViewById( R.id.ip_button);
 		ip_button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v){
-				Log.i( "Reroot", "Start the IP Activity!");
+				try{
+					Intent i = new Intent( ConnectPickerActivity.this, IPConnectActivity.class );
+					ConnectPickerActivity.this.startActivity(i);
+				}
+				catch(Exception ex){
+					Log.e("Reroot", "Could not start the IPConnectActivity" );
+				}
 			}
 		});
+
+		super.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 
 }

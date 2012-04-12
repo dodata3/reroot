@@ -24,7 +24,7 @@
     	    android:id="@+id/qr_button"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:src="@drawable/qr_service_icon" />
+    	    android:src="@drawable/qr_service_icon_reroot" />
 
     	<TextView
     	    android:id="@+id/qr_description"
