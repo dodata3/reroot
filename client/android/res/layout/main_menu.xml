@@ -1,8 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-        <Button android:text="Hybrid Mode" android:layout_width="wrap_content" android:id="@+id/hybrid_mode" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_marginLeft="34dp" android:layout_marginTop="33dp"></Button>
-        <Button android:text="Dualstick Mode" android:layout_width="wrap_content" android:id="@+id/dualstick_mode" android:layout_height="wrap_content" android:layout_below="@+id/hybrid_mode" android:layout_alignLeft="@+id/hybrid_mode" android:layout_marginTop="52dp" android:layout_alignRight="@+id/hybrid_mode"></Button>
-        <FrameLayout android:layout_height="wrap_content" android:id="@+id/background_img" android:layout_width="wrap_content" android:background="@drawable/reroot_background" android:layout_below="@+id/hybrid_mode" android:layout_alignParentRight="true" android:layout_marginTop="20dp"></FrameLayout>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/acc_test" android:text="Accel. Testing" android:layout_centerVertical="true" android:layout_alignLeft="@+id/dualstick_mode"></Button>
-       
+	    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_gravity="bottom"
+	        android:gravity="top"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/textView1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:text="Choose Control Mode"
+	            style="@style/ButtonText" />
+	
+	        <Button
+	            android:id="@+id/mouse_keyboard_btn"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Mouse / Keyboard"
+	            android:background="@drawable/button_black" 
+	            style="@style/ButtonText" />
+	        
+	        <Button
+	            android:id="@+id/game_controller_btn"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Game Controller"
+	            android:background="@drawable/button_black" 
+	            style="@style/ButtonText" />
+	    </LinearLayout>
+	    
+	    <ImageView
+	        android:id="@+id/imageView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+	        android:gravity="bottom"
+	        android:src="@drawable/logo" />
+	
     </RelativeLayout>
