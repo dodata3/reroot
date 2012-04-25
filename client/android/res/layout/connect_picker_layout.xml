@@ -3,13 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect to Reroot"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
@@ -24,7 +17,7 @@
     	    android:id="@+id/qr_button"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:src="@drawable/qr_service_icon" />
+    	    android:src="@drawable/qr_service_icon_reroot" />
 
     	<TextView
     	    android:id="@+id/qr_description"
@@ -41,17 +34,6 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal">
-	    <ImageButton
-	        android:id="@+id/bluetooth_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/bluetooth_service_icon" />
-	   	<TextView
-	   	    android:id="@+id/bluetooth_description"
-	   	    android:layout_width="wrap_content"
-	   	    android:layout_height="wrap_content"
-	   	    android:text="Connect With Bluetooth"
-	   	    android:textAppearance="?android:attr/textAppearanceLarge" />
 	</LinearLayout>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -67,7 +49,7 @@
 	        android:id="@+id/ip_description"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:text="Connect With IP"
+	        android:text="Connect with Key"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	</LinearLayout>
 
