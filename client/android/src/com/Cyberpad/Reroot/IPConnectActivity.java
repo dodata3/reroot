@@ -29,7 +29,6 @@ public class IPConnectActivity extends Activity {
 	      @Override
 	      public void onReceive(Context context, Intent intent) {
 	          // TODO Auto-generated method stub
-	    	  Log.d( "QRConnectActivity", "We've authenticated.  Launching main menu." );
 	          Intent menuIntent = new Intent( IPConnectActivity.this, MainMenuActivity.class);
 	          startActivity( menuIntent );
 	          finish();
