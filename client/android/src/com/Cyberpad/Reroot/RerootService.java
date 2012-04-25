@@ -1,4 +1,5 @@
-package com.Cyberpad.RerootService;
+package com.Cyberpad.Reroot;
+
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,11 +9,17 @@ import android.util.Log;
 public class RerootService extends Service implements RerootServiceConstants
 {
 	private final IBinder mBinder = new RerootBinder( this );
+	private boolean mConnected = false;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
 		Log.d( TAG, "Created RerootService" );
+		if( !Connect() ) {
+			Log.d( TAG, "Failed to start RerootService; Disconnecting..." );
+			stopSelf();
+		}
 	}
 	
 	@Override
@@ -24,6 +31,19 @@ public class RerootService extends Service implements RerootServiceConstants
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mBinder;
+	}
+	
+	private boolean Connect()
+	{
+		// TODO: Attempt to connect via ADB
+		Log.d( TAG, "Attempting to connect!" );
+		
+		// Launch the connector activity to connect using another method
+		Intent dialogIntent = new Intent( getBaseContext(), ConnectPickerActivity.class );
+		dialogIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
+		getApplication().startActivity( dialogIntent );
+		
+		return false;
 	}
 }
 // TODO: Call the ConnectPickerActivity from this service if not connected

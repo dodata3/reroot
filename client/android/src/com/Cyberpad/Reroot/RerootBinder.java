@@ -1,4 +1,4 @@
-package com.Cyberpad.RerootService;
+package com.Cyberpad.Reroot;
 
 import android.os.Binder;
 
