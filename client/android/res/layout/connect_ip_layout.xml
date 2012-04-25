@@ -1,92 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" 
-    android:gravity="center_horizontal">
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical" >
+
     <ImageView
         android:id="@+id/ip_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/logo" />
-	<TextView
-		android:id="@+id/ip_label"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:text="IP Address"
-		android:textAppearance="?android:attr/textAppearanceLarge"/>
-	
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    android:gravity="center">
-
-	    <EditText 
-	        android:id="@+id/ip_edit_1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint="127"
-	        android:maxLength="3"
-	        android:numeric="integer"
-	        android:nextFocusDown="@+id/ip_edit_2"
-	        android:typeface="monospace"/>
-	    <TextView 
-	        android:id="@+id/ip_seperator_1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="." 
-		    android:textAppearance="?android:attr/textAppearanceLarge"/>
-	    <EditText 
-	        android:id="@+id/ip_edit_2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint=" 0 "
-	        android:maxLength="3"
-	        android:numeric="integer"
-	        android:nextFocusDown="@+id/ip_edit_3"
-	        android:typeface="monospace"/>
-	    <TextView 
-	        android:id="@+id/ip_seperator_2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="." 
-		    android:textAppearance="?android:attr/textAppearanceLarge"/>
-	    <EditText 
-	        android:id="@+id/ip_edit_3"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint=" 0 "
-	        android:maxLength="3"
-	        android:numeric="integer"
-	        android:nextFocusDown="@+id/ip_edit_4"
-	        android:typeface="monospace"/>
-	    <TextView 
-	        android:id="@+id/ip_seperator_3"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="." 
-		    android:textAppearance="?android:attr/textAppearanceLarge"/>
-	    <EditText 
-	        android:id="@+id/ip_edit_4"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint=" 1 "
-	        android:maxLength="3"
-	        android:numeric="integer"
-	        android:nextFocusDown="@+id/security_edit"
-	        android:typeface="monospace"/>
-		
-	</LinearLayout>
 	
 	<TextView
 		android:id="@+id/security_label"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center"
-		android:text="Security Code"
+		android:text="Connection Code"
 		android:textAppearance="?android:attr/textAppearanceLarge"/>
+	
+	<TextView
+	    android:id="@+id/security_label_2"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:text="(found under the QR code)"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="match_parent"
@@ -98,7 +37,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:gravity="center"
-	    android:hint="123abc"
+	    android:hint="123456ABCDEF"
 	    android:maxLength="12"
 	    android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	    android:nextFocusDown="@+id/ip_edit_1"
@@ -106,12 +45,14 @@
 	    android:typeface="monospace"/>
 	
 	</LinearLayout>
-	
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    android:gravity="center">
+	    android:gravity="center"
+	    android:orientation="horizontal" >
+
 	<Button
 	    android:id="@+id/connect_button"
 	    android:text="Connect"

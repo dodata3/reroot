@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node7" href="$class_keyboard_listener.html" title="{KeyboardListener\n||+ KeyboardListener()\l+ acceptDecipheredMessage()\l}" alt="" coords="5,302,203,394"/>
-<area shape="rect" id="node9" href="$class_mouse_listener.html" title="{MouseListener\n||+ MouseListener()\l+ acceptDecipheredMessage()\l}" alt="" coords="227,302,425,394"/>
-<area shape="rect" id="node2" href="$class_o_s_c_listener.html" title="{OSCListener\n||+ acceptMessage()\l}" alt="" coords="81,13,215,91"/>
-<area shape="rect" id="node4" href="$class_cipher.html" title="{Cipher\n||# Encrypt()\l# Decrypt()\l}" alt="" coords="239,6,325,98"/>
-</map>
