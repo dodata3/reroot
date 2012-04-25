@@ -1,62 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-<!--    <Button
-        android:id="@+id/qr_push_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="QR" /> -->
-
-    	<ImageButton
-    	    android:id="@+id/qr_button"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:src="@drawable/qr_service_icon_reroot" />
-
-    	<TextView
-    	    android:id="@+id/qr_description"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:text="Connect With QR"
-    	    android:textAppearance="?android:attr/textAppearanceLarge" />
-    	    
-
-
-		</LinearLayout>
-		
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal">
-	</LinearLayout>
+    android:layout_height="match_parent" >
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal">
-	    <ImageButton
-	        android:id="@+id/ip_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/ip_service_icon" />
-	    <TextView
-	        android:id="@+id/ip_description"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:text="Connect with Key"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
-	</LinearLayout>
-
-	<ImageView
-	    android:id="@+id/reroot_logo"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:src="@drawable/logo" />
+	    android:orientation="vertical"
+	    android:layout_gravity="bottom"
+	    android:gravity="top" >
+	    
+	    <TextView
+	            android:id="@+id/textView1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:text="Choose Connection"
+	            style="@style/ButtonText" />
+	    
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_gravity="bottom" >
+	    	<ImageButton
+	    	    android:id="@+id/qr_button"
+	    	    android:layout_width="wrap_content"
+	    	    android:layout_height="wrap_content"
+	    	    android:src="@drawable/qr_service_icon_reroot" />
+	    	<TextView
+	    	    android:id="@+id/qr_description"
+	    	    android:layout_width="wrap_content"
+	    	    android:layout_height="wrap_content"
+	    	    android:text="Connect With QR"
+	    	    android:textAppearance="?android:attr/textAppearanceLarge" />
+		</LinearLayout>
+	
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_gravity="bottom">
+		    <ImageButton
+		        android:id="@+id/ip_button"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/ip_service_icon" />
+		    <TextView
+		        android:id="@+id/ip_description"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:text="Connect with Key"
+		        android:textAppearance="?android:attr/textAppearanceLarge" />
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+	<ImageView
+		    android:id="@+id/reroot_logo"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+		    android:src="@drawable/logo"
+		    android:gravity="bottom" />
 
-</LinearLayout>
+</RelativeLayout>
