@@ -58,10 +58,16 @@ public class IPConnectActivity extends Activity {
 		
 		super.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-	    // Register the authentication broadcast receiver 
-	    IntentFilter filter = new IntentFilter();
-	    filter.addAction( Connector.AUTH_INTENT );
-	    registerReceiver( mAuthReceiver, filter );
+		// Register the authentication broadcast receiver 
+		IntentFilter filter = new IntentFilter();
+		filter.addAction( Connector.AUTH_INTENT );
+		registerReceiver( mAuthReceiver, filter );
+	}
+	
+	@Override
+	public void onDestroy() {
+		unregisterReceiver( mAuthReceiver );
+		super.onDestroy();
 	}
 		
 	private String getSecurity() {
