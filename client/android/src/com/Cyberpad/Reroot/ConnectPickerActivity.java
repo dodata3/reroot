@@ -79,13 +79,6 @@ public class ConnectPickerActivity extends Activity {
 			}
 		});
 		
-		ImageButton bluetooth_button = (ImageButton)findViewById( R.id.bluetooth_button);
-		bluetooth_button.setOnClickListener(new OnClickListener(){
-			public void onClick(View v){
-				Log.i( "Reroot", "Start the Bluetooth Activity!");
-			}
-		});
-		
 		ImageButton ip_button = (ImageButton)findViewById( R.id.ip_button);
 		ip_button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v){
