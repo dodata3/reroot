@@ -72,8 +72,6 @@ public class ConnectPickerActivity extends Activity {
 				try{
 					IntentIntegrator integrator = new IntentIntegrator( ConnectPickerActivity.this );
 					integrator.initiateScan();
-					//Intent i = new Intent( ConnectPickerActivity.this, QRConnectActivity.class );
-					//ConnectPickerActivity.this.startActivity(i);
 				}
 				catch(Exception ex){
 					Log.e( "Reroot", "Could not start the QRConnectActivity" );
@@ -109,12 +107,19 @@ public class ConnectPickerActivity extends Activity {
 		registerReceiver( mAuthReceiver, filter );
 	}
 	
+	@Override
+	public void onDestroy() {
+		unregisterReceiver( mAuthReceiver );
+		super.onDestroy();
+	}
+	
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 		if( scanResult != null ) {
 			// handle scan result
 			String key = scanResult.getContents();
-			try	{
+			if( key != null ) try	
+			{
 				
 				String address = key.substring(0,8);
 				String security_key = key.substring(8);
