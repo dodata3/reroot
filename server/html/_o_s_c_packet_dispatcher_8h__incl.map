@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$_o_s_c_listener_8h.html" title="OSCListener.h" alt="" coords="5,80,112,107"/>
-<area shape="rect" id="node9" href="$_o_s_c_bundle_8h.html" title="OSCBundle.h" alt="" coords="136,80,237,107"/>
-<area shape="rect" id="node22" href="$_o_s_c_message_8h.html" title="OSCMessage.h" alt="" coords="261,80,376,107"/>
-<area shape="rect" id="node12" href="$_o_s_c_packet_8h.html" title="OSCPacket.h" alt="" coords="259,155,361,181"/>
-<area shape="rect" id="node14" href="$_o_s_c_msg_to_byte_array_converter_8h.html" title="OSCMsgToByteArrayConverter.h" alt="" coords="205,229,416,256"/>
-</map>

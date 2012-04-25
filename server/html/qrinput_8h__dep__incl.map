@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$qrencode_8c.html" title="src/qrencode/qrencode.c" alt="" coords="5,80,171,107"/>
-<area shape="rect" id="node5" href="$qrinput_8c.html" title="src/qrencode/qrinput.c" alt="" coords="195,80,345,107"/>
-<area shape="rect" id="node7" href="$qrspec_8c.html" title="src/qrencode/qrspec.c" alt="" coords="370,80,520,107"/>
-<area shape="rect" id="node9" href="$split_8c.html" title="src/qrencode/split.c" alt="" coords="545,80,681,107"/>
-</map>

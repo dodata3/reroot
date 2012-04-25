@@ -1,4 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$class_o_s_c_bundle.html" title="{OSCBundle\n|+ SECONDS_FROM_1900_to_1970\l# iPackets\l# iPacketList\l# iTimestamp\l|+ OSCBundle()\l+ OSCBundle()\l+ OSCBundle()\l+ OSCBundle()\l+ construct()\l+ ~OSCBundle()\l+ getTimestamp()\l+ setTimestamp()\l+ addPacket()\l+ getPackets()\l# computeTimeTagByteArray()\l# computeByteArray()\l}" alt="" coords="5,235,235,517"/>
-<area shape="rect" id="node5" href="$class_o_s_c_message.html" title="{OSCMessage\n|# iArguments\l# iAddress\l|+ OSCMessage()\l+ OSCMessage()\l+ OSCMessage()\l+ construct()\l+ ~OSCMessage()\l+ getAddress()\l+ setAddress()\l+ addArgument()\l+ getArguments()\l# computeAddressByteArray()\l# computeArgumentsByteArray()\l# computeByteArray()\l}" alt="" coords="259,249,471,503"/>
-</map>
