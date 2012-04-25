@@ -47,7 +47,7 @@ public class ConnectPickerActivity extends Activity {
 		setContentView( R.layout.connect_picker_layout );
 		
 		// TODO: This may move around.
-		bindService( new Intent( this, RerootService.class ), mConnection, Context.BIND_AUTO_CREATE );
+		//bindService( new Intent( this, RerootService.class ), mConnection, Context.BIND_AUTO_CREATE );
 		
 		ImageButton qr_button = ( ImageButton )findViewById( R.id.qr_button );
 		qr_button.setOnClickListener(new OnClickListener() {
