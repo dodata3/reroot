@@ -3,5 +3,8 @@
 	<file>images/bad.svg</file>
 	<file>images/heart.svg</file>
 	<file>images/trash.svg</file>
+	<file>images/check.png</file>
+	<file>images/cross.png</file>
+	<file>images/icon.png</file>
 </qresource>
 </RCC>

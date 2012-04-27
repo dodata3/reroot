@@ -5,6 +5,7 @@
 #include <QtGlobal>
 #include <QNetworkInterface>
 #include <QVBoxLayout>
+#include <QStackedLayout>
 #include <QDateTime>
 #include <QMap>
 #include <iostream>
@@ -21,14 +22,33 @@ ConnectDialog::ConnectDialog( Connector* connector )
     mpConnector = connector;
 	setWindowTitle( tr( "Reroot: Connect a Device" ) );
     mConnectionCode.setAlignment( Qt::AlignHCenter );
+
 	QVBoxLayout* layout = new QVBoxLayout;
-	mQRCode.setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-	mQRCode.sizePolicy().setHeightForWidth( true );
+	QStackedLayout* stacked = new QStackedLayout;
+	QWidget* qrwidget = new QWidget;
+
 	mConnectionCode.setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 	mConnectionCode.setScaledContents( true );
-	layout->addWidget( &mQRCode );
+
+    mCheck.setPixmap( QPixmap( ":/images/check.png" ) );
+	mCheck.setAlignment( Qt::AlignCenter );
+
+	mCross.setPixmap( QPixmap( ":/images/cross.png" ) );
+	mCross.setAlignment( Qt::AlignCenter );
+
+    mQRCode.setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+	mQRCode.sizePolicy().setHeightForWidth( true );
+	qrwidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+
+	stacked->addWidget( &mQRCode );
+	stacked->addWidget( &mCheck );
+	stacked->addWidget( &mCross );
+	qrwidget->setLayout( stacked );
+
+	layout->addWidget( qrwidget );
 	layout->addWidget( &mConnectionCode );
 	setLayout( layout );
+
 	resize( 400, 450 );
 	setVisible( false );
 	connect( &mTimeout, SIGNAL( timeout() ), this, SLOT( ConnectionTimeout() ) );
@@ -83,6 +103,8 @@ void ConnectDialog::ConnectNewDevice()
     QString connectionCode = QString( "%1%2" )
         .arg( ip, 8, 16, QLatin1Char('0') )
         .arg( randomNumber, 2, 16, QLatin1Char('0') ).toUpper();
+    mCheck.hide();
+    mCross.hide();
     qDebug() << "Connection Code: " << connectionCode;
     mConnectionCode.setText( connectionCode );
     mQRCode.RenderConnectionCode( connectionCode );
@@ -103,6 +125,7 @@ void ConnectDialog::ConnectionSuccess( QString name )
 	mTimeout.stop();
 
 	// Show the success pane
+	mCheck.show();
 
 	// This is likely a problem: What if they open a new QR Code while this timer is running?
 	QTimer::singleShot( FEEDBACK_TIME, this, SLOT( hide() ) );
@@ -115,6 +138,7 @@ void ConnectDialog::ConnectionTimeout()
     mpConnector->SetConnectKey();
 
 	// Show the Failure Pane
+	mCross.show();
 
 	// This is likely a problem: What if they open a new QR Code while this timer is running?
 	QTimer::singleShot( FEEDBACK_TIME, this, SLOT( hide() ) );

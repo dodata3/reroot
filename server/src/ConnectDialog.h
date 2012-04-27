@@ -36,6 +36,8 @@ private:
     Connector* mpConnector;
     QRWidget mQRCode;
     QLabel mConnectionCode;
+    QLabel mCheck;
+    QLabel mCross;
 	QTimer mTimeout;
 };
 
