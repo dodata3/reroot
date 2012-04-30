@@ -29,16 +29,12 @@ Connector::Connector() :
 	mpIncomingPort->addListener( controlAddress, mControl );
 	QString handshakeAddress = QString( "/handshake_client" );
 	mpIncomingPort->addListener( handshakeAddress, mHandshake );
-	mpIncomingPort->startListening();
+	mpIncomingPort->startListening(); // Problem here
 }
 
 Connector::~Connector()
 {
-	mpIncomingPort->stopListening();
-	mpIncomingPort->close();
-	mpIncomingPort->terminate();
-	if( !mpIncomingPort->wait() )
-        qWarning( "Incoming port thread termination timeout." );
+	CloseOSCPort( mpIncomingPort );
 	delete mpIncomingPort;
 	mpIncomingPort = NULL;
 	RemoveAllDevices();
@@ -52,10 +48,12 @@ void Connector::AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByte
 	dev.encKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inEncExp.data() ), inEncExp.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetModulus( Integer( reinterpret_cast< byte* >( inSignMod.data() ), inSignMod.size(), Integer::UNSIGNED ) );
 	dev.signKey.SetPublicExponent( Integer( reinterpret_cast< byte* >( inSignExp.data() ), inSignExp.size(), Integer::UNSIGNED ) );
+	dev.name = inRemote.toString();
+	dev.index = mDeviceMap.size();
 	mLock.lock();
-	mDeviceMap[ inRemote.toString() ] = dev;
+	mDeviceMap[ dev.name ] = dev;
 	mLock.unlock();
-	SendHandshake( inRemote.toString() );
+	SendHandshake( dev.name );
 	qDebug() << "Added new device: " << inRemote.toString() << " to list of allowed devices";
 	emit HandshakeSuccessful( inRemote.toString() );
 }
@@ -103,22 +101,10 @@ void Connector::RemoveDevice( QString& name )
 	mLock.unlock();
 }
 
-void Connector::CloseOSCPort( OSCPort* port )
-{
-  port->stopListening();
-  port->terminate();
-  if( !port->wait() )
-        qWarning( "Incoming port thread termination timeout." );
-  port->close();
-}
-
 void Connector::RemoveAllDevices()
 {
-	mLock.lock();
-	for( DeviceMap::iterator itr = mDeviceMap.begin(); itr != mDeviceMap.end(); ++itr )
-		delete itr->port;
-	mDeviceMap.clear();
-	mLock.unlock();
+	while( !mDeviceMap.empty() )
+		RemoveDevice( mDeviceMap.begin()->name );
 }
 
 RSA::PublicKey Connector::GetClientEncKey( QHostAddress& address )
@@ -141,14 +127,14 @@ RSA::PublicKey Connector::GetClientSignKey( QHostAddress& address )
 	return key;
 }
 
-OSCPort* Connector::GetClientPort( QHostAddress& address )
+Device Connector::GetDevice( QHostAddress& address )
 {
-    OSCPort* port = NULL;
+	Device dev;
 	mLock.lock();
 	if( mDeviceMap.contains( address.toString() ) )
-        port = mDeviceMap[ address.toString() ].port;
+        dev = mDeviceMap[ address.toString() ];
 	mLock.unlock();
-	return port;
+	return dev;
 }
 
 QString Connector::IntegerToHexString( Integer integer )
@@ -163,4 +149,13 @@ QString Connector::IntegerToHexString( Integer integer )
         new HexEncoder( new StringSink( s ) ) );
 
     return QString::fromStdString( s );
+}
+
+void Connector::CloseOSCPort( OSCPort* port )
+{
+	port->stopListening();
+	port->terminate();
+	if( !port->wait() )
+        qWarning( "Incoming port thread termination timeout." );
+	port->close();
 }

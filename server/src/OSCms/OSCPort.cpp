@@ -6,6 +6,8 @@
 #include "OSCPort.h"
 #include <iostream>
 
+using namespace std;
+
 /**
  * Create an OSCPort that sends to newAddress, on the standard SuperCollider port
  * @param newAddress InetAddress
@@ -36,7 +38,8 @@ void OSCPort::construct(QHostAddress& newAddress, quint16 newPort)
 
     iAddress = newAddress;
     iPort  = newPort;
-    iSocket->bind(iPort, QUdpSocket::ShareAddress);
+    cout << "Binding to " << iPort << endl;
+    iSocket->bind( iPort, QUdpSocket::ShareAddress);
 }
 
 OSCPort::~OSCPort()
@@ -47,14 +50,17 @@ OSCPort::~OSCPort()
     delete iConverter;
 }
 
+// This is incorrect.  We need to use signals/slots here.
 void OSCPort::run()
 {
     QByteArray datagram(1536,0);
     QHostAddress address;
     while(ibListening)
     {
+		cout << "Listening..." << endl;
         if(!iSocket->waitForReadyRead())    continue;
         if(!iSocket->hasPendingDatagrams()) continue;
+        cout << "Got Message!" << endl;
 
         qint32 mbytesLength;
         mbytesLength = iSocket->readDatagram( datagram.data(),1536, &address );

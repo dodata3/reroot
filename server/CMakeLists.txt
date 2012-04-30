@@ -106,14 +106,19 @@ SET( LIBRARIES
 )
 
 # We need to use the special winmain symbol...
-IF (WIN32)
-    SET (QT_USE_QTMAIN TRUE)
-    LIST(APPEND LIBRARIES
+IF( WIN32 )
+    SET( QT_USE_QTMAIN TRUE )
+    LIST( APPEND LIBRARIES
         psapi
     )
-ENDIF (WIN32)
+ENDIF( WIN32 )
 
-ADD_EXECUTABLE( ${PROJECT_NAME} ${SOURCES} )
+IF( WIN32 )
+	ADD_EXECUTABLE( ${PROJECT_NAME} WIN32 ${SOURCES} )
+ELSE( WIN32 )
+	ADD_EXECUTABLE( ${PROJECT_NAME} ${SOURCES} )
+ENDIF( WIN32 )
+
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME} ${LIBRARIES} )
 INSTALL_TARGETS( /bin ${PROJECT_NAME} )
 
@@ -128,7 +133,14 @@ IF(APPLE)
 ENDIF(APPLE)
 IF(WIN32)
   SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/Reroot.exe")
+  # Set NSIS specific install variable which creates a start-menu shortcut.
+  SET( CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\bin\\\\${PROJECT_NAME}.exe'")
+  SET( CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${PROJECT_NAME}.exe" )
 ENDIF(WIN32)
+
+SET( CPACK_PACKAGE_VERSION_MAJOR 1 )
+SET( CPACK_PACKAGE_VERSION_MINOR 0 )
+SET( CPACK_PACKAGE_VERSION_PATCH 0 )
 
 #--------------------------------------------------------------------------------
 # Install the application, on Apple, the bundle is at the root of the

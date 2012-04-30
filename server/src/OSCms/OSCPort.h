@@ -48,7 +48,7 @@ protected:
     OSCByteArrayToMsgConverter* iConverter;
 
     QUdpSocket* iSocket;
-    qint16 iPort;
+    quint16 iPort;
 };
 
 #endif

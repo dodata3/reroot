@@ -16,10 +16,13 @@
 
 struct Device
 {
+	int index;
 	OSCPort* port;
 	QString name;
 	CryptoPP::RSA::PublicKey encKey;
 	CryptoPP::RSA::PublicKey signKey;
+
+	Device::Device() : port( NULL ) {}
 };
 
 typedef QMap< QString, Device > DeviceMap;
@@ -34,8 +37,7 @@ public:
 
 	void AddNewDevice( QHostAddress& inRemote, QByteArray inEncMod, QByteArray inEncExp,
                     QByteArray inSignMod, QByteArray inSignExp );
-	void RemoveDevice( QString& name );
-	//*void RemoveDevice( QHostAddress& inRemote );
+	void RemoveDevice( QString& inRemote );
 	void RemoveAllDevices();
 	void SetConnectKey( qint32 key = 0 );
 	void SendHandshake( QString inDeviceName );
@@ -43,19 +45,19 @@ public:
 
 	CryptoPP::RSA::PublicKey GetClientEncKey( QHostAddress& inRemote );
 	CryptoPP::RSA::PublicKey GetClientSignKey( QHostAddress& inRemote );
-	OSCPort* GetClientPort( QHostAddress& inRemote );
+	Device GetDevice( QHostAddress& inRemote );
 
 	CryptoPP::RSA::PublicKey PublicEncKey() { return mPublicEncKey; }
 	CryptoPP::RSA::PrivateKey PrivateEncKey() { return mPrivateEncKey; }
 	CryptoPP::RSA::PublicKey PublicSignKey() { return mPublicSignKey; }
 	CryptoPP::RSA::PrivateKey PrivateSignKey() { return mPrivateSignKey; }
-//
+
 signals:
 	void HandshakeSuccessful( QString deviceName );
 
 private:
     QString IntegerToHexString( CryptoPP::Integer integer );
-	void CloseOSCPort(OSCPort* port);
+	void CloseOSCPort( OSCPort* port );
 
 	QMutex mLock;
 	QHostAddress mListenerAddress;
